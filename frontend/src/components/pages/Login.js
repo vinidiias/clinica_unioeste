@@ -6,6 +6,7 @@ import { useState } from 'react'
 import RegisterForm from '../login/RegisterForm'
 
 import { motion } from 'framer-motion'
+import api from '../../services/Api'
 
 const Login = () => {
   const [showLogin, setShowLogin] = useState(false)
@@ -13,6 +14,18 @@ const Login = () => {
 
   const toggleChange = () => {
     setShowLogin(!showLogin)
+  }
+
+  async function registerHandler(name, password) {
+    try{
+      const user = await api.post('/user', {
+        name,
+        password
+      })
+      console.log(user)
+    } catch(err){
+      console.log(err)
+    }
   }
 
   const submitHandler = () => {
@@ -39,12 +52,11 @@ const Login = () => {
           initial="initial"
           animate="animate"
           exit="exit"
-
-            className={styles.login}
+          className={styles.login}
           >
             <h1> Criar conta</h1>
             <RegisterForm
-              handleSubmit={submitHandler}
+              handleSubmit={registerHandler}
               handleClick={toggleChange}
             />
           </motion.div>
@@ -55,8 +67,7 @@ const Login = () => {
           initial="initial"
           animate="animate"
           exit="exit"
-
-            className={styles.login}
+          className={styles.login}
           >
             <h1>Entrar</h1>
             <LoginForm

@@ -1,7 +1,6 @@
 import styles from './LoginForm.module.css'
 import Input from '../form/Input'
 import Submit from '../form/Submit'
-import { style } from 'framer-motion/client'
 
 const LoginForm = ({ handleSubmit, handleClick }) => {
 
