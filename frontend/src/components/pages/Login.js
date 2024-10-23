@@ -16,13 +16,13 @@ const Login = () => {
     setShowLogin(!showLogin)
   }
 
-  async function registerHandler(name, password) {
+  async function registerHandler(email, password) {
     try{
       const user = await api.post('/user', {
-        name,
+        email,
         password
       })
-      console.log(user)
+      .then((resp) => console.log(resp))
     } catch(err){
       console.log(err)
     }
