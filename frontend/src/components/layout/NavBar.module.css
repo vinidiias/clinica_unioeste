@@ -1,0 +1,27 @@
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1em;
+    width: 100%;
+    background-color: #483768;
+    color: #fff;
+}
+
+.nav a {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+}
+
+.list {
+    display: flex;
+    list-style: none;
+}
+.list a {
+    color: #fff;
+    text-decoration: none;
+    margin-right: 1em;
+}

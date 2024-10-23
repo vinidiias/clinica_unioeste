@@ -1,0 +1,24 @@
+.footer{
+    border-top: 1px solid #0000003a;
+    font-size: .78em;
+    font-weight: 500;
+    text-align: center;
+    padding: .5em;
+    width: 100%;
+    color: #535353;
+}
+
+.copy_right {
+    margin-bottom: 5px;
+}
+
+.copy_right a {
+    margin-right: .5em;
+    color: #535353;
+    text-decoration: none;
+    transition: 0.5s;
+}
+
+.copy_right a:hover {
+    color: #000;
+}

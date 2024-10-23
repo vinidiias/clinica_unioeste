@@ -1,0 +1,44 @@
+.btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5em 0em;
+    border: none;
+    border-radius: 10px;
+    background-color: #51436C;
+    margin: 10px;
+    width: 18%;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+@media(max-width: 500px) {
+    .btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1.5em 0em;
+        border: none;
+        border-radius: 10px;
+        background-color: #51436C;
+        margin: 10px;
+        width: 100%;
+        cursor: pointer;
+        transition: 0.5s;
+    }
+}
+
+.btn:hover{
+    background-color:#B64667 ;
+}
+
+.btn svg {
+    margin-bottom: 10px;
+    font-size: 1.5em;
+}
+
+.btn h3 {
+    color: #fff;
+    font-size: .9em;
+    font-weight: 500;
+}

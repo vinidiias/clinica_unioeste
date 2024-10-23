@@ -1,0 +1,24 @@
+.container {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    margin: 0 auto;
+    flex: 1;
+}
+
+.column {
+    flex-direction: column;
+}
+
+.height {
+    justify-content: center;
+}
+
+.align {
+    align-items: center;
+    justify-content: center;
+}
+
+.auto {
+    justify-content: center;
+}
