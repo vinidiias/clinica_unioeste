@@ -6,13 +6,13 @@ import { useState } from 'react'
 
 const RegisterForm = ({ handleSubmit, handleClick }) => {
 
-    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
     const submit = (e) =>{
       e.preventDefault()
-
-      handleSubmit(name, password)
+      console.log(email + ' ' + password)
+      handleSubmit(email, password)
     }
 
     return (
@@ -23,7 +23,7 @@ const RegisterForm = ({ handleSubmit, handleClick }) => {
           text="Nome"
           placeholder="Digite seu nome"
           customClass="column padding_login"
-          handleOnChange={(e) => setName(e.target.value)}
+          handleOnChange={(e) => setEmail(e.target.value)}
 
         />
         <Input
