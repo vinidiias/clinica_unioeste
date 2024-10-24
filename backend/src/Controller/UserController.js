@@ -14,7 +14,7 @@ async function hashPassword(password) {
 module.exports = {
     async create(req, res) {
         
-        const { email, password } = req.body
+        const { email, name, password } = req.body
        
         try{
             const userAlreadyExists = await User.findOne({ email })
@@ -24,6 +24,7 @@ module.exports = {
 
             const createdUser = await User.create({
                 email,
+                name,
                 password: hashedPassword,
             })
 
