@@ -11,18 +11,23 @@ import System from '../system/System';
 const Home = () => {
   const navigate = useNavigate()
 
-  const writeForm = () => {
-    console.log('teste')
+  const navigateficha = () => {
     navigate('/ficha')
+  }
+  const navigateprofile = () => {
+    navigate('/profile')
+  }
+  const navigatehistory = () => {
+    navigate('/history')
   }
 
     return (
       <div className={styles.home}>
         <h1>Meus sistemas</h1>
         <div className={styles.systems}>
-          <System text="Dados Pessoais" icon={<FaAddressCard style={{color: '#fff'}} />} />
-          <System text="Consultas" icon={<FaPlusCircle style={{color:'#fff'}} />} handleClick={writeForm} />
-          <System text="Histórico de Consultas" icon={<FaHistory style={{color:'#fff'}} />} />
+          <System text="Dados Pessoais" icon={<FaHistory  style={{color:'#fff'}} /> } handleClick={navigateprofile} />
+          <System text="Consultas" icon={<FaPlusCircle style={{color:'#fff'}} />} handleClick={navigateficha} />
+          <System text="Histórico de Consultas" icon={<FaHistory  style={{color:'#fff'}} /> } handleClick={navigatehistory} />
         </div>
       </div>
     );

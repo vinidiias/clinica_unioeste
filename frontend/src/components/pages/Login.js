@@ -1,13 +1,14 @@
 import styles from './Login.module.css'
 
-import LoginForm from '../login/LoginForm'
 import { useNavigate } from 'react-router-dom'
 import { useContext, useState } from 'react'
-import RegisterForm from '../login/RegisterForm'
-
 import { motion } from 'framer-motion'
-import api from '../../services/Api'
 import { UserContext } from '../context/UserContext'
+import RegisterForm from '../login/RegisterForm'
+import LoginForm from '../login/LoginForm'
+import api from '../../services/Api'
+
+
 
 const Login = () => {
   const [userData, setUserData] = useContext(UserContext)
@@ -18,14 +19,25 @@ const Login = () => {
     setShowLogin(!showLogin)
   }
 
-  async function registerHandler(email, password) {
+  async function registerHandler(email, name, password) {
     try{
       const user = await api.post('/user', {
         email,
+        name,
         password
       })
       .then((resp) => {
-        console.log(resp)
+        const user = resp.data
+        console.log(resp.data)
+        setUserData(prevStat => ({
+          ...prevStat,
+          email: user.email,
+          name: user.name
+        }))
+      })
+      .then(() =>{
+        console.log(userData)
+        setShowLogin(!showLogin)
       })
       .catch((err) => console.log(err))
     } catch(err){
@@ -47,9 +59,10 @@ const Login = () => {
           ...prevStat,
           isLogged: true,
           email: user.email,
+          name: user.name,
           user_id: user._id,
         }))
-        navigate('/ficha')
+        navigate('/home')
       })
       .catch((err) => console.log(err))
     } catch(err) {
