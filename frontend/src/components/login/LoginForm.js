@@ -2,22 +2,27 @@ import styles from './LoginForm.module.css'
 import Input from '../form/Input'
 import Submit from '../form/Submit'
 
-const LoginForm = ({ handleSubmit, handleClick }) => {
+import { useState } from 'react'
 
+const LoginForm = ({ handleSubmit, handleClick }) => {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    
     const submit = (e) =>{
       e.preventDefault()
 
-      handleSubmit()
+      handleSubmit(email, password)
     }
 
     return (
       <form onSubmit={submit}>
         <Input
-          type="text"
+          type="email"
           name="name"
-          text="Nome"
-          placeholder="Digite seu nome"
+          text="Email"
+          placeholder="Digite seu email"
           customClass="column padding_login"
+          handleOnChange={(e) => setEmail(e.target.value)}
         />
         <Input
           type="password"
@@ -25,6 +30,7 @@ const LoginForm = ({ handleSubmit, handleClick }) => {
           text="Senha"
           placeholder="Digite sua senha"
           customClass="column padding_login"
+          handleOnChange={(e) => setPassword(e.target.value)}
         />
         <div className={styles.form_submit}>
           <Submit text="Entrar" />

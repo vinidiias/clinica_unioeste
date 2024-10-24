@@ -2,13 +2,15 @@ import styles from './Login.module.css'
 
 import LoginForm from '../login/LoginForm'
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import RegisterForm from '../login/RegisterForm'
 
 import { motion } from 'framer-motion'
 import api from '../../services/Api'
+import { UserContext } from '../context/UserContext'
 
 const Login = () => {
+  const [userData, setUserData] = useContext(UserContext)
   const [showLogin, setShowLogin] = useState(false)
   const navigate = useNavigate()
 
@@ -22,14 +24,37 @@ const Login = () => {
         email,
         password
       })
-      .then((resp) => console.log(resp))
+      .then((resp) => {
+        console.log(resp)
+      })
+      .catch((err) => console.log(err))
     } catch(err){
       console.log(err)
     }
   }
 
-  const submitHandler = () => {
-    navigate('/home')
+  async function loginHandler(email, password) {
+    try{
+      const user = await api.post('/session', {
+        email,
+        password
+      })
+      .then((resp) => {
+        const user = resp.data
+        console.log(user)
+
+        setUserData(prevStat => ({
+          ...prevStat,
+          isLogged: true,
+          email: user.email,
+          user_id: user._id,
+        }))
+        navigate('/ficha')
+      })
+      .catch((err) => console.log(err))
+    } catch(err) {
+      console.log(err)
+    }
   }
 
   const cardVariants = {
@@ -71,7 +96,7 @@ const Login = () => {
           >
             <h1>Entrar</h1>
             <LoginForm
-              handleSubmit={submitHandler}
+              handleSubmit={loginHandler}
               handleClick={toggleChange}
             />
           </motion.div>

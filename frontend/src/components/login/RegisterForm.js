@@ -18,10 +18,10 @@ const RegisterForm = ({ handleSubmit, handleClick }) => {
     return (
       <form onSubmit={submit}>
         <Input
-          type="text"
+          type="email"
           name="name"
-          text="Nome"
-          placeholder="Digite seu nome"
+          text="Email"
+          placeholder="Digite seu email"
           customClass="column padding_login"
           handleOnChange={(e) => setEmail(e.target.value)}
 

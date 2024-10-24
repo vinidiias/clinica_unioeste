@@ -16,10 +16,13 @@ import About from './components/pages/About';
 import Contato from './components/pages/Contato';
 import Ficha from './components/pages/Ficha';
 
+import { UserProvider } from './components/context/UserContext'
+
 function App() {
   return (
     <div className="app">
       <Router>
+        <UserProvider>
         <NavBar />
         <Routes>
           <Route path='/' element={<Container customClass='align' ><Login /></Container>} />
@@ -30,6 +33,7 @@ function App() {
           <Route path='/ficha' element={<Container customClass='auto'><Ficha /></Container>} />
         </Routes>
         <Footer />
+        </UserProvider>
       </Router>
     </div>
   );
