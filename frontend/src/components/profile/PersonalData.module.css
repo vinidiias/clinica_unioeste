@@ -1,0 +1,63 @@
+.containers {
+    background-color: #fff;
+    width: 50%;
+    border-radius: 5px;
+    border: 1px solid rgb(177, 177, 177);
+}
+
+.containers h3 {
+    font-weight: 550;
+}
+
+.header {
+    background-color: rgb(221, 221, 221);
+    padding: .5em;
+    text-align: center;
+}
+
+.infos {
+    display: flex;
+    column-gap: 1em;
+    justify-content: space-around;
+    padding: 1em;
+}
+
+.item {
+    width: 100%;
+}
+
+.input {
+    display: flex;
+    flex-direction: column;
+}
+
+.input label {
+    font-weight: 600;
+    font-size: .8em;
+}
+
+.input input {
+    width: 100%;
+    text-align: left;
+    padding: .05em 0;
+    border-radius: 2px;
+    border: 1px solid rgb(151, 151, 151);
+    background-color: rgb(204, 204, 204) ;
+    margin-bottom: 1em;
+}
+
+.input select:disabled,
+.input input:disabled {
+    cursor: no-drop;
+}
+
+.submitEdit {
+    display: flex;
+    justify-content: center;
+    padding-top: 1em;
+    column-gap: .5em;
+}
+
+.submitEdit button {
+    padding: .1em;
+}
