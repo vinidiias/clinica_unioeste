@@ -119,8 +119,10 @@ const FichaForm = () => {
 
     handleSetShowCurso(newSchool);
 
-    setFichaForm({...fichaForm , [e.target.name]: e.target.checked ? value : null})
-}
+    setFichaForm({...fichaForm , education: {
+      [e.target.name]: e.target.checked ? value : null
+    }
+  })}
 
 function handleUniversityChange(value, e) {
   const newSchool = selectedSchool === value ? null : value;
@@ -265,7 +267,7 @@ function handleChangeTimeWork(e) {
         </div>
         <div className={styles.flex}>
           <div><Input type="number" name="age" text="Idade" handleOnChange={handleChange} /></div>
-          <Input type="date" name="date_of_birth" text="Data de Nascimento" handleOnChange={handleChange} />
+          <Input type="date" name="birth" text="Data de Nascimento" handleOnChange={handleChange} />
           <div className={styles.sex}>
             <label htmlFor="sexo-F" className={styles.label}>
               Sexo:
@@ -311,17 +313,17 @@ function handleChangeTimeWork(e) {
             autoComplete="adress"
             handleOnChange={handleChange}
           />
-          <Input type="number" name="AdressNumber" text="Número" handleOnChange={handleChange} />
+          <Input type="number" name="adressNumber" text="Número" handleOnChange={handleChange} />
         </div>
         <Input type="text" name="profission" text="Profissão" customClass="flex_1" handleOnChange={handleChange} />
         <div style={{ marginBottom: "1em" }} className={styles.flex}>
-          <label htmlFor="education-Fundamental I" className={styles.label}>
+          <label htmlFor="level-Fundamental I" className={styles.label}>
             Escolaridade:
           </label>
           <div>
             <CheckBox
               isSelected={selectedSchool === "Fundamental I"}
-              name="education"
+              name="level"
               side="right"
               text="Fundamental I"
               value="Fundamental I"
@@ -330,7 +332,7 @@ function handleChangeTimeWork(e) {
             <CheckBox
               isSelected={selectedSchool === "Fundamental II"}
               side="right"
-              name="education"
+              name="level"
               text="Fundamental II"
               value="Fundamental II"
               handleOnChange={handleSchoolChange}
@@ -338,7 +340,7 @@ function handleChangeTimeWork(e) {
             <CheckBox
               isSelected={selectedSchool === "Ensino Médio"}
               side="right"
-              name="education"
+              name="level"
               text="Ensino Médio"
               value="Ensino Médio"
               handleOnChange={handleSchoolChange}
@@ -346,7 +348,7 @@ function handleChangeTimeWork(e) {
             <CheckBox
               isSelected={selectedSchool === "Ensino Técnico"}
               side="right"
-              name="education"
+              name="level"
               text="Ensino Técnico"
               value="Ensino Técnico"
               handleOnChange={handleSchoolChange}

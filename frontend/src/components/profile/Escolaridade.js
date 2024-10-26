@@ -1,51 +1,48 @@
 import { useState } from 'react';
 import styles from './PersonalData.module.css'
 
-const Escolaridade = ({ education, curso, turno }) => {
+const Escolaridade = ({ education }) => {
     const [edit, setEdit] = useState(true)
-    const [showCurso, setShowCurso] = useState(false)
 
-    const [formData, setFormData] = useState({
-        education,
-        curso,
-        turno
-    })
+    const [level, setLevel] = useState(education.level)
+    const [curso, setCurso] = useState(education.curso)
+    const [turno, setTurno] = useState(education.turno)
+    const [periodo, setPeriodo] = useState(education.periodo)
+
+    function imcomplete_info() {
+      if((curso === undefined | curso === '') |
+      (turno === undefined | turno === '') |
+      (periodo === undefined | periodo === '')) {
+        return 1
+      }
+      return 0
+    }
 
     function editToggle() {
         setEdit(!edit)
-        console.log(edit)
     }
 
-    function handleChange(e) {
-        if(e.target.value === 'graduacao' |
-           e.target.value === 'pos graduacao') setShowCurso(true)
-        else setShowCurso(false)
-
-        setFormData(prevStat => ({
-          ...prevStat,
-          education: e.target.value
-        }))
-        console.log(formData.education)
+    function editHandle(){
+      if(level !== 'graduacao' && level !== 'pos graduacao') {
+        const education = ({
+          level,
+        })
+        console.log(education)
+        editToggle()
+        return
       }
-
-      function editHandle(){
-        console.log(formData);
-        editToggle();
+      if(imcomplete_info()) return alert('Informações incompletas!')
+      
+      const education = {
+        level,
+        curso,
+        periodo,
+        turno
       }
-
-      function handleChangeCurso(e) {
-        setFormData(prevStat => ({
-            ...prevStat,
-            curso: e.target.value
-        }))
-      }
-
-      function handleChangeTurno(e) {
-        setFormData(prevStat => ({
-            ...prevStat,
-            turno: e.target.value
-        }))
-      }
+      console.log(education)
+      editToggle()
+      return
+    }
 
     return (
       <div className={styles.containers}>
@@ -55,13 +52,13 @@ const Escolaridade = ({ education, curso, turno }) => {
         <div className={styles.infos}>
           <div className={styles.item}>
             <div className={styles.input}>
-              <label htmlFor="education">Escolaridade</label>
+              <label htmlFor="level">Escolaridade</label>
               <select
-                onChange={handleChange}
-                value={formData.education}
+                onChange={(e) => setLevel(e.target.value)}
+                value={level}
                 disabled={edit}
-                name="education"
-                id="education"
+                name="level"
+                id="level"
               >
                 <option value="default">Selecione</option>
                 <option value="fundamental I">Fundamental I</option>
@@ -72,15 +69,29 @@ const Escolaridade = ({ education, curso, turno }) => {
                 <option value="pos graduacao">Pós Graduação</option>
               </select>
             </div>
-            {showCurso && (
+            {(level === "graduacao" || level === "pos graduacao") && (
               <>
                 <div className={styles.input}>
                   <label htmlFor="curso">Curso</label>
-                  <input type="text" name="curso" id="curso" value={curso} onChange={handleChangeCurso} />
+                  <input
+                    type="text"
+                    name="curso"
+                    id="curso"
+                    disabled={edit}
+                    value={curso}
+                    onChange={(e) => setCurso(e.target.value)}
+                  />
                 </div>
                 <div className={styles.input}>
                   <label htmlFor="periodo">Ano/Periodo</label>
-                  <input type="text" name="periodo" id="periodo" />
+                  <input
+                    type="text"
+                    name="periodo"
+                    id="periodo"
+                    disabled={edit}
+                    value={periodo}
+                    onChange={(e) => setPeriodo(e.target.periodo)}
+                  />
                 </div>
               </>
             )}
@@ -90,21 +101,20 @@ const Escolaridade = ({ education, curso, turno }) => {
               <button onClick={editToggle}>Editar dados</button>
               {!edit && <button onClick={editHandle}>Confirmar</button>}
             </div>
-            {showCurso && (
+            {(level === "graduacao" || level === "pos graduacao") && (
               <div className={styles.input}>
-                <label htmlFor="course_schedule">Ano/Periodo</label>
+                <label htmlFor="turno">Ano/Periodo</label>
                 <select
-                    onChange={handleChange}
-                    value={formData.turno}
-                    disabled={edit}
-                    name="course_schedule"
-                    id="course_schedule"
+                  onChange={(e) => setTurno(e.target.turno)}
+                  value={turno}
+                  disabled={edit}
+                  name="turno"
+                  id="turno"
                 >
-                    <option value="default">Selecione</option>
-                    <option value="Manhã">Manhã</option>
-                    <option value="Tarde">Tarde</option>
-                    <option value="Noite">Noite</option>
-                   
+                  <option value="default">Selecione</option>
+                  <option value="Manhã">Manhã</option>
+                  <option value="Tarde">Tarde</option>
+                  <option value="Noite">Noite</option>
                 </select>
               </div>
             )}

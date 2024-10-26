@@ -9,9 +9,21 @@ export function UserProvider(props) {
         email: '',
         user_id: '',
     })
+    const [pessoa, setPessoa] = useState({
+        img: '',
+        name: '',
+        age: '',
+        birth: '',
+        cpf: '',
+        ra: '',
+        phone: '',
+        email: '',
+        profissao: '',
+        education: '',    
+    })
 
     return (
-        <UserContext.Provider value={[userData, setUserData]}>
+        <UserContext.Provider value={{userData, setUserData, pessoa, setPessoa}}>
             {props.children}
         </UserContext.Provider>
     )

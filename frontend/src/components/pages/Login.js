@@ -11,7 +11,7 @@ import api from '../../services/Api'
 
 
 const Login = () => {
-  const [userData, setUserData] = useContext(UserContext)
+  const {userData, setUserData} = useContext(UserContext)
   const [showLogin, setShowLogin] = useState(false)
   const navigate = useNavigate()
 
