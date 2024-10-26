@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../context/UserContext'
 
 const LoginForm = ({ handleSubmit, handleClick }) => {
-  const [userData, setUserData] = useContext(UserContext)
+  const {userData, setUserData} = useContext(UserContext)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
