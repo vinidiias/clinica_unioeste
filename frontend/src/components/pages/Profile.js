@@ -5,9 +5,11 @@ import logoPerfil from '../../img/logoPerfil.jpg'
 
 
 import PersonalData from '../profile/PersonalData'
+import Escolaridade from '../profile/Escolaridade'
 
 const Profile = () => {
   const [userData, setUserData] = useContext(UserContext)
+
 
 
   return (
@@ -21,6 +23,9 @@ const Profile = () => {
           ra="220919"
           phone="45 991330882"
           email="vinidiias@outlook.com.br"
+        />
+        <Escolaridade
+
         />
     </div>
   );
