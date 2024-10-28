@@ -91,5 +91,5 @@ const fichaSchema = new mongoose.Schema({
         }
       }
 })
-
-module.exports = mongoose.model('Ficha', fichaSchema)
+const ficha = mongoose.model('Ficha', fichaSchema)
+module.exports = ficha
