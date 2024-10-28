@@ -29,13 +29,15 @@ const pessoaSchema = new mongoose.Schema({
         type: String, 
         require: true,
     },
-    adrres: {
-        type: String, 
-        require: true,
-    }, 
-    adrres_number:{
-        type: String, 
-        require: true,
+    adrress: {
+        adrres: {
+            type: String, 
+            require: true,
+        }, 
+        adrres_number:{
+            type: String, 
+            require: true,
+        },
     },
     profissao: {
         type: String,
