@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from './PersonalData.module.css'
 
-const Escolaridade = ({ education }) => {
+const Escolaridade = ({ education='' }) => {
     const [edit, setEdit] = useState(true)
 
     const [level, setLevel] = useState(education.level)
@@ -97,10 +97,6 @@ const Escolaridade = ({ education }) => {
             )}
           </div>
           <div className={styles.item}>
-            <div className={styles.submitEdit}>
-              <button onClick={editToggle}>Editar dados</button>
-              {!edit && <button onClick={editHandle}>Confirmar</button>}
-            </div>
             {(level === "graduacao" || level === "pos graduacao") && (
               <div className={styles.input}>
                 <label htmlFor="turno">Ano/Periodo</label>
@@ -118,6 +114,10 @@ const Escolaridade = ({ education }) => {
                 </select>
               </div>
             )}
+            <div className={styles.submitEdit}>
+              <button onClick={editToggle}>Editar dados</button>
+              {!edit && <button onClick={editHandle}>Confirmar</button>}
+            </div>
           </div>
         </div>
       </div>
