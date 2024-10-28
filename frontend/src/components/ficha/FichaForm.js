@@ -11,15 +11,49 @@ import Table from '../form/Table'
 const FichaForm = () => {
 
   const [fichaForm, setFichaForm] = useState({})
-  const [selectedSchool, setSelectedSchool] = useState(null)
-  const [selectedSexo, setSelectedSexo] = useState(null)
-  const [selectedTurno, setSelectedTurno] = useState(null)
-  const [selectedVinculo, setSelectedVinculo] = useState(null)
-  const [selectedTypeVinculo, setSelectedTypeVinculo] = useState(null)
-  const [selectedCommunity, setSelectedCommunity] = useState(null)
-  const [selectedWork, setSelectedWork] = useState(null)
-  const [selectedPsycho, setSelectedPsycho] = useState(null)
-  const [selectedPsychi, setSelectedPsychi] = useState(null)
+  const [name, setName] = useState('')
+  const [age, setAge] = useState('')
+  const [birth, setBirth] = useState('')
+  const [sex, setSex] = useState('')
+  const [ra, setRa] = useState('')
+  const [cpf, setCpf] = useState('')
+  const [phone, setPhone] = useState('')
+  const [email, setEmail] = useState('')
+  const [adress, setAdress] = useState('')
+  const [numberAdress, setNumberAdress] = useState('')
+  const [profission, setProfission] = useState('')
+  const [education, setEducation] = useState({
+    type:'',
+    curso: '',
+    periodo: '',
+    turno: '',
+  })
+  const [curso, setCurso] = useState('')
+  const [periodo, setPeriodo] = useState('')
+  const [turno, setTurno] = useState('')
+  const [preferredDay, setPreferredDay] = useState({})
+  const [vinculo, setVinculo] = useState({
+    type: '',
+    setor: '',
+  })
+  const [setor, setSetor] = useState('')
+  const [comunidade, setComunidade] = useState('')
+  const [work, setWork] = useState({
+    type: '',
+    hours: '',
+  })
+  const [horarioWork, setHorarioWork] = useState('')
+  const [psicologa, setPsicologa] = useState({
+    type: '',
+    time: '',
+  })
+  const [timePsicologa, setTimePsicologa] = useState('')
+  const [psiquiatra, setPsiquiatra] = useState({
+    type: '',
+    time: '',
+  })
+  const [timePsiquiatra, setTimePsiquiatra] = useState('')
+  const [observation, setObservation] = useState('')
 
   const [showPsychi, setShowPsychi] = useState(false)
   const [showPsycho, setShowPsycho] = useState(false)
@@ -32,9 +66,28 @@ const FichaForm = () => {
     e.preventDefault()
     console.log(fichaForm)
   }
-  
+
   function handleChange(e) {
-    setFichaForm({...fichaForm, [e.target.name]: e.target.value })
+    const { name, value } = e.target
+
+    const setters = {
+      name: setName,
+      age: setAge,
+      birth: setBirth,
+      sex: setSex,
+      ra: setRa,
+      cpf: setCpf,
+      phone: setPhone,
+      email: setEmail,
+      adress: setAdress,
+      numberAdress: setNumberAdress,
+      profission: setProfission,
+      observation: setObservation
+    }
+
+    if(setters[name]) {
+      setters[name](value)
+    }
   }
 
   function handleChangeCurso(e) {
@@ -410,8 +463,8 @@ function handleChangeTimeWork(e) {
         </div>
         <div>
           <Table
-            setFichaForm={setFichaForm}
-            fichaForm={fichaForm}
+            setPreferredDay={setPreferredDay}
+            preferredDay={preferredDay}
           />
         </div>
         <div style={{ marginBottom: "1em" }} className={styles.flex}>

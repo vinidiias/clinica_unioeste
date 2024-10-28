@@ -11,6 +11,7 @@ const CheckBox = ({ name, text, side, handleOnChange, value, isSelected, customC
           </label>
         )}
         <input
+          required={true}
           type="checkbox"
           checked={isSelected}
           name={name}
