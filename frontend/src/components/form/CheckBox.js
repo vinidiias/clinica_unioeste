@@ -11,11 +11,12 @@ const CheckBox = ({ name, text, side, handleOnChange, value, isSelected, customC
           </label>
         )}
         <input
+          required={true}
           type="checkbox"
           checked={isSelected}
           name={name}
           id={inputId}
-          onChange={(e) => handleOnChange(value, e)}
+          onChange={handleOnChange}
           value={value | ''}
         />
         {side === "right" && (
