@@ -1,16 +1,11 @@
 import styles from './FichaForm.module.css'
-
-import { useState } from 'react'
-
+import { useEffect, useState } from 'react'
 import Input from '../form/Input'
-//import Select from '../form/Select'
-//import Submit from '../form/Submit'
 import CheckBox from '../form/CheckBox'
 import Table from '../form/Table'
 
 const FichaForm = () => {
 
-  const [fichaForm, setFichaForm] = useState({})
   const [name, setName] = useState('')
   const [age, setAge] = useState('')
   const [birth, setBirth] = useState('')
@@ -28,44 +23,89 @@ const FichaForm = () => {
     periodo: '',
     turno: '',
   })
+  const [typeEducation, setTypeEducation] = useState('')
   const [curso, setCurso] = useState('')
   const [periodo, setPeriodo] = useState('')
   const [turno, setTurno] = useState('')
-  const [preferredDay, setPreferredDay] = useState({})
+  const [preferredDay, setPreferredDay] = useState('')
   const [vinculo, setVinculo] = useState({
     type: false,
     typeVinculo: '',
     setor: '',
   })
+  const [typeVinculo, setTypeVinculo] = useState('')
   const [setor, setSetor] = useState('')
   const [comunidade, setComunidade] = useState('')
   const [work, setWork] = useState({
     type: '',
     hours: '',
   })
+  const [typeWork, setTypeWork] = useState('')
   const [horarioWork, setHorarioWork] = useState('')
   const [psicologa, setPsicologa] = useState({
     type: '',
     time: '',
   })
+  const [typePsicologa, setTypePsicologa] = useState('')
   const [timePsicologa, setTimePsicologa] = useState('')
   const [psiquiatra, setPsiquiatra] = useState({
     type: '',
     time: '',
   })
+  const [typePsiquiatra, setTypePsiquiatra] = useState('')
   const [timePsiquiatra, setTimePsiquiatra] = useState('')
   const [observation, setObservation] = useState('')
 
-  const [showPsychi, setShowPsychi] = useState(false)
-  const [showPsycho, setShowPsycho] = useState(false)
-  const [showWork, setShowWork] = useState(false)
-  const [showSetor, setShowSetor] = useState(false)
-  const [showCurso, setShowCurso] = useState(false)
-  const [showTypeVinculo, setShowTypeVinculo] = useState(false)
+//education object
+useEffect(() => {
+  if (typeEducation !== 'Graduação' && typeEducation !== 'Pós Graduação') {
+    setEducation({
+      type: typeEducation, // Corrigido para 'type'
+    });
+  } else {
+    setEducation({
+      typeEducation, // Corrigido para 'type'
+      curso,
+      periodo,
+      turno,
+    });
+  }
+}, [typeEducation, curso, periodo, turno]);
+
+
+
+  //vinculo unioeste object
+  useEffect(() => {
+    const vinculoType = vinculo.type
+    if(vinculoType){
+      if(typeVinculo !== 'Agente') setVinculo({typeVinculo})
+      else setVinculo({typeVinculo, setor})
+    }
+    else setVinculo({type:vinculoType})
+  }, [typeVinculo, setor, vinculo.type])
+
+  //work object
+  useEffect(()=> {
+    if(typeWork === 'Trabalha') setWork({typeWork, horarioWork})
+    else setWork({typeWork})
+  }, [typeWork, horarioWork])
+
+  //psicologa object
+  useEffect(() => {
+    if(typePsicologa !== 'Acompanha')
+      setPsicologa({typePsicologa})
+    else setPsicologa({typePsicologa, timePsicologa})
+  }, [typePsicologa, timePsicologa])
+
+  //psiquiatra object
+  useEffect(() => {
+    if(typePsiquiatra !== 'Acompanha')
+      setPsiquiatra({typePsiquiatra})
+    else setPsiquiatra({typePsiquiatra, timePsiquiatra})
+  }, [typePsiquiatra, timePsiquiatra])
 
   function showDate(e){
     e.preventDefault()
-    console.log(fichaForm)
   }
 
   function handleChange(e) {
@@ -91,45 +131,6 @@ const FichaForm = () => {
     }
   }
 
-  function handleShowPsychi(currentPsychi){
-    if(currentPsychi === 'Acompanha') setShowPsychi(true)
-      else setShowPsychi(false)
-  }
-
-  function handleShowPsycho(currentPsycho) {
-    if(currentPsycho === 'Acompanha') setShowPsycho(true)
-    else setShowPsycho(false)
-  }
-
-function handleShowWork(currentWork) {
-  if(currentWork === 'Trabalha') setShowWork(true)
-  else setShowWork(false)
-}
-
-  function handleSetShowSetor(currentSetor) {
-    if (currentSetor === 'Agente') {
-      setShowSetor(true);
-    } else {
-      setShowSetor(false);
-    }
-  }
-
-  function handleSetShowTypeVinculo(currentVinculo) {
-    if (currentVinculo !== null) {
-      setShowTypeVinculo(true);
-    } else {
-      setShowTypeVinculo(false);
-    }
-  }
-
-  function handleSetShowCurso(currentSchool) {
-    if (currentSchool === "Graduação" || currentSchool === "Pós Graduação") {
-      setShowCurso(true);
-    } else {
-      setShowCurso(false);
-    }
-  }
-
     return (
       <form className={styles.ficha_form}>
         <div>
@@ -143,44 +144,76 @@ function handleShowWork(currentWork) {
           />
         </div>
         <div className={styles.flex}>
-          <div><Input type="number" name="age" text="Idade" handleOnChange={handleChange} /></div>
-          <Input type="date" name="birth" text="Data de Nascimento" handleOnChange={handleChange} />
+          <div>
+            <Input
+              type="number"
+              name="age"
+              text="Idade"
+              handleOnChange={handleChange}
+            />
+          </div>
+          <Input
+            type="date"
+            name="birth"
+            text="Data de Nascimento"
+            handleOnChange={handleChange}
+          />
           <div className={styles.sex}>
             <label htmlFor="sexo-F" className={styles.label}>
               Sexo:
             </label>
             <CheckBox
               side="right"
-              isSelected={sex}
-              name="sexo"
+              isSelected={sex === 'F'}
+              name="sex"
               value="F"
               text="( )F"
-              handleOnChange={(e) => {setSex(e.target.value)}}
+              handleOnChange={(e) => {
+                setSex(e.target.value);
+              }}
               customClass="title"
             />
             <CheckBox
               side="right"
-              isSelected={sex}
-              name="sexo"
+              isSelected={sex === 'M'}
+              name="sex"
               value="M"
               text="( )M"
-              handleOnChange={(e) => {setSex(e.target.value)}}
+              handleOnChange={(e) => {
+                setSex(e.target.value);
+              }}
             />
           </div>
         </div>
         <div className={styles.flex}>
-          <Input type="number" name="ra" text="RA" handleOnChange={handleChange} />
-          <Input type="text" name="cpf" text="CPF" handleOnChange={handleChange} />
+          <Input
+            type="number"
+            name="ra"
+            text="RA"
+            handleOnChange={handleChange}
+          />
+          <Input
+            type="text"
+            name="cpf"
+            text="CPF"
+            handleOnChange={handleChange}
+          />
         </div>
         <div className={styles.flex}>
           <Input
             type="number"
-            name="tel"
+            name="phone"
             text="Telefone ( )"
             autoComplete="tel"
             handleOnChange={handleChange}
           />
-          <Input type="email" name="email" text="Email" autoComplete="email" handleOnChange={handleChange} />
+          <Input
+            type="email"
+            name="email"
+            text="Email"
+            autoComplete="email"
+            handleOnChange={handleChange}
+          />
         </div>
         <div className={styles.flex}>
           <Input
@@ -190,9 +223,20 @@ function handleShowWork(currentWork) {
             autoComplete="adress"
             handleOnChange={handleChange}
           />
-          <Input type="number" name="adressNumber" text="Número" handleOnChange={handleChange} />
+          <Input
+            type="number"
+            name="numberAdress"
+            text="Número"
+            handleOnChange={handleChange}
+          />
         </div>
-        <Input type="text" name="profission" text="Profissão" customClass="flex_1" handleOnChange={handleChange} />
+        <Input
+          type="text"
+          name="profission"
+          text="Profissão"
+          customClass="flex_1"
+          handleOnChange={handleChange}
+        />
         <div style={{ marginBottom: "1em" }} className={styles.flex}>
           <label htmlFor="level-Fundamental I" className={styles.label}>
             Escolaridade:
@@ -204,7 +248,7 @@ function handleShowWork(currentWork) {
               side="right"
               text="Fundamental I"
               value="Fundamental I"
-              handleOnChange={(e) => setEducation({type: e.target.value})}
+              handleOnChange={(e) => setTypeEducation({ type: e.target.value })}
             />
             <CheckBox
               isSelected={education.type === "Fundamental II"}
@@ -212,7 +256,7 @@ function handleShowWork(currentWork) {
               name="level"
               text="Fundamental II"
               value="Fundamental II"
-              handleOnChange={(e) => setEducation({type: e.target.value})}
+              handleOnChange={(e) => setTypeEducation({ type: e.target.value })}
             />
             <CheckBox
               isSelected={education.type === "Ensino Médio"}
@@ -220,7 +264,7 @@ function handleShowWork(currentWork) {
               name="level"
               text="Ensino Médio"
               value="Ensino Médio"
-              handleOnChange={(e) => setEducation({type: e.target.value})}
+              handleOnChange={(e) => setTypeEducation({ type: e.target.value })}
             />
             <CheckBox
               isSelected={education.type === "Ensino Técnico"}
@@ -228,7 +272,7 @@ function handleShowWork(currentWork) {
               name="level"
               text="Ensino Técnico"
               value="Ensino Técnico"
-              handleOnChange={(e) => setEducation({type: e.target.value})}
+              handleOnChange={(e) => setTypeEducation({ type: e.target.value })}
             />
             <CheckBox
               isSelected={education.type === "Graduação"}
@@ -236,7 +280,7 @@ function handleShowWork(currentWork) {
               name="level"
               text="Graduação"
               value="Graduação"
-              handleOnChange={(e) => setEducation({type: e.target.value})}
+              handleOnChange={(e) => setTypeEducation({ type: e.target.value })}
             />
             <CheckBox
               isSelected={education.type === "Pós Graduação"}
@@ -244,66 +288,52 @@ function handleShowWork(currentWork) {
               name="level"
               text="Pós Graduação"
               value="Pós Graduação"
-              handleOnChange={(e) => setEducation({type: e.target.value})}
+              handleOnChange={(e) => setTypeEducation({ type: e.target.value })}
             />
-            {showCurso && (
+            {((typeEducation === 'Pós Graduação') ||
+            (typeEducation === 'Graduação')) && (
               <div style={{ marginTop: "1em" }}>
                 <div className={styles.flex}>
-                  <Input type="text" name="curso" text="Curso" handleOnChange={(e) => {
-                    setEducation(prevStat => ({
-                      ...prevStat,
-                      curso: e.target.value
-                    }))
-                  }} />
-                  <Input type="text" name="periodo" text="Ano/período" handleOnChange={(e) => {
-                    setEducation(prevStat => ({
-                      ...prevStat,
-                      periodo: e.target.value
-                    }))
-                  }} />
+                  <Input
+                    type="text"
+                    name="curso"
+                    text="Curso"
+                    handleOnChange={(e) => setCurso(e.target.value)}
+                  />
+                  <Input
+                    type="text"
+                    name="periodo"
+                    text="Ano/período"
+                    handleOnChange={(e) => setPeriodo(e.target.value)}
+                  />
                 </div>
                 <div className={styles.flex}>
                   <label htmlFor="curso" className={styles.label}>
                     Turno do seu curso:
                   </label>
                   <CheckBox
-                    isSelected={education.turno === "Manhã"}
+                    isSelected={turno === "Manhã"}
                     side="right"
                     value="Manhã"
                     name="course_schedule"
                     text="Manhã"
-                    handleOnChange={(e) => {
-                      setEducation(prevStat => ({
-                        ...prevStat,
-                        turno: e.target.value
-                      }))
-                    }}
+                    handleOnChange={(e) => setTurno(e.target.value)}
                   />
                   <CheckBox
-                    isSelected={education.turno === "Tarde"}
+                    isSelected={turno === "Tarde"}
                     side="right"
                     value="Tarde"
                     name="course_schedule"
                     text="Tarde"
-                    handleOnChange={(e) => {
-                      setEducation(prevStat => ({
-                        ...prevStat,
-                        turno: e.target.value
-                      }))
-                    }}
+                    handleOnChange={(e) => setTurno(e.target.value)}
                   />
                   <CheckBox
-                    isSelected={education.turno === "Noite"}
+                    isSelected={turno === "Noite"}
                     side="right"
                     value="Noite"
                     name="course_schedule"
                     text="Noite"
-                    handleOnChange={(e) => {
-                      setEducation(prevStat => ({
-                        ...prevStat,
-                        turno: e.target.value
-                      }))
-                    }}
+                    handleOnChange={(e) => setTurno(e.target.value)}
                   />
                 </div>
               </div>
@@ -324,82 +354,71 @@ function handleShowWork(currentWork) {
             value="Vínculo com Unioeste"
             name="vinculo_com_unioeste"
             text="Vínculo com Unioeste:"
-            handleOnChange={(e) => setVinculo({
-              type: !vinculo.type
-            })}
+            handleOnChange={(e) =>
+              setVinculo({
+                type: !vinculo.type,
+              })
+            }
           />
           {vinculo.type && (
             <div className={styles.flex}>
               <CheckBox
-                isSelected={vinculo.typeVinculo === "Docente"}
+                isSelected={typeVinculo === "Docente"}
                 side="right"
                 value="Docente"
                 name="vinculo_com_unioeste"
                 text="Docente"
-                handleOnChange={(e) => setVinculo(prevStat => ({
-                  ...prevStat,
-                  typeVinculo: e.target.value
-                }))}
+                handleOnChange={(e) => setTypeVinculo(e.target.value)}
               />
               <CheckBox
-                isSelected={vinculo.typeVinculo === "Agente"}
+                isSelected={typeVinculo === "Agente"}
                 side="right"
                 value="Agente"
                 name="type"
                 text="Agente"
-                handleOnChange={(e) => setVinculo(prevStat => ({
-                  ...prevStat,
-                  typeVinculo: e.target.value
-                }))}
+                handleOnChange={(e) => setTypeVinculo(e.target.value)}
               />
               <CheckBox
-                isSelected={vinculo.typeVinculo === "Acadêmico"}
+                isSelected={typeVinculo === "Acadêmico"}
                 side="right"
                 value="Acadêmico"
                 name="vinculo_com_unioeste"
                 text="Acadêmico"
-                handleOnChange={(e) => setVinculo(prevStat => ({
-                  ...prevStat,
-                  typeVinculo: e.target.value
-                }))}
+                handleOnChange={(e) => setTypeVinculo(e.target.value)}
               />
               <CheckBox
-                isSelected={vinculo.typeVinculo === "Estagiário"}
+                isSelected={typeVinculo === "Estagiário"}
                 side="right"
                 value="Estagiário"
                 name="vinculo_com_unioeste"
                 text="Estagiário"
-                handleOnChange={(e) => setVinculo(prevStat => ({
-                  ...prevStat,
-                  typeVinculo: e.target.value
-                }))}
+                handleOnChange={(e) => setTypeVinculo(e.target.value)}
               />
             </div>
           )}
         </div>
-        {showSetor && (
+        {typeVinculo === 'Agente' && (
           <div>
             <Input
               type="text"
               name="setor"
               text="Setor que trabalha"
               customClass="flex_1"
-              handleOnChange={(e) => setVinculo(prevStat => ({
-                ...prevStat,
-                setor: e.target.value
-              }))}
+              handleOnChange={(e) => setSetor(e.target.value)}
             />
           </div>
         )}
         <div style={{ marginBottom: "1em" }}>
           <CheckBox
-            isSelected={comunidade === 'Sim'}
+            isSelected={comunidade === "Sim"}
             side="right"
             name="community"
             value="Comunidade Externa"
             text="Comunidade Externa"
             customClass="bold"
-            handleOnChange={(e) => setComunidade(e.target.checked ? 'Sim' : 'Não')}
+            handleOnChange={(e) =>
+              setComunidade(e.target.checked ? "Sim" : "Não")
+            }
           />
         </div>
         <div style={{ marginBottom: "1em" }} className={styles.flex}>
@@ -407,32 +426,30 @@ function handleShowWork(currentWork) {
             Você trabalha?
           </label>
           <CheckBox
-            isSelected={work.type === "Não trabalha"}
+            isSelected={typeWork === "Não trabalha"}
             side="right"
             value="Não trabalha"
-            handleOnChange={(e) => setWork({
-              type: e.target.value
-            })}
             name="work"
             text="( ) Não"
+            handleOnChange={(e) => setTypeWork(e.target.value)}
           />
           <CheckBox
-            isSelected={work.type === "Trabalha"}
+            isSelected={typeWork === "Trabalha"}
             side="right"
-            handleOnChange={(e) => setWork({
-              type: e.target.value
-            })}
+            handleOnChange={(e) => setTypeWork(e.target.value)}
             value="Trabalha"
             name="work"
             text="( ) Sim"
           />
         </div>
-        {work.type === 'Trabalha' && (
+        {work.type === "Trabalha" && (
           <div>
-            <Input type="time" name="work_schedule" text="Trabalha em qual horário?" handleOnChange={(e) => setWork(prevStat => ({
-              ...prevStat,
-              hours: e.target.value
-            }))} />
+            <Input
+              type="time"
+              name="work_schedule"
+              text="Trabalha em qual horário?"
+              handleOnChange={(e) => setHorarioWork(e.target.value)}
+            />
           </div>
         )}
         <div style={{ marginBottom: "1em" }} className={styles.flex}>
@@ -441,30 +458,30 @@ function handleShowWork(currentWork) {
           </label>
           <div className={styles.flex}>
             <CheckBox
-              isSelected={selectedPsycho === "Não acompanha"}
+              isSelected={typePsicologa === "Não acompanha"}
               side="right"
               value="Não acompanha"
               name="psycho"
               text="( ) Não"
-              handleOnChange={handlePsychoChange}
+              handleOnChange={(e) => setTypePsicologa(e.target.value)}
             />
             <CheckBox
-              isSelected={selectedPsycho === "Acompanha"}
+              isSelected={typePsicologa === "Acompanha"}
               side="right"
               name="psycho"
               value="Acompanha"
               text="( ) Sim"
-              handleOnChange={handlePsychoChange}
+              handleOnChange={(e) => setTypePsicologa(e.target.value)}
             />
           </div>
         </div>
-        {showPsycho && (
+        {typePsicologa === 'Acompanha' && (
           <div>
             <Input
               type="text"
               name="psycho_schedule"
               text="Por quanto tempo acompanhamento psicológico?"
-              handleOnChange={handleChangePsycho}
+              handleOnChange={(e) => setTimePsicologa(e.target.value)}
             />
           </div>
         )}
@@ -475,30 +492,30 @@ function handleShowWork(currentWork) {
           </label>
           <div className={styles.flex}>
             <CheckBox
-              isSelected={selectedPsychi === "Não acompanha"}
+              isSelected={typePsiquiatra === "Não acompanha"}
               side="right"
               value="Não acompanha"
               name="psychiatric"
               text="( ) Não"
-              handleOnChange={handlePsychiChange}
+              handleOnChange={(e) => setTypePsiquiatra(e.target.value)}
             />
             <CheckBox
-              isSelected={selectedPsychi === "Acompanha"}
+              isSelected={typePsiquiatra === "Acompanha"}
               side="right"
               value="Acompanha"
               name="psychiatric"
               text="( ) Sim"
-              handleOnChange={handlePsychiChange}
+              handleOnChange={(e) => setTypePsiquiatra(e.target.value)}
             />
           </div>
         </div>
-        {showPsychi && (
+        {typePsiquiatra === 'Acompanha' && (
           <div>
             <Input
               type="text"
               name="psychiatric_schedule"
               text="Por quanto tempo fez acompanhamento psiquiátrico?"
-              handleOnChange={handleChangePsychi}
+              handleOnChange={(e) => setTimePsiquiatra(e.target.value)}
             />
           </div>
         )}
@@ -506,7 +523,12 @@ function handleShowWork(currentWork) {
           <label htmlFor="observation" className={styles.label}>
             Observações que considere importante:
           </label>
-          <textarea name="observation" id="observation" rows="7" onChange={handleChange}></textarea>
+          <textarea
+            name="observation"
+            id="observation"
+            rows="7"
+            onChange={(e) => setObservation(e.target.value)}
+          ></textarea>
         </div>
         <button onClick={showDate}>Enviar</button>
       </form>
