@@ -36,5 +36,9 @@ module.exports = {
         catch (err) {
             return res.status(400).send(err);
         }
+    },
+
+    async delete (req, res) {
+
     }
 }
