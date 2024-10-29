@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom"
 import { useContext, useEffect } from "react"
 
 const Ficha = () => {
-    const [userData] = useContext(UserContext)
+    const {userData} = useContext(UserContext)
     const navigate = useNavigate()
 
     useEffect(() => {

@@ -29,10 +29,11 @@ const FichaForm = () => {
   const [turno, setTurno] = useState('')
   const [preferredDay, setPreferredDay] = useState('')
   const [vinculo, setVinculo] = useState({
-    type: false,
+    type: '',
     typeVinculo: '',
     setor: '',
   })
+  const [isVinculo, setIsVinculo] = useState(false)
   const [typeVinculo, setTypeVinculo] = useState('')
   const [setor, setSetor] = useState('')
   const [comunidade, setComunidade] = useState('')
@@ -64,44 +65,41 @@ useEffect(() => {
     });
   } else {
     setEducation({
-      typeEducation, // Corrigido para 'type'
-      curso,
-      periodo,
-      turno,
+      type:typeEducation, // Corrigido para 'type'
+      curso:curso,
+      periodo:periodo,
+      turno:turno,
     });
   }
 }, [typeEducation, curso, periodo, turno]);
 
-
-
   //vinculo unioeste object
   useEffect(() => {
-    const vinculoType = vinculo.type
-    if(vinculoType){
-      if(typeVinculo !== 'Agente') setVinculo({typeVinculo})
-      else setVinculo({typeVinculo, setor})
+    if(isVinculo){
+      if(typeVinculo !== 'Agente') setVinculo(typeVinculo)
+      else setVinculo({type:typeVinculo, setor:setor})
     }
-    else setVinculo({type:vinculoType})
-  }, [typeVinculo, setor, vinculo.type])
+    else setVinculo(isVinculo)
+  }, [typeVinculo, setor, isVinculo])
 
   //work object
   useEffect(()=> {
-    if(typeWork === 'Trabalha') setWork({typeWork, horarioWork})
-    else setWork({typeWork})
+    if(typeWork === 'Trabalha') setWork({type:typeWork, time:horarioWork})
+    else setWork(typeWork)
   }, [typeWork, horarioWork])
 
   //psicologa object
   useEffect(() => {
     if(typePsicologa !== 'Acompanha')
-      setPsicologa({typePsicologa})
-    else setPsicologa({typePsicologa, timePsicologa})
+      setPsicologa(typePsicologa)
+    else setPsicologa({type:typePsicologa, time:timePsicologa})
   }, [typePsicologa, timePsicologa])
 
   //psiquiatra object
   useEffect(() => {
     if(typePsiquiatra !== 'Acompanha')
-      setPsiquiatra({typePsiquiatra})
-    else setPsiquiatra({typePsiquiatra, timePsiquiatra})
+      setPsiquiatra(typePsiquiatra)
+    else setPsiquiatra({type:typePsiquiatra, time:timePsiquiatra})
   }, [typePsiquiatra, timePsiquiatra])
 
   function showDate(e){
@@ -248,7 +246,7 @@ useEffect(() => {
               side="right"
               text="Fundamental I"
               value="Fundamental I"
-              handleOnChange={(e) => setTypeEducation({ type: e.target.value })}
+              handleOnChange={(e) => setTypeEducation(e.target.value)}
             />
             <CheckBox
               isSelected={education.type === "Fundamental II"}
@@ -256,7 +254,7 @@ useEffect(() => {
               name="level"
               text="Fundamental II"
               value="Fundamental II"
-              handleOnChange={(e) => setTypeEducation({ type: e.target.value })}
+              handleOnChange={(e) => setTypeEducation(e.target.value)}
             />
             <CheckBox
               isSelected={education.type === "Ensino Médio"}
@@ -264,7 +262,7 @@ useEffect(() => {
               name="level"
               text="Ensino Médio"
               value="Ensino Médio"
-              handleOnChange={(e) => setTypeEducation({ type: e.target.value })}
+              handleOnChange={(e) => setTypeEducation(e.target.value)}
             />
             <CheckBox
               isSelected={education.type === "Ensino Técnico"}
@@ -272,7 +270,7 @@ useEffect(() => {
               name="level"
               text="Ensino Técnico"
               value="Ensino Técnico"
-              handleOnChange={(e) => setTypeEducation({ type: e.target.value })}
+              handleOnChange={(e) => setTypeEducation(e.target.value)}
             />
             <CheckBox
               isSelected={education.type === "Graduação"}
@@ -280,7 +278,7 @@ useEffect(() => {
               name="level"
               text="Graduação"
               value="Graduação"
-              handleOnChange={(e) => setTypeEducation({ type: e.target.value })}
+              handleOnChange={(e) => setTypeEducation(e.target.value)}
             />
             <CheckBox
               isSelected={education.type === "Pós Graduação"}
@@ -288,7 +286,7 @@ useEffect(() => {
               name="level"
               text="Pós Graduação"
               value="Pós Graduação"
-              handleOnChange={(e) => setTypeEducation({ type: e.target.value })}
+              handleOnChange={(e) => setTypeEducation(e.target.value)}
             />
             {((typeEducation === 'Pós Graduação') ||
             (typeEducation === 'Graduação')) && (
@@ -348,17 +346,13 @@ useEffect(() => {
         </div>
         <div style={{ marginBottom: "1em" }} className={styles.flex}>
           <CheckBox
-            isSelected={vinculo.type}
+            isSelected={isVinculo}
             customClass="bold"
             side="right"
             value="Vínculo com Unioeste"
             name="vinculo_com_unioeste"
             text="Vínculo com Unioeste:"
-            handleOnChange={(e) =>
-              setVinculo({
-                type: !vinculo.type,
-              })
-            }
+            handleOnChange={(e) => setIsVinculo(!isVinculo)}
           />
           {vinculo.type && (
             <div className={styles.flex}>
