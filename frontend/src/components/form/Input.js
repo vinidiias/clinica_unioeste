@@ -14,6 +14,7 @@ const Input = ({ type, name, text, handleOnChange, placeholder, value, autoCompl
       >
         <label htmlFor={name}>{text}:</label>
         <input
+          required={true}
           type={type}
           name={name}
           id={name}
