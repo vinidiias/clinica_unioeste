@@ -1,7 +1,7 @@
 const Pessoa = require('../Models/Pessoa')
 const { index } = require('./UserController')
 
-module.exports = {
+module.exports ={
     async create (req,res) {
         const { name, age, data_nasc, sexo, ra, cpf, telefone, adrres, adrres_number, profissao} = req.body
         
@@ -26,7 +26,7 @@ module.exports = {
                 telefone,
                 adrress,
                 profissao,
-                user: user_id 
+                user: user_id
             })
             await createPessoa.populate('user') //tras outras informacoes sobre o usurario
 
