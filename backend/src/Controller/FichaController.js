@@ -10,7 +10,7 @@ module.exports = {
         const { auth } = req.headers
 
         if( user_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
-        
+    
         try {
             // Cria o documento usando o modelo Ficha
             const createFicha = await Ficha.create({
@@ -45,6 +45,7 @@ module.exports = {
         catch (err) {
             return res.status(400).send(err);
         }
+
     }, 
 
     async indexAll (req, res) {
@@ -71,5 +72,6 @@ module.exports = {
         catch (err){
             return res.status(400).send(err)
         }
+
     }
 }

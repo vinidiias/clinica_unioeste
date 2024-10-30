@@ -1,11 +1,123 @@
+@media(max-width: 900px) {
+    .containers .header h3 {
+        font-size: 1em;
+    }
+
+    .containers .input label {
+        font-size: .7em;
+    }
+
+    .containers .divImg span {
+        padding: .3em;
+    }
+
+    .containers .divImg button {
+        font-size: .9em;
+    }
+
+    .containers .divImg img {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .containers .input input,
+    .containers .input select {
+        font-size: .7em;
+        height: 20px;
+    }
+
+    .containers .submitEdit button {
+        font-size: .7em;
+        padding: .4em .5em;
+        margin-bottom: .2em;
+    }
+}
+
+@media(max-width: 771px) {
+    .containers .header h3 {
+        font-size: .9em;
+    }
+
+    .containers .input label {
+        font-size: .6em;
+    }
+
+    .containers .divImg span {
+        padding: .2em;
+    }
+
+    .containers .input img {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .containers .input input,
+    .containers .input select {
+        font-size: .6em;
+        height: 15px;
+    }
+
+    .containers .submitEdit button {
+        font-size: .6em;
+        padding: .3em .3em;
+        margin-bottom: .2em;
+    }
+}
+
 .containers {
     background-color: #fff;
-    width: 50%;
+    width: 80%;
     border-radius: 5px;
     border: 1px solid rgb(177, 177, 177);
 }
 
-.containers h3 {
+@media(max-width: 680px) {
+    .containers {
+        width: 100%;
+    }
+
+    .containers .header h3 {
+        font-size: .9em;
+    }
+
+    .containers .infos {
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .containers .divImg {
+        margin-bottom: 1em;
+    }
+
+    .containers .infos .divImg {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .containers .input label {
+        font-size: .7em;
+    }
+
+    .containers .divImg img {
+        width: 120px;
+        height: 150px;
+    }
+    
+    .containers .input input,
+    .containers .input select {
+        font-size: .7em;
+        height: 20px;
+    }
+
+    .containers .submitEdit button {
+        font-size: .7em;
+        padding: .5em .7em;
+        margin-bottom: .2em;
+    }
+}
+
+.header h3 {
     font-weight: 550;
 }
 
@@ -20,6 +132,60 @@
     column-gap: 1em;
     justify-content: space-around;
     padding: 1em;
+}
+
+.divImg {
+    text-align: center;
+    font-size: .8em;
+    width: 30%;
+    position: relative;
+}
+
+.divImg .editButtonImg {
+    position: absolute;
+    z-index: 1;
+}
+
+.img {
+    width: 150px;
+    height: 150px;
+    opacity: 0.7;
+    position: relative;
+    object-fit: contain;
+}
+
+.divImg label {
+    font-weight: 600;
+}
+
+.divImg button {
+    padding: .1em;
+    border: 1px solid rgb(180, 180, 180);
+    background-color: rgba(220, 220, 220, 0.842);
+}
+
+.divImg .imgEdit {
+    object-fit: contain;
+    width: 150px;
+    height: 150px;
+}
+
+.divImg .file {
+    display: none;
+}
+
+.divImg .file::placeholder {
+    content: none;
+}
+
+.divImg span {
+    display: block;
+    border: 1px solid rgb(141, 141, 141);
+    background-color: rgb(207, 207, 207);
+    font-weight: 400;
+    padding: .5em;
+    border-radius: 3px;
+    text-align: center;
 }
 
 .item {
@@ -38,6 +204,7 @@
 
 .input input {
     width: 100%;
+    height: 22px;
     text-align: left;
     padding: .05em 0;
     border-radius: 2px;
@@ -57,6 +224,7 @@
 }
 
 .submitEdit {
+    flex-wrap: wrap;
     display: flex;
     justify-content: center;
     padding-top: 1em;
@@ -64,5 +232,22 @@
 }
 
 .submitEdit button {
-    padding: .1em;
+    font-weight: 500;
+    border: none;
+    color: #fff;
+    background-color: #B64667;
+    font-size: .8em;
+    padding: .5em .7em;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.submitEdit button:hover{
+    background-color: #8a364f;
+    color: #fff;
+}
+
+.margin {
+    margin-bottom: 1em;
 }
