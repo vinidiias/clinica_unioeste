@@ -45,11 +45,11 @@ const Escolaridade = ({ education='' }) => {
     }
 
     return (
-      <div className={styles.containers}>
+      <div className={styles.containers + ' ' + styles.margin}>
         <div className={styles.header}>
           <h3>Escolaridade</h3>
         </div>
-        <div className={styles.infos}>
+        <div style={{paddingBottom: '0em'}} className={styles.infos}>
           <div className={styles.item}>
             <div className={styles.input}>
               <label htmlFor="level">Escolaridade</label>
@@ -82,6 +82,27 @@ const Escolaridade = ({ education='' }) => {
                     onChange={(e) => setCurso(e.target.value)}
                   />
                 </div>
+              </>
+            )}
+          </div>
+          <div className={styles.item}>
+            {(level === "graduacao" || level === "pos graduacao") && (
+              <>
+                <div className={styles.input}>
+                  <label htmlFor="turno">Ano/Periodo</label>
+                  <select
+                    onChange={(e) => setTurno(e.target.turno)}
+                    value={turno}
+                    disabled={edit}
+                    name="turno"
+                    id="turno"
+                  >
+                    <option value="default">Selecione</option>
+                    <option value="Manhã">Manhã</option>
+                    <option value="Tarde">Tarde</option>
+                    <option value="Noite">Noite</option>
+                  </select>
+                </div>
                 <div className={styles.input}>
                   <label htmlFor="periodo">Ano/Periodo</label>
                   <input
@@ -96,6 +117,7 @@ const Escolaridade = ({ education='' }) => {
               </>
             )}
           </div>
+<<<<<<< HEAD
           <div className={styles.item}>
             {(level === "graduacao" || level === "pos graduacao") && (
               <div className={styles.input}>
@@ -119,6 +141,12 @@ const Escolaridade = ({ education='' }) => {
               {!edit && <button onClick={editHandle}>Confirmar</button>}
             </div>
           </div>
+=======
+        </div>
+        <div style={{padding: '0em 0em .9em 0em'}} className={styles.submitEdit}>
+          <button onClick={editToggle}>Editar dados</button>
+          {!edit && <button onClick={editHandle}>Confirmar</button>}
+>>>>>>> dd233a64d0a6391032e3e80b38370168547d0cd6
         </div>
       </div>
     );
