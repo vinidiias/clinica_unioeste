@@ -1,5 +1,5 @@
 const Ficha = require('../Models/Ficha');
-const { index } = require('./PessoaController');
+const { index, indexByUser } = require('./PessoaController');
 const { create } = require('./UserController');
 
 module.exports = {
@@ -54,6 +54,21 @@ module.exports = {
 
         }
         catch(err){
+            return res.status(400).send(err)
+        }
+    }, 
+    
+    async indexByUser (req, res) {
+        const { user_id } = req.params
+        //if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'})
+
+        try {
+            const allFicharioUser = await Ficha.find({
+                user: user_id
+            })
+            return res.status(200).send(allFicharioUser)    
+        }
+        catch (err){
             return res.status(400).send(err)
         }
     }
