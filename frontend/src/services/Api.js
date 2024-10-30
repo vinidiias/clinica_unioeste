@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-    baseURL: 'https://deploybackendclinica.vercel.app'
+    baseURL: 'https://clinica-unioeste.vercel.app'
 })
 
 export default api
