@@ -1,255 +1,131 @@
 import styles from './FichaForm.module.css'
-
-import { useState } from 'react'
-
+import { useEffect, useState } from 'react'
 import Input from '../form/Input'
-//import Select from '../form/Select'
-//import Submit from '../form/Submit'
 import CheckBox from '../form/CheckBox'
 import Table from '../form/Table'
 
 const FichaForm = () => {
 
-  const [fichaForm, setFichaForm] = useState({})
-  const [selectedSchool, setSelectedSchool] = useState(null)
-  const [selectedSexo, setSelectedSexo] = useState(null)
-  const [selectedTurno, setSelectedTurno] = useState(null)
-  const [selectedVinculo, setSelectedVinculo] = useState(null)
-  const [selectedTypeVinculo, setSelectedTypeVinculo] = useState(null)
-  const [selectedCommunity, setSelectedCommunity] = useState(null)
-  const [selectedWork, setSelectedWork] = useState(null)
-  const [selectedPsycho, setSelectedPsycho] = useState(null)
-  const [selectedPsychi, setSelectedPsychi] = useState(null)
+  const [name, setName] = useState('')
+  const [age, setAge] = useState('')
+  const [birth, setBirth] = useState('')
+  const [sex, setSex] = useState('')
+  const [ra, setRa] = useState('')
+  const [cpf, setCpf] = useState('')
+  const [phone, setPhone] = useState('')
+  const [email, setEmail] = useState('')
+  const [adress, setAdress] = useState('')
+  const [numberAdress, setNumberAdress] = useState('')
+  const [profission, setProfission] = useState('')
+  const [education, setEducation] = useState({
+    type:'',
+    curso: '',
+    periodo: '',
+    turno: '',
+  })
+  const [typeEducation, setTypeEducation] = useState('')
+  const [curso, setCurso] = useState('')
+  const [periodo, setPeriodo] = useState('')
+  const [turno, setTurno] = useState('')
+  const [preferredDay, setPreferredDay] = useState('')
+  const [vinculo, setVinculo] = useState({
+    type: '',
+    typeVinculo: '',
+    setor: '',
+  })
+  const [isVinculo, setIsVinculo] = useState(false)
+  const [typeVinculo, setTypeVinculo] = useState('')
+  const [setor, setSetor] = useState('')
+  const [comunidade, setComunidade] = useState('')
+  const [work, setWork] = useState({
+    type: '',
+    hours: '',
+  })
+  const [typeWork, setTypeWork] = useState('')
+  const [horarioWork, setHorarioWork] = useState('')
+  const [psicologa, setPsicologa] = useState({
+    type: '',
+    time: '',
+  })
+  const [typePsicologa, setTypePsicologa] = useState('')
+  const [timePsicologa, setTimePsicologa] = useState('')
+  const [psiquiatra, setPsiquiatra] = useState({
+    type: '',
+    time: '',
+  })
+  const [typePsiquiatra, setTypePsiquiatra] = useState('')
+  const [timePsiquiatra, setTimePsiquiatra] = useState('')
+  const [observation, setObservation] = useState('')
 
-  const [showPsychi, setShowPsychi] = useState(false)
-  const [showPsycho, setShowPsycho] = useState(false)
-  const [showWork, setShowWork] = useState(false)
-  const [showSetor, setShowSetor] = useState(false)
-  const [showCurso, setShowCurso] = useState(false)
-  const [showTypeVinculo, setShowTypeVinculo] = useState(false)
+//education object
+useEffect(() => {
+  if (typeEducation !== 'Graduação' && typeEducation !== 'Pós Graduação') {
+    setEducation({
+      type: typeEducation, // Corrigido para 'type'
+    });
+  } else {
+    setEducation({
+      type:typeEducation, // Corrigido para 'type'
+      curso:curso,
+      periodo:periodo,
+      turno:turno,
+    });
+  }
+}, [typeEducation, curso, periodo, turno]);
+
+  //vinculo unioeste object
+  useEffect(() => {
+    if(isVinculo){
+      if(typeVinculo !== 'Agente') setVinculo(typeVinculo)
+      else setVinculo({type:typeVinculo, setor:setor})
+    }
+    else setVinculo(isVinculo)
+  }, [typeVinculo, setor, isVinculo])
+
+  //work object
+  useEffect(()=> {
+    if(typeWork === 'Trabalha') setWork({type:typeWork, time:horarioWork})
+    else setWork(typeWork)
+  }, [typeWork, horarioWork])
+
+  //psicologa object
+  useEffect(() => {
+    if(typePsicologa !== 'Acompanha')
+      setPsicologa(typePsicologa)
+    else setPsicologa({type:typePsicologa, time:timePsicologa})
+  }, [typePsicologa, timePsicologa])
+
+  //psiquiatra object
+  useEffect(() => {
+    if(typePsiquiatra !== 'Acompanha')
+      setPsiquiatra(typePsiquiatra)
+    else setPsiquiatra({type:typePsiquiatra, time:timePsiquiatra})
+  }, [typePsiquiatra, timePsiquiatra])
 
   function showDate(e){
     e.preventDefault()
-    console.log(fichaForm)
   }
-  
+
   function handleChange(e) {
-    setFichaForm({...fichaForm, [e.target.name]: e.target.value })
-  }
+    const { name, value } = e.target
 
-  function handleChangeCurso(e) {
-    setFichaForm({
-      ...fichaForm,
-      education: {
-        ...fichaForm.education, // Preserva os campos existentes
-        [e.target.name]: e.target.value // Atualiza apenas o campo correspondente ao input alterado
-      }
-    });
-  }
-
-  function handleChangePsycho(e) {
-    setFichaForm({...fichaForm,
-      psychological: {
-        ...fichaForm.psychological,
-        [e.target.name]: e.target.value
-      }
-    })
-  }
-
-  function handleChangePsychi(e) {
-    setFichaForm({...fichaForm,
-      psychiatric: {
-        ...fichaForm.psychiatric,
-        [e.target.name]: e.target.value
-      }
-    })
-  }
-
-  function handleChangeSetor(e) {
-    setFichaForm({
-      ...fichaForm,
-      vinculo_com_unioeste: {
-        ...fichaForm.vinculo_com_unioeste,
-        [e.target.name]: e.target.value
-      }
-    })
-  }
-
-  function handlePsychiChange(value, e) {
-    const newPsychi = selectedPsychi === value ? null : value
-
-    setSelectedPsychi(newPsychi)
-    handleShowPsychi(newPsychi)
-
-    setFichaForm({...fichaForm,
-      psychiatric: {
-        ...fichaForm.psychiatric,
-        type: e.target.checked ? value : null
-      }
-    })
-  }
-
-  function handleShowPsychi(currentPsychi){
-    if(currentPsychi === 'Acompanha') setShowPsychi(true)
-      else setShowPsychi(false)
-  }
-
-  function handleShowPsycho(currentPsycho) {
-    if(currentPsycho === 'Acompanha') setShowPsycho(true)
-    else setShowPsycho(false)
-  }
-
-  function handlePsychoChange(value, e) {
-    const newPsycho = selectedPsycho === value ? null : value
-
-    setSelectedPsycho(newPsycho)
-    handleShowPsycho(newPsycho)
-
-    setFichaForm({...fichaForm,
-      psychological: {
-        ...fichaForm.psychological,
-        type: e.target.checked ? value : null
-      }
-    })
-  }
-
-  function handleSchoolChange(value, e) {
-    const newSchool = selectedSchool === value ? null : value;
-    setSelectedSchool(newSchool);
-
-    handleSetShowCurso(newSchool);
-
-    setFichaForm({...fichaForm , education: {
-      [e.target.name]: e.target.checked ? value : null
-    }
-  })}
-
-function handleUniversityChange(value, e) {
-  const newSchool = selectedSchool === value ? null : value;
-  setSelectedSchool(newSchool);
-
-  handleSetShowCurso(newSchool);
-
-  setFichaForm({...fichaForm , education: {
-    [e.target.name]: e.target.checked ? value : null
-  }
-})
-}
-
-function handleTurnoChange(value, e) {
-  const newTurno = selectedTurno === value ? null : value;
-  setSelectedTurno(newTurno)
-
-  setFichaForm({...fichaForm, education:{
-    ...fichaForm.education,
-    [e.target.name]: e.target.checked ? value : null
-  }})
-}
-
-function handleShowWork(currentWork) {
-  if(currentWork === 'Trabalha') setShowWork(true)
-  else setShowWork(false)
-}
-
-function handleWorkChange(value, e) {
-  const newWork = selectedWork === value ? null : value
-
-  setSelectedWork(newWork)
-  handleShowWork(newWork)
-
-  setFichaForm({
-    ...fichaForm,
-    work: {
-      ...fichaForm.work,
-      type: e.target.checked ? value : null
-    }
-  });
-}
-
-function handleChangeTimeWork(e) {
-  setFichaForm({
-    ...fichaForm,
-    work: {
-      ...fichaForm.work,
-      [e.target.name]: e.target.value
-    }
-  });
-}
-
-  function handleCommunityChange(value, e) {
-    const newCommunity = selectedCommunity === value ? null : value
-
-    setSelectedCommunity(newCommunity)
-
-    setFichaForm({
-      ...fichaForm,
-      [e.target.name]: e.target.checked ? true : null
-    })
-  }
-
-  function handleSexoChange(value, e) {
-    setSelectedSexo(selectedSexo === value ? null : value);
-  
-    // Atualiza a ficha com base no valor e se o checkbox está marcado
-    setFichaForm({
-      ...fichaForm,
-      [e.target.name]: e.target.checked ? value : null
-    })
-  }
-
-  function handleVinculoChange(value, e) {
-    const newVinculo = selectedVinculo === value ? null : value;
-    setSelectedVinculo(newVinculo)
-    handleSetShowTypeVinculo(newVinculo)
-    setFichaForm({
-      ...fichaForm,
-      [e.target.name]: e.target.checked ? selectedTypeVinculo : null
-    })
-  }
-
-  function handleTypeVinculoChange(value, e) {
-    const newtTypeVinculo = selectedTypeVinculo === value ? null : value;
-
-    setSelectedTypeVinculo(newtTypeVinculo)
-    handleSetShowSetor(newtTypeVinculo)
-    
-    if(value === 'Agente'){
-      setFichaForm({
-        ...fichaForm,
-        vinculo_com_unioeste:{
-          [e.target.name]: e.target.checked ? value : null
-        }
-      })
-    } else {
-      setFichaForm({
-        ...fichaForm,
-        [e.target.name]: e.target.checked ? value : null
-      })
+    const setters = {
+      name: setName,
+      age: setAge,
+      birth: setBirth,
+      sex: setSex,
+      ra: setRa,
+      cpf: setCpf,
+      phone: setPhone,
+      email: setEmail,
+      adress: setAdress,
+      numberAdress: setNumberAdress,
+      profission: setProfission,
+      observation: setObservation
     }
 
-  }
-
-  function handleSetShowSetor(currentSetor) {
-    if (currentSetor === 'Agente') {
-      setShowSetor(true);
-    } else {
-      setShowSetor(false);
-    }
-  }
-
-  function handleSetShowTypeVinculo(currentVinculo) {
-    if (currentVinculo !== null) {
-      setShowTypeVinculo(true);
-    } else {
-      setShowTypeVinculo(false);
-    }
-  }
-
-  function handleSetShowCurso(currentSchool) {
-    if (currentSchool === "Graduação" || currentSchool === "Pós Graduação") {
-      setShowCurso(true);
-    } else {
-      setShowCurso(false);
+    if(setters[name]) {
+      setters[name](value)
     }
   }
 
@@ -266,44 +142,76 @@ function handleChangeTimeWork(e) {
           />
         </div>
         <div className={styles.flex}>
-          <div><Input type="number" name="age" text="Idade" handleOnChange={handleChange} /></div>
-          <Input type="date" name="birth" text="Data de Nascimento" handleOnChange={handleChange} />
+          <div>
+            <Input
+              type="number"
+              name="age"
+              text="Idade"
+              handleOnChange={handleChange}
+            />
+          </div>
+          <Input
+            type="date"
+            name="birth"
+            text="Data de Nascimento"
+            handleOnChange={handleChange}
+          />
           <div className={styles.sex}>
             <label htmlFor="sexo-F" className={styles.label}>
               Sexo:
             </label>
             <CheckBox
               side="right"
-              isSelected={selectedSexo === "F"}
-              name="sexo"
+              isSelected={sex === 'F'}
+              name="sex"
               value="F"
               text="( )F"
-              handleOnChange={handleSexoChange}
+              handleOnChange={(e) => {
+                setSex(e.target.value);
+              }}
               customClass="title"
             />
             <CheckBox
               side="right"
-              isSelected={selectedSexo === "M"}
-              name="sexo"
+              isSelected={sex === 'M'}
+              name="sex"
               value="M"
               text="( )M"
-              handleOnChange={handleSexoChange}
+              handleOnChange={(e) => {
+                setSex(e.target.value);
+              }}
             />
           </div>
         </div>
         <div className={styles.flex}>
-          <Input type="number" name="ra" text="RA" handleOnChange={handleChange} />
-          <Input type="text" name="cpf" text="CPF" handleOnChange={handleChange} />
+          <Input
+            type="number"
+            name="ra"
+            text="RA"
+            handleOnChange={handleChange}
+          />
+          <Input
+            type="text"
+            name="cpf"
+            text="CPF"
+            handleOnChange={handleChange}
+          />
         </div>
         <div className={styles.flex}>
           <Input
             type="number"
-            name="tel"
+            name="phone"
             text="Telefone ( )"
             autoComplete="tel"
             handleOnChange={handleChange}
           />
-          <Input type="email" name="email" text="Email" autoComplete="email" handleOnChange={handleChange} />
+          <Input
+            type="email"
+            name="email"
+            text="Email"
+            autoComplete="email"
+            handleOnChange={handleChange}
+          />
         </div>
         <div className={styles.flex}>
           <Input
@@ -313,95 +221,117 @@ function handleChangeTimeWork(e) {
             autoComplete="adress"
             handleOnChange={handleChange}
           />
-          <Input type="number" name="adressNumber" text="Número" handleOnChange={handleChange} />
+          <Input
+            type="number"
+            name="numberAdress"
+            text="Número"
+            handleOnChange={handleChange}
+          />
         </div>
-        <Input type="text" name="profission" text="Profissão" customClass="flex_1" handleOnChange={handleChange} />
+        <Input
+          type="text"
+          name="profission"
+          text="Profissão"
+          customClass="flex_1"
+          handleOnChange={handleChange}
+        />
         <div style={{ marginBottom: "1em" }} className={styles.flex}>
           <label htmlFor="level-Fundamental I" className={styles.label}>
             Escolaridade:
           </label>
           <div>
             <CheckBox
-              isSelected={selectedSchool === "Fundamental I"}
+              isSelected={education.type === "Fundamental I"}
               name="level"
               side="right"
               text="Fundamental I"
               value="Fundamental I"
-              handleOnChange={handleSchoolChange}
+              handleOnChange={(e) => setTypeEducation(e.target.value)}
             />
             <CheckBox
-              isSelected={selectedSchool === "Fundamental II"}
+              isSelected={education.type === "Fundamental II"}
               side="right"
               name="level"
               text="Fundamental II"
               value="Fundamental II"
-              handleOnChange={handleSchoolChange}
+              handleOnChange={(e) => setTypeEducation(e.target.value)}
             />
             <CheckBox
-              isSelected={selectedSchool === "Ensino Médio"}
+              isSelected={education.type === "Ensino Médio"}
               side="right"
               name="level"
               text="Ensino Médio"
               value="Ensino Médio"
-              handleOnChange={handleSchoolChange}
+              handleOnChange={(e) => setTypeEducation(e.target.value)}
             />
             <CheckBox
-              isSelected={selectedSchool === "Ensino Técnico"}
+              isSelected={education.type === "Ensino Técnico"}
               side="right"
               name="level"
               text="Ensino Técnico"
               value="Ensino Técnico"
-              handleOnChange={handleSchoolChange}
+              handleOnChange={(e) => setTypeEducation(e.target.value)}
             />
             <CheckBox
-              isSelected={selectedSchool === "Graduação"}
+              isSelected={education.type === "Graduação"}
               side="right"
               name="level"
               text="Graduação"
               value="Graduação"
-              handleOnChange={handleUniversityChange}
+              handleOnChange={(e) => setTypeEducation(e.target.value)}
             />
             <CheckBox
-              isSelected={selectedSchool === "Pós Graduação"}
+              isSelected={education.type === "Pós Graduação"}
               side="right"
               name="level"
               text="Pós Graduação"
               value="Pós Graduação"
-              handleOnChange={handleUniversityChange}
+              handleOnChange={(e) => setTypeEducation(e.target.value)}
             />
-            {showCurso && (
+            {((typeEducation === 'Pós Graduação') ||
+            (typeEducation === 'Graduação')) && (
               <div style={{ marginTop: "1em" }}>
                 <div className={styles.flex}>
-                  <Input type="text" name="curso" text="Curso" handleOnChange={handleChangeCurso} />
-                  <Input type="text" name="periodo" text="Ano/período" handleOnChange={handleChangeCurso} />
+                  <Input
+                    type="text"
+                    name="curso"
+                    text="Curso"
+                    handleOnChange={(e) => setCurso(e.target.value)}
+                  />
+                  <Input
+                    type="text"
+                    name="periodo"
+                    text="Ano/período"
+                    handleOnChange={(e) => setPeriodo(e.target.value)}
+                  />
                 </div>
                 <div className={styles.flex}>
                   <label htmlFor="curso" className={styles.label}>
                     Turno do seu curso:
                   </label>
                   <CheckBox
-                    isSelected={selectedTurno === "Manhã"}
+                    isSelected={turno === "Manhã"}
                     side="right"
                     value="Manhã"
                     name="course_schedule"
                     text="Manhã"
-                    handleOnChange={handleTurnoChange}
+                    handleOnChange={(e) => setTurno(e.target.value)}
                   />
                   <CheckBox
-                    isSelected={selectedTurno === "Tarde"}
+                    isSelected={turno === "Tarde"}
                     side="right"
                     value="Tarde"
                     name="course_schedule"
                     text="Tarde"
-                    handleOnChange={handleTurnoChange}
+                    handleOnChange={(e) => setTurno(e.target.value)}
                   />
                   <CheckBox
-                    isSelected={selectedTurno === "Noite"}
+                    isSelected={turno === "Noite"}
                     side="right"
                     value="Noite"
                     name="course_schedule"
                     text="Noite"
-                    handleOnChange={handleTurnoChange}
+                    handleOnChange={(e) => setTurno(e.target.value)}
                   />
                 </div>
               </div>
@@ -410,77 +340,79 @@ function handleChangeTimeWork(e) {
         </div>
         <div>
           <Table
-            setFichaForm={setFichaForm}
-            fichaForm={fichaForm}
+            setPreferredDay={setPreferredDay}
+            preferredDay={preferredDay}
           />
         </div>
         <div style={{ marginBottom: "1em" }} className={styles.flex}>
           <CheckBox
-            isSelected={selectedVinculo === "Vínculo com Unioeste"}
+            isSelected={isVinculo}
             customClass="bold"
             side="right"
             value="Vínculo com Unioeste"
             name="vinculo_com_unioeste"
             text="Vínculo com Unioeste:"
-            handleOnChange={handleVinculoChange}
+            handleOnChange={(e) => setIsVinculo(!isVinculo)}
           />
-          {showTypeVinculo && (
+          {vinculo.type && (
             <div className={styles.flex}>
               <CheckBox
-                isSelected={selectedTypeVinculo === "Docente"}
+                isSelected={typeVinculo === "Docente"}
                 side="right"
                 value="Docente"
                 name="vinculo_com_unioeste"
                 text="Docente"
-                handleOnChange={handleTypeVinculoChange}
+                handleOnChange={(e) => setTypeVinculo(e.target.value)}
               />
               <CheckBox
-                isSelected={selectedTypeVinculo === "Agente"}
+                isSelected={typeVinculo === "Agente"}
                 side="right"
                 value="Agente"
                 name="type"
                 text="Agente"
-                handleOnChange={handleTypeVinculoChange}
+                handleOnChange={(e) => setTypeVinculo(e.target.value)}
               />
               <CheckBox
-                isSelected={selectedTypeVinculo === "Acadêmico"}
+                isSelected={typeVinculo === "Acadêmico"}
                 side="right"
                 value="Acadêmico"
                 name="vinculo_com_unioeste"
                 text="Acadêmico"
-                handleOnChange={handleTypeVinculoChange}
+                handleOnChange={(e) => setTypeVinculo(e.target.value)}
               />
               <CheckBox
-                isSelected={selectedTypeVinculo === "Estagiário"}
+                isSelected={typeVinculo === "Estagiário"}
                 side="right"
                 value="Estagiário"
                 name="vinculo_com_unioeste"
                 text="Estagiário"
-                handleOnChange={handleTypeVinculoChange}
+                handleOnChange={(e) => setTypeVinculo(e.target.value)}
               />
             </div>
           )}
         </div>
-        {showSetor && (
+        {typeVinculo === 'Agente' && (
           <div>
             <Input
               type="text"
               name="setor"
               text="Setor que trabalha"
               customClass="flex_1"
-              handleOnChange={handleChangeSetor}
+              handleOnChange={(e) => setSetor(e.target.value)}
             />
           </div>
         )}
         <div style={{ marginBottom: "1em" }}>
           <CheckBox
-            isSelected={selectedCommunity === "Comunidade Externa"}
+            isSelected={comunidade === "Sim"}
             side="right"
             name="community"
             value="Comunidade Externa"
             text="Comunidade Externa"
             customClass="bold"
-            handleOnChange={handleCommunityChange}
+            handleOnChange={(e) =>
+              setComunidade(e.target.checked ? "Sim" : "Não")
+            }
           />
         </div>
         <div style={{ marginBottom: "1em" }} className={styles.flex}>
@@ -488,25 +420,30 @@ function handleChangeTimeWork(e) {
             Você trabalha?
           </label>
           <CheckBox
-            isSelected={selectedWork === "Não trabalha"}
+            isSelected={typeWork === "Não trabalha"}
             side="right"
             value="Não trabalha"
-            handleOnChange={handleWorkChange}
             name="work"
             text="( ) Não"
+            handleOnChange={(e) => setTypeWork(e.target.value)}
           />
           <CheckBox
-            isSelected={selectedWork === "Trabalha"}
+            isSelected={typeWork === "Trabalha"}
             side="right"
-            handleOnChange={handleWorkChange}
+            handleOnChange={(e) => setTypeWork(e.target.value)}
             value="Trabalha"
             name="work"
             text="( ) Sim"
           />
         </div>
-        {showWork && (
+        {work.type === "Trabalha" && (
           <div>
-            <Input type="time" name="work_schedule" text="Trabalha em qual horário?" handleOnChange={handleChangeTimeWork} />
+            <Input
+              type="time"
+              name="work_schedule"
+              text="Trabalha em qual horário?"
+              handleOnChange={(e) => setHorarioWork(e.target.value)}
+            />
           </div>
         )}
         <div style={{ marginBottom: "1em" }} className={styles.flex}>
@@ -515,30 +452,30 @@ function handleChangeTimeWork(e) {
           </label>
           <div className={styles.flex}>
             <CheckBox
-              isSelected={selectedPsycho === "Não acompanha"}
+              isSelected={typePsicologa === "Não acompanha"}
               side="right"
               value="Não acompanha"
               name="psycho"
               text="( ) Não"
-              handleOnChange={handlePsychoChange}
+              handleOnChange={(e) => setTypePsicologa(e.target.value)}
             />
             <CheckBox
-              isSelected={selectedPsycho === "Acompanha"}
+              isSelected={typePsicologa === "Acompanha"}
               side="right"
               name="psycho"
               value="Acompanha"
               text="( ) Sim"
-              handleOnChange={handlePsychoChange}
+              handleOnChange={(e) => setTypePsicologa(e.target.value)}
             />
           </div>
         </div>
-        {showPsycho && (
+        {typePsicologa === 'Acompanha' && (
           <div>
             <Input
               type="text"
               name="psycho_schedule"
               text="Por quanto tempo acompanhamento psicológico?"
-              handleOnChange={handleChangePsycho}
+              handleOnChange={(e) => setTimePsicologa(e.target.value)}
             />
           </div>
         )}
@@ -549,30 +486,30 @@ function handleChangeTimeWork(e) {
           </label>
           <div className={styles.flex}>
             <CheckBox
-              isSelected={selectedPsychi === "Não acompanha"}
+              isSelected={typePsiquiatra === "Não acompanha"}
               side="right"
               value="Não acompanha"
               name="psychiatric"
               text="( ) Não"
-              handleOnChange={handlePsychiChange}
+              handleOnChange={(e) => setTypePsiquiatra(e.target.value)}
             />
             <CheckBox
-              isSelected={selectedPsychi === "Acompanha"}
+              isSelected={typePsiquiatra === "Acompanha"}
               side="right"
               value="Acompanha"
               name="psychiatric"
               text="( ) Sim"
-              handleOnChange={handlePsychiChange}
+              handleOnChange={(e) => setTypePsiquiatra(e.target.value)}
             />
           </div>
         </div>
-        {showPsychi && (
+        {typePsiquiatra === 'Acompanha' && (
           <div>
             <Input
               type="text"
               name="psychiatric_schedule"
               text="Por quanto tempo fez acompanhamento psiquiátrico?"
-              handleOnChange={handleChangePsychi}
+              handleOnChange={(e) => setTimePsiquiatra(e.target.value)}
             />
           </div>
         )}
@@ -580,7 +517,12 @@ function handleChangeTimeWork(e) {
           <label htmlFor="observation" className={styles.label}>
             Observações que considere importante:
           </label>
-          <textarea name="observation" id="observation" rows="7" onChange={handleChange}></textarea>
+          <textarea
+            name="observation"
+            id="observation"
+            rows="7"
+            onChange={(e) => setObservation(e.target.value)}
+          ></textarea>
         </div>
         <button onClick={showDate}>Enviar</button>
       </form>

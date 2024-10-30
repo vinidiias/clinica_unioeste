@@ -6,9 +6,10 @@ import logoPerfil from '../../img/logoPerfil.jpg'
 
 import PersonalData from '../profile/PersonalData'
 import Escolaridade from '../profile/Escolaridade'
+import Adress from '../profile/Adress'
 
 const Profile = () => {
-  const {pessoa, setPessoa} = useContext(UserContext)
+  const {pessoa} = useContext(UserContext)
 
   let education = {
     level: 'graduacao',
@@ -16,7 +17,6 @@ const Profile = () => {
     periodo: '4° ano',
     turno: 'Manhã'
   }
-
 
   return (
     <div className={styles.profile}>
@@ -32,6 +32,10 @@ const Profile = () => {
         />
         <Escolaridade
           education={education}
+        />
+
+        <Adress
+          adress_completo={pessoa.adress_completo}
         />
     </div>
   );

@@ -4,6 +4,7 @@ import styles from './PersonalData.module.css'
 
 const PersonalData =  ({ img, nome='', idade='', sex='M', nascimento='', CPF='', RA='', mail='', tel='' }) => {
     const [edit, setEdit] = useState(true)
+    const [selectedFile, setSelectedFile] = useState('')
     const [name, setName] = useState(nome)
     const [age, setAge] = useState(idade)
     const [sexo, setSexo] = useState(sex)
@@ -12,6 +13,14 @@ const PersonalData =  ({ img, nome='', idade='', sex='M', nascimento='', CPF='',
     const [ra, setRa] = useState(RA)
     const [email, setEmail] = useState(mail)
     const [phone, setPhone] = useState(tel)
+
+    function handleFileChange(e) {
+      const file = e.target.files[0]
+
+      if(file){
+        setSelectedFile(URL.createObjectURL(file))
+      }
+    }
 
     function editToggle() {
         setEdit(!edit)
@@ -39,13 +48,57 @@ const PersonalData =  ({ img, nome='', idade='', sex='M', nascimento='', CPF='',
           <h3>Dados pessoais</h3>
         </div>
         <div className={styles.infos}>
-          <div className={styles.input} style={{ width: "auto" }}>
+          <div
+            className={styles.input}
+            style={{
+              width: "auto",
+              position: "relative",
+              display: "inline-block",
+            }}
+          >
             <label htmlFor="name">Foto</label>
-            <img
-              style={{ width: "100px", height: "100px", borderRadius: "50%" }}
-              src={img}
-              alt=""
-            />
+            {selectedFile && !edit ? (
+              <>
+                <button
+                  style={{
+                    position: "absolute",
+                    top: "55px", // Ajuste conforme necessário
+                    left: "30px", // Ajuste conforme necessário
+                    zIndex: "1", // Garante que o botão fique acima da imagem
+                  }}
+                >
+                  Editar
+                </button>
+                <img
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    borderRadius: "50%",
+                    position: "relative",
+                    opacity: "0.7",
+                  }}
+                  src={selectedFile}
+                  alt='foto perfil'
+                />
+              </>
+            ) : selectedFile ? (
+              <img
+                style={{
+                  width: "100px",
+                  height: "100px",
+                  borderRadius: "50%",
+                }}
+                src={selectedFile}
+                alt='foto perfil'
+              />
+            ) : (
+              <input
+                type="file"
+                accept="image/png, image/jpeg"
+                required
+                onChange={handleFileChange}
+              />
+            )}
           </div>
           <div className={styles.item}>
             <div className={styles.input}>
@@ -73,7 +126,13 @@ const PersonalData =  ({ img, nome='', idade='', sex='M', nascimento='', CPF='',
             </div>
             <div className={styles.input}>
               <label htmlFor="sexuality">Sexo</label>
-              <select onChange={(e) => setSexo(e.target.value)} value={sexo} disabled={edit} name="sexuality" id="sexuality">
+              <select
+                onChange={(e) => setSexo(e.target.value)}
+                value={sexo}
+                disabled={edit}
+                name="sexuality"
+                id="sexuality"
+              >
                 <option value="M">Masculino</option>
                 <option value="F">Feminino</option>
               </select>
