@@ -89,7 +89,13 @@ const fichaSchema = new mongoose.Schema({
             return this.acompanhamentoPsiquiatrico.realizado;
           }  // Só pede o tempo se tiver realizado acompanhamento psiquiátrico
         }
-      }
+      },
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    }
+    
 })
 
 const ficha = mongoose.model('Ficha', fichaSchema)
