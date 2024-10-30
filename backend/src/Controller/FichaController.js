@@ -1,9 +1,15 @@
 const Ficha = require('../Models/Ficha');
-const { index } = require('./PessoaController');
 const { create } = require('./UserController');
 
 module.exports = {
     async create(req, res) {
+        const { profissao, escolaridade, curso, anoPeriodo, turno, dia, vinculo, setor, comunidadeExterna, trabalha, horario, acompanhamentoPsicologico, acompanhamentoPsiquiatrico } = req.body;
+        
+        const { user_id } = req.params
+        const { auth } = req.headers
+
+        if( user_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
+    
         const { profissao, escolaridade, curso, anoPeriodo, turno, dia, vinculo, setor, comunidadeExterna, trabalha, horario, acompanhamentoPsicologico, tempoPscicologo, acompanhamentoPsiquiatrico, tempo } = req.body;
         const { user_id } = req.params;
 
@@ -21,20 +27,52 @@ module.exports = {
                 comunidadeExterna, 
                 trabalha, 
                 horario, 
-                acompanhamentoPsicologico, 
-                tempoPscicologo, 
-                acompanhamentoPsiquiatrico, 
-                tempo,
+                acompanhamentoPsicologico: {
+                    realizado: acompanhamentoPsicologico.realizado,
+                    tempoPscicologo: acompanhamentoPsicologico.tempoPscicologo
+                },
+                acompanhamentoPsiquiatrico: {
+                    realizado: acompanhamentoPsiquiatrico.realizado,
+                    tempo: acompanhamentoPsiquiatrico.tempo
+                },
                 user: user_id
             });
+            //console.log(createFicha)
 
-            // Popula o campo 'user' com as informações do usuário associado
-            await createFicha.populate('user').execPopulate();
+            // Popula o campo 'user' com as informações do usuário associado (se houver relação no schema)
+            const fichaPopulada = await Ficha.findById(createFicha._id).populate('user')
 
             return res.status(200).send(createFicha);
         }
         catch (err) {
             return res.status(400).send(err);
+        }
+
+    }, 
+
+    async indexAll (req, res) {
+        try{
+            const allFichario = await Ficha.find().populate('user')
+            return res.status(200).send(allFichario)
+
+        }
+        catch(err){
+            return res.status(400).send(err)
+        }
+    }, 
+    
+    async indexByUser (req, res) {
+        const { user_id } = req.params
+        //if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'})
+
+        try {
+            const allFicharioUser = await Ficha.find({
+                user: user_id
+            })
+            return res.status(200).send(allFicharioUser)    
+        }
+        catch (err){
+            return res.status(400).send(err)
         }
     }
 }

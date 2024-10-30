@@ -68,9 +68,19 @@ const fichaSchema = new mongoose.Schema({
       },
       acompanhamentoPsicologico: {
         realizado: {
+
             type: Boolean,
             required: true
         },
+
+          type: Boolean,
+          required: true
+        },
+        tempo: {
+          type: String,
+          required: function() {
+            return this.acompanhamentoPsicologico.realizado;
+          },  // Só pede o tempo se tiver realizado acompanhamento psicológico
         tempoPscicologo: {
             type: String,
             required: function() {
@@ -89,7 +99,12 @@ const fichaSchema = new mongoose.Schema({
             return this.acompanhamentoPsiquiatrico.realizado;
           }  // Só pede o tempo se tiver realizado acompanhamento psiquiátrico
         }
-      }
+      },
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    }
 })
 
 const ficha = mongoose.model('Ficha', fichaSchema)
