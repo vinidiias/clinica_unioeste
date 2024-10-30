@@ -135,6 +135,7 @@
 }
 
 .divImg {
+    text-align: center;
     font-size: .8em;
     width: 30%;
     position: relative;
@@ -146,10 +147,11 @@
 }
 
 .img {
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
     opacity: 0.7;
     position: relative;
+    object-fit: contain;
 }
 
 .divImg label {
@@ -163,8 +165,9 @@
 }
 
 .divImg .imgEdit {
-    width: 100px;
-    height: 100px;
+    object-fit: contain;
+    width: 150px;
+    height: 150px;
 }
 
 .divImg .file {
