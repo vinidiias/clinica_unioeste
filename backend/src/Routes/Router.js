@@ -20,7 +20,10 @@ routes.delete('/pessoa/delete', PessoaController.deleteAll)
 routes.delete('/:user_id/pessoa/:pessoa_id', PessoaController.delete)
 
 routes.post('/:user_id/ficha', FichaController.create)
+<<<<<<< HEAD
 routes.get('/ficharios', FichaController.indexAll)
+=======
+>>>>>>> main
 
 routes.post('/session', SessionController.create)
 
