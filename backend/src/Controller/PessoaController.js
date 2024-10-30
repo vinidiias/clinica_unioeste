@@ -4,12 +4,18 @@ const { index } = require('./UserController')
 module.exports ={
     async create (req,res) {
         const { name, age, data_nasc, sexo, ra, cpf, telefone, adrres, adrres_number, profissao} = req.body
+        
         const { user_id } = req.params 
         const { auth } = req.headers
 
         if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'})
     
         try{
+            const adrress = { //criar um objeto do endereco
+                adrres, 
+                adrres_number
+            }
+
             const createPessoa = await Pessoa.create({
                 name,
                 age,
@@ -18,8 +24,7 @@ module.exports ={
                 ra,
                 cpf,
                 telefone,
-                adrres,
-                adrres_number,
+                adrress,
                 profissao,
                 user: user_id
             })
@@ -80,6 +85,29 @@ module.exports ={
         try{
             const allPessoa = await Pessoa.find().populate('user')
             return res.status(200).send(allPessoa)
+        }
+        catch(err){
+            return res.status(400).send(err)
+        }
+    }, 
+
+    async updatePessoa (req, res){
+        try{
+            const { id } = req.params 
+            const dadosAtualizados = req.body
+
+            const pessoaAtualizada = await Pessoa.findByIdAndUpdate(
+                id, 
+                
+                { $set: dadosAtualizados },
+                { new: true }
+
+            );
+
+            if(!pessoaAtualizada){
+                return res.status(400).send({ message: "Pessoa nao encontrada"})
+            }
+            res.status(200).send({ message: "Dados atualizados com sucesso", pessoa: pessoaAtualizada })
         }
         catch(err){
             return res.status(400).send(err)
