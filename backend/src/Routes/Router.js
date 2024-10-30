@@ -22,8 +22,6 @@ routes.delete('/:user_id/pessoa/:pessoa_id', PessoaController.delete)
 routes.post('/:user_id/ficha', FichaController.create)
 
 routes.get('/ficharios', FichaController.indexAll)
-
-
 routes.post('/session', SessionController.create)
 
 module.exports = routes

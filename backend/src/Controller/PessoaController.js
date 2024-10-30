@@ -4,7 +4,6 @@ const { index } = require('./UserController')
 module.exports ={
     async create (req,res) {
         const { name, age, data_nasc, sexo, ra, cpf, telefone, adrres, adrres_number, imagem} = req.body
-        
         const { user_id } = req.params 
         const { auth } = req.headers
 

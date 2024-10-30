@@ -81,7 +81,6 @@ const fichaSchema = new mongoose.Schema({
           required: function() {
             return this.acompanhamentoPsicologico.realizado;
           },  // Só pede o tempo se tiver realizado acompanhamento psicológico
-
         tempoPscicologo: {
             type: String,
             required: function() {
@@ -106,7 +105,6 @@ const fichaSchema = new mongoose.Schema({
         ref: 'User',
         required: true,
     }
-    
 })
 
 const ficha = mongoose.model('Ficha', fichaSchema)
