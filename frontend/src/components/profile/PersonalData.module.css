@@ -1,3 +1,61 @@
+@media(max-width: 900px) {
+    .containers .header h3 {
+        font-size: 1em;
+    }
+
+    .containers .input label {
+        font-size: .7em;
+    }
+
+    .containers .divImg button {
+        font-size: .9em;
+    }
+
+    .containers .divImg img {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .containers .input input,
+    .containers .input select {
+        font-size: .7em;
+        height: 20px;
+    }
+
+    .containers .submitEdit button {
+        font-size: .7em;
+        padding: .4em .5em;
+        margin-bottom: .2em;
+    }
+}
+
+@media(max-width: 771px) {
+    .containers .header h3 {
+        font-size: .9em;
+    }
+
+    .containers .input label {
+        font-size: .6em;
+    }
+
+    .containers .input img {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .containers .input input,
+    .containers .input select {
+        font-size: .6em;
+        height: 15px;
+    }
+
+    .containers .submitEdit button {
+        font-size: .6em;
+        padding: .3em .3em;
+        margin-bottom: .2em;
+    }
+}
+
 .containers {
     background-color: #fff;
     width: 80%;
@@ -5,7 +63,49 @@
     border: 1px solid rgb(177, 177, 177);
 }
 
-.containers h3 {
+@media(max-width: 680px) {
+    .containers {
+        width: 50%;
+    }
+
+    .containers .header h3 {
+        font-size: .9em;
+    }
+
+    .containers .infos {
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .containers .infos .divImg {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .containers .input label {
+        font-size: .6em;
+    }
+
+    .containers .input img {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .containers .input input,
+    .containers .input select {
+        font-size: .6em;
+        height: 15px;
+    }
+
+    .containers .submitEdit button {
+        font-size: .6em;
+        padding: .3em .3em;
+        margin-bottom: .2em;
+    }
+}
+
+.header h3 {
     font-weight: 550;
 }
 
@@ -20,6 +120,41 @@
     column-gap: 1em;
     justify-content: space-around;
     padding: 1em;
+}
+
+.divImg {
+    font-size: .8em;
+    width: auto;
+    position: relative;
+}
+
+.divImg .editButtonImg {
+    position: absolute;
+    z-index: 1;
+}
+
+.img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    opacity: 0.7;
+    position: relative;
+}
+
+.divImg label {
+    font-weight: 600;
+}
+
+.divImg button {
+    padding: .1em;
+    border: 1px solid rgb(180, 180, 180);
+    background-color: rgba(220, 220, 220, 0.842);
+}
+
+.divImg .imgEdit {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
 }
 
 .item {
@@ -38,17 +173,18 @@
 
 .input input {
     width: 100%;
-    height: 20px;
+    height: 22px;
     text-align: left;
     padding: .05em 0;
     border-radius: 2px;
     border: 1px solid rgb(151, 151, 151);
     background-color: rgb(233, 233, 233) ;
-    margin-bottom: 1em;
+    margin-bottom: 1.2em;
 }
 
 .input select {
-    height:  20px;
+    height:  22px;
+    margin-bottom: 1.2em;
 }
 
 .input input:disabled {
@@ -70,5 +206,22 @@
 }
 
 .submitEdit button {
-    padding: .1em;
+    font-weight: 500;
+    border: none;
+    color: #fff;
+    background-color: #B64667;
+    font-size: .8em;
+    padding: .5em .7em;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.submitEdit button:hover{
+    background-color: #8a364f;
+    color: #fff;
+}
+
+.margin {
+    margin-bottom: 1em;
 }

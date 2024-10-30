@@ -2,6 +2,7 @@
     display: flex;
     column-gap: 10px;
 }
+
 .btn {
     font-weight: 500;
     border: none;

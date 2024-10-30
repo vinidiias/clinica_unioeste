@@ -43,51 +43,33 @@ const PersonalData =  ({ img, nome='', idade='', sex='M', nascimento='', CPF='',
     }
 
     return (
-      <div className={styles.containers}>
+      <div className={styles.containers + ' ' + styles.margin}>
         <div className={styles.header}>
           <h3>Dados pessoais</h3>
         </div>
         <div className={styles.infos}>
           <div
-            className={styles.input}
-            style={{
-              width: "auto",
-              position: "relative",
-              display: "inline-block",
-            }}
+            className={styles.divImg}
           >
             <label htmlFor="name">Foto</label>
             {selectedFile && !edit ? (
               <>
-                <button
-                  style={{
-                    position: "absolute",
-                    top: "55px", // Ajuste conforme necessário
-                    left: "30px", // Ajuste conforme necessário
-                    zIndex: "1", // Garante que o botão fique acima da imagem
-                  }}
-                >
-                  Editar
-                </button>
-                <img
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                    borderRadius: "50%",
-                    position: "relative",
-                    opacity: "0.7",
-                  }}
-                  src={selectedFile}
-                  alt='foto perfil'
-                />
+                <div style={{display:'flex', alignItems: 'center', justifyContent: 'center'}}>
+                  <button
+                    className={styles.editButtonImg}
+                  >
+                    Editar
+                  </button>
+                  <img
+                    className={styles.img}
+                    src={selectedFile}
+                    alt='foto perfil'
+                  />
+                </div>
               </>
             ) : selectedFile ? (
               <img
-                style={{
-                  width: "100px",
-                  height: "100px",
-                  borderRadius: "50%",
-                }}
+                className={styles.imgEdit}
                 src={selectedFile}
                 alt='foto perfil'
               />

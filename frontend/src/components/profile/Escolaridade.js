@@ -45,7 +45,7 @@ const Escolaridade = ({ education='' }) => {
     }
 
     return (
-      <div className={styles.containers}>
+      <div className={styles.containers + ' ' + styles.margin}>
         <div className={styles.header}>
           <h3>Escolaridade</h3>
         </div>
