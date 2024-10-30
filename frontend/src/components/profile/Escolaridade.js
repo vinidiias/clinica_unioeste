@@ -121,7 +121,6 @@ const Escolaridade = ({ education='' }) => {
         <div style={{padding: '0em 0em .9em 0em'}} className={styles.submitEdit}>
           <button onClick={editToggle}>Editar dados</button>
           {!edit && <button onClick={editHandle}>Confirmar</button>}
-
         </div>
       </div>
     );

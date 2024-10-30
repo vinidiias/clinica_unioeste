@@ -50,7 +50,6 @@ const PersonalData =  ({ img, nome='', idade='', sex='M', nascimento='', CPF='',
         <div className={styles.infos}>
           <div
             className={styles.divImg}
-
           >
             <label htmlFor="name">Foto</label>
             {selectedFile && !edit ? (
