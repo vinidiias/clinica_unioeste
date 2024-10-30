@@ -7,6 +7,10 @@
         font-size: .7em;
     }
 
+    .containers .divImg span {
+        padding: .3em;
+    }
+
     .containers .divImg button {
         font-size: .9em;
     }
@@ -38,6 +42,10 @@
         font-size: .6em;
     }
 
+    .containers .divImg span {
+        padding: .2em;
+    }
+
     .containers .input img {
         width: 70px;
         height: 70px;
@@ -65,7 +73,7 @@
 
 @media(max-width: 680px) {
     .containers {
-        width: 50%;
+        width: 100%;
     }
 
     .containers .header h3 {
@@ -77,6 +85,10 @@
         flex-direction: column;
     }
 
+    .containers .divImg {
+        margin-bottom: 1em;
+    }
+
     .containers .infos .divImg {
         display: flex;
         flex-direction: column;
@@ -84,23 +96,23 @@
     }
 
     .containers .input label {
-        font-size: .6em;
+        font-size: .7em;
     }
 
-    .containers .input img {
-        width: 70px;
-        height: 70px;
+    .containers .divImg img {
+        width: 90px;
+        height: 90px;
     }
     
     .containers .input input,
     .containers .input select {
-        font-size: .6em;
-        height: 15px;
+        font-size: .7em;
+        height: 20px;
     }
 
     .containers .submitEdit button {
-        font-size: .6em;
-        padding: .3em .3em;
+        font-size: .7em;
+        padding: .5em .7em;
         margin-bottom: .2em;
     }
 }
@@ -124,7 +136,7 @@
 
 .divImg {
     font-size: .8em;
-    width: auto;
+    width: 30%;
     position: relative;
 }
 
@@ -136,7 +148,6 @@
 .img {
     width: 100px;
     height: 100px;
-    border-radius: 50%;
     opacity: 0.7;
     position: relative;
 }
@@ -154,7 +165,24 @@
 .divImg .imgEdit {
     width: 100px;
     height: 100px;
-    border-radius: 50%;
+}
+
+.divImg .file {
+    display: none;
+}
+
+.divImg .file::placeholder {
+    content: none;
+}
+
+.divImg span {
+    display: block;
+    border: 1px solid rgb(141, 141, 141);
+    background-color: rgb(207, 207, 207);
+    font-weight: 400;
+    padding: .5em;
+    border-radius: 3px;
+    text-align: center;
 }
 
 .item {

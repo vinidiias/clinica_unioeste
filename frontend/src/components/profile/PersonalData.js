@@ -74,12 +74,19 @@ const PersonalData =  ({ img, nome='', idade='', sex='M', nascimento='', CPF='',
                 alt='foto perfil'
               />
             ) : (
-              <input
-                type="file"
-                accept="image/png, image/jpeg"
-                required
-                onChange={handleFileChange}
-              />
+              <label htmlFor='file-img'>
+                <input
+                  id='file-img'
+                  name='file-img'
+                  className={styles.file}
+                  placeholder='teste'
+                  type="file"
+                  accept="image/png, image/jpeg"
+                  required
+                  onChange={handleFileChange}
+                />
+                <span>Selecionar</span>
+              </label>
             )}
           </div>
           <div className={styles.item}>
