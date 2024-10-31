@@ -8,10 +8,6 @@ module.exports = {
         const { user_id } = req.params
         const { auth } = req.headers
 
-        if( user_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
-    
-        const { profissao, escolaridade, curso, anoPeriodo, turno, dia, vinculo, setor, comunidadeExterna, trabalha, horario, acompanhamentoPsicologico, tempoPscicologo, acompanhamentoPsiquiatrico, tempo } = req.body;
-        const { user_id } = req.params;
 
         try {
             // Cria o documento usando o modelo Ficha
