@@ -21,25 +21,25 @@ const Login = () => {
 
   async function registerHandler(email, name, password) {
     try{
-      const user = await api.post('/user', {
+      const userCreated = await api.post('/user', {
         email,
         name,
         password
       })
-      .then((resp) => {
-        const user = resp.data
-        console.log(resp.data)
-        setUserData(prevStat => ({
-          ...prevStat,
-          email: user.email,
-          name: user.name
-        }))
-      })
-      .then(() =>{
-        console.log(userData)
-        setShowLogin(!showLogin)
-      })
-      .catch((err) => console.log(err))
+
+      if(!userCreated) return alert('Erro ao criar conta. Tente novamente...')
+
+      const user = userCreated.data
+
+      //depois de validado então envia informações para o Context (session da aplicação)
+      setUserData(prevStat => ({
+        ...prevStat,
+        email: user.email,
+        name: user.name,
+        user_id: user._id,
+      }))
+
+      setShowLogin(!showLogin)
     } catch(err){
       console.log(err)
     }
@@ -64,6 +64,15 @@ const Login = () => {
         }))
         navigate('/home')
       })
+
+
+      /* tirar os thens acima e adpatar sem 
+
+          if(user.isFirt) {
+          navigate('/preencher-dados-pessoais')
+          return
+        }
+       */
       .catch((err) => console.log(err))
     } catch(err) {
       console.log(err)
