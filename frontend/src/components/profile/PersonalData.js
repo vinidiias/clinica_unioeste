@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import styles from './PersonalData.module.css'
 import { UserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
+import api from '../../services/Api';
 
 
 const PersonalData =  ({ customClass, onClose, img, nome='', idade='', sex='M', nascimento='', CPF='', RA='', mail='', tel='' }) => {
@@ -35,13 +36,53 @@ const PersonalData =  ({ customClass, onClose, img, nome='', idade='', sex='M', 
         console.log(edit)
     }
 
-    function submitHandle() {
-      onClose()
-      setUserData(prevStat => ({
-        ...prevStat,
-        isFirst: false,
-      }))
-      navigate('/home')
+    function validateInputs(data) {
+      for(let key in data) {
+        if(data.hasOWnProperty(key)){
+          if(!data[key] || data[key] === '') return 0
+        }
+      }
+      return 0
+    }
+
+    async function submitHandle() {
+      
+      const personal_data = {
+        name,
+        age,
+        sexo,
+        birth,
+        cpf,
+        ra,
+        email,
+        phone
+      }
+
+      if(validateInputs(personal_data)) {
+
+        setUserData(prevStat => ({
+          ...prevStat,
+          isFirst: false,
+        }))
+        onClose()
+        navigate('/home')
+      }
+      else alert('Campos vázios! Preencha todas as informações')
+
+      try {
+        const personCreated = await api.post('/pessoa', {
+          name,
+          age,
+          sexo,
+          birth,
+          cpf,
+          ra,
+          email,
+          phone})
+ 
+      } catch(err) {
+        console.log(err)
+      }
     }
 
     function editHandle(){
