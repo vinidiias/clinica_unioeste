@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import styles from './PersonalData.module.css'
 import { UserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
@@ -18,6 +18,10 @@ const PersonalData =  ({ customClass, onClose, img, nome='', idade='', sex='M', 
     const {userData, setUserData} = useContext(UserContext)
     const navigate = useNavigate()
 
+    useEffect(() => {
+      if(customClass === 'column') setEdit(false)
+    }, [edit, customClass])
+
     function handleFileChange(e) {
       const file = e.target.files[0]
 
@@ -33,6 +37,10 @@ const PersonalData =  ({ customClass, onClose, img, nome='', idade='', sex='M', 
 
     function submitHandle() {
       onClose()
+      setUserData(prevStat => ({
+        ...prevStat,
+        isFirst: false,
+      }))
       navigate('/home')
     }
 
