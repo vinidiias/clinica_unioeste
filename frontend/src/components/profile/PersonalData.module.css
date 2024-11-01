@@ -213,6 +213,10 @@
     margin-bottom: 1em;
 }
 
+.input select { 
+    margin-bottom: 1em;
+}
+
 .input select:disabled,
 .input input:disabled {
     cursor: no-drop;
@@ -251,4 +255,8 @@
 
 .margin {
     margin-bottom: 1em;
+}
+
+.column {
+    flex-direction: column;
 }
