@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import api from '../../services/Api';
 
 
-const PersonalData =  ({ customClass, onClose, img, nome='', idade='', sex='M', nascimento='', CPF='', RA='', mail='', tel='' }) => {
+const PersonalData =  ({ customClass, onClose, imgProfile, nome='', idade='', sex='M', nascimento='', CPF='', RA='', mail='', tel='', endereco, endereco_num }) => {
     const [edit, setEdit] = useState(true)
-    const [selectedFile, setSelectedFile] = useState('')
+    const [img, setImg] = useState(imgProfile)
     const [name, setName] = useState(nome)
     const [age, setAge] = useState(idade)
     const [sexo, setSexo] = useState(sex)
@@ -16,6 +16,8 @@ const PersonalData =  ({ customClass, onClose, img, nome='', idade='', sex='M', 
     const [ra, setRa] = useState(RA)
     const [email, setEmail] = useState(mail)
     const [phone, setPhone] = useState(tel)
+    const [adress, setAdress] = useState(endereco)
+    const [number, setNumber] = useState(endereco_num)
     const {userData, setUserData} = useContext(UserContext)
     const navigate = useNavigate()
 
@@ -27,7 +29,8 @@ const PersonalData =  ({ customClass, onClose, img, nome='', idade='', sex='M', 
       const file = e.target.files[0]
 
       if(file){
-        setSelectedFile(URL.createObjectURL(file))
+        setImg(URL.createObjectURL(file))
+        console.log(img)
       }
     }
 
@@ -37,16 +40,17 @@ const PersonalData =  ({ customClass, onClose, img, nome='', idade='', sex='M', 
     }
 
     function validateInputs(data) {
-      for(let key in data) {
-        if(data.hasOWnProperty(key)){
-          if(!data[key] || data[key] === '') return 0
-        }
+      if((!data.adressComplet.adress || data.adressComplet.adress === '') || 
+          !data.adressComplet.number || data.adressComplet.number === '') {
+            return 0
       }
-      return 0
+      for(let key in data) {
+        if(!data[key] || data[key] === '') return 0
+      }
+      return 1
     }
 
     async function submitHandle() {
-      
       const personal_data = {
         name,
         age,
@@ -55,7 +59,11 @@ const PersonalData =  ({ customClass, onClose, img, nome='', idade='', sex='M', 
         cpf,
         ra,
         email,
-        phone
+        phone,
+        adressComplet : {
+          adress,
+          number
+        }
       }
 
       if(validateInputs(personal_data)) {
@@ -68,9 +76,9 @@ const PersonalData =  ({ customClass, onClose, img, nome='', idade='', sex='M', 
         navigate('/home')
       }
       else alert('Campos vázios! Preencha todas as informações')
-
       try {
         const personCreated = await api.post('/pessoa', {
+          img,
           name,
           age,
           sexo,
@@ -108,7 +116,7 @@ const PersonalData =  ({ customClass, onClose, img, nome='', idade='', sex='M', 
         <div className={styles.infos + " " + styles[customClass]}>
           <div className={styles.divImg}>
             <label htmlFor="name">Foto</label>
-            {selectedFile && !edit ? (
+            {img && !edit ? (
               <>
                 <div
                   style={{
@@ -120,19 +128,20 @@ const PersonalData =  ({ customClass, onClose, img, nome='', idade='', sex='M', 
                   <button className={styles.editButtonImg}>Editar</button>
                   <img
                     className={styles.img}
-                    src={selectedFile}
+                    src={img}
                     alt="foto perfil"
                   />
                 </div>
               </>
-            ) : selectedFile ? (
+            ) : img ? (
               <img
                 className={styles.imgEdit}
-                src={selectedFile}
+                src={img}
                 alt="foto perfil"
               />
             ) : (
               <label htmlFor="file-img">
+                
                 <input
                   id="file-img"
                   name="file-img"
@@ -245,6 +254,30 @@ const PersonalData =  ({ customClass, onClose, img, nome='', idade='', sex='M', 
                 autoComplete="home email"
               />
             </div>
+            {customClass === "column" && (
+              <div className={styles.item}>
+                <div className={styles.input}>
+                  <label htmlFor="adress">Endereço</label>
+                  <input
+                    disabled={edit}
+                    type="text"
+                    name="adress"
+                    id="adress"
+                    onChange={(e) => setAdress(e.target.value)}
+                  />
+                </div>
+                <div className={styles.input}>
+                  <label htmlFor="number">Número</label>
+                  <input
+                    disabled={edit}
+                    type="text"
+                    name="number"
+                    id="number"
+                    onChange={(e) => setNumber(e.target.value)}
+                  />
+                </div>
+              </div>
+            )}
             <div className={styles.submitEdit}>
               {userData.isFirst ? (
                 <button onClick={submitHandle}>Confirmar</button>

@@ -14,13 +14,16 @@ export function UserProvider(props) {
         img: '',
         name: '',
         age: '',
+        sexo: '',
         birth: '',
         cpf: '',
         ra: '',
-        phone: '',
         email: '',
-        profissao: '',
-        education: '',    
+        phone: '',
+        adressComplet: {
+            adress: '',
+            number: '',
+        }
     })
 
     return (
