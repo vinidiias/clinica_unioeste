@@ -258,5 +258,6 @@
 }
 
 .column {
+    align-items: center;
     flex-direction: column;
 }
