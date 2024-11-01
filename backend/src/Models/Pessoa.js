@@ -39,10 +39,10 @@ const pessoaSchema = new mongoose.Schema({
             require: true,
         },
     },
-    profissao: {
-        type: String,
-        require: true
-    },
+    imagem: {
+        type: String, // ou Buffer se você estiver armazenando os dados da imagem
+        required: false // ou false, dependendo da sua necessidade
+      },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
