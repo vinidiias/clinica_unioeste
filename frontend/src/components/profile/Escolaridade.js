@@ -118,7 +118,7 @@ const Escolaridade = ({ education='' }) => {
             )}
           </div>
           <div className={styles.item}>
-            {(level === "graduacao" || level === "pos graduacao") && (
+            {(level === "Graduação" || level === "Pós Graduação") && (
               <div className={styles.input}>
                 <label htmlFor="turno">Ano/Periodo</label>
                 <select

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../../services/Api';
 
 
-const PersonalData =  ({ customClass, onClose, imgProfile, nome='', idade='', sex='M', nascimento='', CPF='', RA='', mail='', tel='', endereco, endereco_num }) => {
+const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='', sex='M', nascimento='', CPF='', RA='', mail='', tel=''}) => {
     const [edit, setEdit] = useState(true)
     const [img, setImg] = useState(imgProfile)
     const [name, setName] = useState(nome)
@@ -16,23 +16,34 @@ const PersonalData =  ({ customClass, onClose, imgProfile, nome='', idade='', se
     const [ra, setRa] = useState(RA)
     const [email, setEmail] = useState(mail)
     const [phone, setPhone] = useState(tel)
-    const [adress, setAdress] = useState(endereco)
-    const [number, setNumber] = useState(endereco_num)
-    const {userData, setUserData} = useContext(UserContext)
+    const [adress, setAdress] = useState('')
+    const [number, setNumber] = useState('')
+    const {userData, setUserData, setPessoa} = useContext(UserContext)
     const navigate = useNavigate()
 
     useEffect(() => {
       if(customClass === 'column') setEdit(false)
     }, [edit, customClass])
 
-    function handleFileChange(e) {
+    async function handleFileChange(e) {
       const file = e.target.files[0]
 
       if(file){
-        setImg(URL.createObjectURL(file))
+        const base64Img = await convertToBase64(file)
+        setImg(base64Img)
         console.log(img)
       }
     }
+
+    // Função para converter o arquivo de imagem em Base64
+  function convertToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  }
 
     function editToggle() {
         setEdit(!edit)
@@ -52,6 +63,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile, nome='', idade='', se
 
     async function submitHandle() {
       const personal_data = {
+        img,
         name,
         age,
         sexo,
@@ -66,31 +78,61 @@ const PersonalData =  ({ customClass, onClose, imgProfile, nome='', idade='', se
         }
       }
 
-      if(validateInputs(personal_data)) {
+      console.log(personal_data)
 
-        setUserData(prevStat => ({
-          ...prevStat,
-          isFirst: false,
-        }))
-        onClose()
-        navigate('/home')
-      }
-      else alert('Campos vázios! Preencha todas as informações')
-      try {
-        const personCreated = await api.post('/pessoa', {
-          img,
-          name,
-          age,
-          sexo,
-          birth,
-          cpf,
-          ra,
-          email,
-          phone})
+      if (validateInputs(personal_data)) {
+        try {
+          const personCreated = await api.post(
+            `/${userData.user_id}/pessoa`,
+            {
+              img,
+              name,
+              age,
+              sexo,
+              birth,
+              cpf,
+              ra,
+              email,
+              phone,
+              adressComplet : {
+                adress,
+                number
+              }
+            },
+            {
+              headers: { auth: `${userData.user_id}` },
+            }
+          )
  
-      } catch(err) {
-        console.log(err)
-      }
+          const pessoa = personCreated.data
+
+          setUserData((prevStat) => ({
+            ...prevStat,
+            isFirst: false,
+          }))
+
+          setPessoa({
+            img: pessoa.img,
+            name: pessoa.name,
+            age: pessoa.age,
+            sexo: pessoa.sexo,
+            birth: pessoa.birth,
+            cpf: pessoa.cpf,
+            ra: pessoa.ra,
+            email: pessoa.email,
+            phone: pessoa.phone,
+            adressComplet: {
+                adress: pessoa.adress,
+                number: pessoa.number,
+            }
+          })
+
+          onClose()
+          navigate("/home")
+        } catch (err) {
+          console.log(err)
+        }
+      } else alert("Campos vázios! Preencha todas as informações");
     }
 
     function editHandle(){
@@ -116,32 +158,34 @@ const PersonalData =  ({ customClass, onClose, imgProfile, nome='', idade='', se
         <div className={styles.infos + " " + styles[customClass]}>
           <div className={styles.divImg}>
             <label htmlFor="name">Foto</label>
-            {img && !edit ? (
-              <>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <button className={styles.editButtonImg}>Editar</button>
-                  <img
-                    className={styles.img}
-                    src={img}
-                    alt="foto perfil"
-                  />
-                </div>
-              </>
-            ) : img ? (
-              <img
-                className={styles.imgEdit}
-                src={img}
-                alt="foto perfil"
-              />
-            ) : (
+            {customClass === "column" ? (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {img ? (
+                  <img className={styles.imgEdit} src={img} alt="foto perfil" />
+                ) : (
+                  <label htmlFor="file-img">
+                    <input
+                      id="file-img"
+                      name="file-img"
+                      className={styles.file}
+                      placeholder="teste"
+                      type="file"
+                      accept="image/png, image/jpeg"
+                      required
+                      onChange={handleFileChange}
+                    />
+                    <span>Selecionar</span>
+                  </label>
+                )}
+              </div>
+            ) : !img ? (
               <label htmlFor="file-img">
-                
                 <input
                   id="file-img"
                   name="file-img"
@@ -154,6 +198,19 @@ const PersonalData =  ({ customClass, onClose, imgProfile, nome='', idade='', se
                 />
                 <span>Selecionar</span>
               </label>
+            ) : !edit ? (
+              <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <button className={styles.editButtonImg}>Editar</button>
+              <img className={styles.img} src={img} alt="foto perfil" />
+              </div>
+            ) : (
+              <img className={styles.imgEdit} src={img} alt="foto perfil" />
             )}
           </div>
           <div className={styles.item}>
