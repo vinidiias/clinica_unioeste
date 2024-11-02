@@ -9,7 +9,7 @@ const pessoaSchema = new mongoose.Schema({
         type: String,
         require: true,
     },
-    data_nasc: {
+    birth: {
         type: String,
         require: true,
     },
@@ -25,21 +25,25 @@ const pessoaSchema = new mongoose.Schema({
         type: String, 
         require: true,
     },
-    telefone: {
+    phone: {
         type: String, 
         require: true,
     },
-    adrress: {
-        adrres: {
+    email: {
+        type: String, 
+        require: true,
+    },
+    adressComplet: {
+        adress: {
             type: String, 
             require: true,
         }, 
-        adrres_number:{
+        number:{
             type: String, 
             require: true,
         },
     },
-    imagem: {
+    img: {
         type: String, // ou Buffer se você estiver armazenando os dados da imagem
         required: false // ou false, dependendo da sua necessidade
       },

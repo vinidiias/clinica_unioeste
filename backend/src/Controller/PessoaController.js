@@ -3,32 +3,28 @@ const { index } = require('./UserController')
 
 module.exports ={
     async create (req,res) {
-        const { name, age, data_nasc, sexo, ra, cpf, telefone, adrres, adrres_number, imagem} = req.body
-        
+        const { img, name, age, sexo, birth, cpf, ra, email, phone, adressComplet} = req.body
         const { user_id } = req.params 
         const { auth } = req.headers
 
         if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'})
     
         try{
-            const adrress = { //criar um objeto do endereco
-                adrres, 
-                adrres_number
-            }
-
             const createPessoa = await Pessoa.create({
+                img,
                 name,
                 age,
-                data_nasc,
                 sexo,
-                ra,
+                birth,
                 cpf,
-                telefone,
-                adrress,
-                imagem,
+                ra,
+                email,
+                phone,
+                adressComplet,
                 user: user_id
             })
-            await createPessoa.populate('user') //tras outras informacoes sobre o usurario
+
+            //await createPessoa.populate('user') //tras outras informacoes sobre o usurario
 
             return res.status(200).send(createPessoa)
         }
