@@ -2,11 +2,12 @@ import { useContext, useEffect, useState } from 'react';
 import styles from './PersonalData.module.css'
 import { UserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
+import api from '../../services/Api';
 
 
-const PersonalData =  ({ customClass, onClose, img, nome='', idade='', sex='M', nascimento='', CPF='', RA='', mail='', tel='' }) => {
+const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='', sex='M', nascimento='', CPF='', RA='', mail='', tel=''}) => {
     const [edit, setEdit] = useState(true)
-    const [selectedFile, setSelectedFile] = useState('')
+    const [img, setImg] = useState(imgProfile)
     const [name, setName] = useState(nome)
     const [age, setAge] = useState(idade)
     const [sexo, setSexo] = useState(sex)
@@ -15,33 +16,123 @@ const PersonalData =  ({ customClass, onClose, img, nome='', idade='', sex='M', 
     const [ra, setRa] = useState(RA)
     const [email, setEmail] = useState(mail)
     const [phone, setPhone] = useState(tel)
-    const {userData, setUserData} = useContext(UserContext)
+    const [adress, setAdress] = useState('')
+    const [number, setNumber] = useState('')
+    const {userData, setUserData, setPessoa} = useContext(UserContext)
     const navigate = useNavigate()
 
     useEffect(() => {
       if(customClass === 'column') setEdit(false)
     }, [edit, customClass])
 
-    function handleFileChange(e) {
+    async function handleFileChange(e) {
       const file = e.target.files[0]
 
       if(file){
-        setSelectedFile(URL.createObjectURL(file))
+        const base64Img = await convertToBase64(file)
+        setImg(base64Img)
+        console.log(img)
       }
     }
+
+    // Função para converter o arquivo de imagem em Base64
+  function convertToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  }
 
     function editToggle() {
         setEdit(!edit)
         console.log(edit)
     }
 
-    function submitHandle() {
-      onClose()
-      setUserData(prevStat => ({
-        ...prevStat,
-        isFirst: false,
-      }))
-      navigate('/home')
+    function validateInputs(data) {
+      if((!data.adressComplet.adress || data.adressComplet.adress === '') || 
+          !data.adressComplet.number || data.adressComplet.number === '') {
+            return 0
+      }
+      for(let key in data) {
+        if(!data[key] || data[key] === '') return 0
+      }
+      return 1
+    }
+
+    async function submitHandle() {
+      const personal_data = {
+        img,
+        name,
+        age,
+        sexo,
+        birth,
+        cpf,
+        ra,
+        email,
+        phone,
+        adressComplet : {
+          adress,
+          number
+        }
+      }
+
+      console.log(personal_data)
+
+      if (validateInputs(personal_data)) {
+        try {
+          const personCreated = await api.post(
+            `/${userData.user_id}/pessoa`,
+            {
+              img,
+              name,
+              age,
+              sexo,
+              birth,
+              cpf,
+              ra,
+              email,
+              phone,
+              adressComplet : {
+                adress,
+                number
+              }
+            },
+            {
+              headers: { auth: `${userData.user_id}` },
+            }
+          )
+ 
+          const pessoa = personCreated.data
+
+          setUserData((prevStat) => ({
+            ...prevStat,
+            isFirst: false,
+          }))
+
+          setPessoa({
+            img: pessoa.img,
+            name: pessoa.name,
+            age: pessoa.age,
+            sexo: pessoa.sexo,
+            birth: pessoa.birth,
+            cpf: pessoa.cpf,
+            ra: pessoa.ra,
+            email: pessoa.email,
+            phone: pessoa.phone,
+            adressComplet: {
+                adress: pessoa.adress,
+                number: pessoa.number,
+            }
+          })
+
+          onClose()
+          navigate("/home")
+        } catch (err) {
+          console.log(err)
+        }
+      } else alert("Campos vázios! Preencha todas as informações");
     }
 
     function editHandle(){
@@ -67,30 +158,33 @@ const PersonalData =  ({ customClass, onClose, img, nome='', idade='', sex='M', 
         <div className={styles.infos + " " + styles[customClass]}>
           <div className={styles.divImg}>
             <label htmlFor="name">Foto</label>
-            {selectedFile && !edit ? (
-              <>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <button className={styles.editButtonImg}>Editar</button>
-                  <img
-                    className={styles.img}
-                    src={selectedFile}
-                    alt="foto perfil"
-                  />
-                </div>
-              </>
-            ) : selectedFile ? (
-              <img
-                className={styles.imgEdit}
-                src={selectedFile}
-                alt="foto perfil"
-              />
-            ) : (
+            {customClass === "column" ? (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {img ? (
+                  <img className={styles.imgEdit} src={img} alt="foto perfil" />
+                ) : (
+                  <label htmlFor="file-img">
+                    <input
+                      id="file-img"
+                      name="file-img"
+                      className={styles.file}
+                      placeholder="teste"
+                      type="file"
+                      accept="image/png, image/jpeg"
+                      required
+                      onChange={handleFileChange}
+                    />
+                    <span>Selecionar</span>
+                  </label>
+                )}
+              </div>
+            ) : !img ? (
               <label htmlFor="file-img">
                 <input
                   id="file-img"
@@ -104,6 +198,19 @@ const PersonalData =  ({ customClass, onClose, img, nome='', idade='', sex='M', 
                 />
                 <span>Selecionar</span>
               </label>
+            ) : !edit ? (
+              <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <button className={styles.editButtonImg}>Editar</button>
+              <img className={styles.img} src={img} alt="foto perfil" />
+              </div>
+            ) : (
+              <img className={styles.imgEdit} src={img} alt="foto perfil" />
             )}
           </div>
           <div className={styles.item}>
@@ -204,6 +311,30 @@ const PersonalData =  ({ customClass, onClose, img, nome='', idade='', sex='M', 
                 autoComplete="home email"
               />
             </div>
+            {customClass === "column" && (
+              <div className={styles.item}>
+                <div className={styles.input}>
+                  <label htmlFor="adress">Endereço</label>
+                  <input
+                    disabled={edit}
+                    type="text"
+                    name="adress"
+                    id="adress"
+                    onChange={(e) => setAdress(e.target.value)}
+                  />
+                </div>
+                <div className={styles.input}>
+                  <label htmlFor="number">Número</label>
+                  <input
+                    disabled={edit}
+                    type="text"
+                    name="number"
+                    id="number"
+                    onChange={(e) => setNumber(e.target.value)}
+                  />
+                </div>
+              </div>
+            )}
             <div className={styles.submitEdit}>
               {userData.isFirst ? (
                 <button onClick={submitHandle}>Confirmar</button>

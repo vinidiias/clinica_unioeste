@@ -21,9 +21,10 @@ const Profile = () => {
   return (
     <div className={styles.profile}>
         <PersonalData 
-          img={logoPerfil}
+          imgProfile={pessoa.img}
           nome={pessoa.name}
           idade={pessoa.age}
+          sex={pessoa.sexo}
           nascimento={pessoa.birth}
           CPF={pessoa.cpf}
           RA={pessoa.ra}
@@ -33,9 +34,8 @@ const Profile = () => {
         <Escolaridade
           education={education}
         />
-
         <Adress
-          adress_completo={pessoa.adress_completo}
+          adress_completo={pessoa.adressComplet}
         />
     </div>
   );

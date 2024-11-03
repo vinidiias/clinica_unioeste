@@ -17,7 +17,7 @@ const CheckBox = ({ name, text, side, handleOnChange, value, isSelected, customC
           name={name}
           id={inputId}
           onChange={handleOnChange}
-          value={value | ''}
+          value={value || ''}
         />
         {side === "right" && (
           <label htmlFor={inputId} className={styles.label_right}>
