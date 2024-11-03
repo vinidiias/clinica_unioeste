@@ -78,7 +78,6 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
         }
       }
 
-      console.log(personal_data)
 
       if (validateInputs(personal_data)) {
         try {
@@ -105,6 +104,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
           )
  
           const pessoa = personCreated.data
+          console.log(pessoa)
 
           setUserData((prevStat) => ({
             ...prevStat,
@@ -121,10 +121,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
             ra: pessoa.ra,
             email: pessoa.email,
             phone: pessoa.phone,
-            adressComplet: {
-                adress: pessoa.adress,
-                number: pessoa.number,
-            }
+            adressComplet: pessoa.adressComplet
           })
 
           onClose()

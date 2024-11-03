@@ -53,13 +53,13 @@ const Adress = ({ adress_completo='' }) => {
           <div className={styles.item}>
             <div className={styles.input}>
               <label htmlFor="adress">Endereço</label>
-              <input disabled={edit} type="text" name="adress" id="adress" onChange={(e) => setAdress(e.target.value)} />
+              <input disabled={edit} value={adress} type="text" name="adress" id="adress" onChange={(e) => setAdress(e.target.value)} />
             </div>
           </div>
           <div className={styles.item}>
             <div className={styles.input}>
               <label htmlFor="number">Número</label>
-              <input disabled={edit} type="text" name="number" id="number" onChange={(e) => setNumber(e.target.value)} />
+              <input disabled={edit} value={number} type="text" name="number" id="number" onChange={(e) => setNumber(e.target.value)} />
             </div>
           </div>
           <div className={styles.item}>

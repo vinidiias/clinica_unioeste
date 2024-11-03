@@ -151,7 +151,7 @@
     height: 150px;
     opacity: 0.7;
     position: relative;
-    object-fit: contain;
+    object-fit: cover;
 }
 
 .divImg label {
@@ -165,7 +165,8 @@
 }
 
 .divImg .imgEdit {
-    object-fit: contain;
+    object-fit: cover;
+
     width: 150px;
     height: 150px;
 }
