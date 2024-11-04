@@ -8,7 +8,7 @@ module.exports ={
         const { user_id } = req.params 
         const { auth } = req.headers
 
-        //if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'})
+        if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'})
     
         try{
             const createPessoa = await Pessoa.create({
@@ -27,7 +27,7 @@ module.exports ={
 
             await createPessoa.populate('user') //tras outras informacoes sobre o usurario
             // Atualiza `isFirstLogin` para false após completar o perfil
-            console.log(user_id)
+            //console.log(user_id)
             const userExists = await User.findById(user_id)
             userExists.isFirstLogin = false;
             await userExists.save();
