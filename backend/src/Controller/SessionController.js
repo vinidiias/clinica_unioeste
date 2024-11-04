@@ -3,22 +3,34 @@ const User = require('../Models/User')
 const bcrypt = require('bcrypt')
 
 module.exports = {
-    async create(req, res) {
-        
-        const { email, password } = req.body
+    async create(req, res) { 
+        const { email, password } = req.body;
        
-        try{
-            const userExists = await User.findOne({ email })
-            if(!userExists) return res.status(400).send({ message: 'User does not exist' })
-            //return res.status(200).send(userExists)
-
-            const validPassword = await bcrypt.compare(password, userExists.password)
-            if(!validPassword) return res.status(400).send('Password invelid')
-
-            return res.status(200).send(userExists)
+        try {
+            const userExists = await User.findOne({ email });
+            if (!userExists) return res.status(400).send({ message: 'User does not exist' });
+    
+            const validPassword = await bcrypt.compare(password, userExists.password);
+            if (!validPassword) return res.status(400).send({ message: 'Invalid password' });
+    
+            // Verifica o valor de `isFirstLogin`
+            if (userExists.isFirstLogin) {
+                return res.status(200).json({
+                    message: 'Seja Bem-vindo, por favor complete seu cadastro',
+                    //firstLogin: true, // Informa que é o primeiro login
+                    user: userExists.name
+                });
+            }
+    
+            // Se não for o primeiro login, permite o acesso direto
+            return res.status(201).json({
+                message: 'Login realizado com sucesso',
+                //firstLogin: false, // Indica que não é o primeiro login
+                user: userExists.name
+            });
+    
+        } catch (err) {
+            return res.status(400).send(err);
         }
-        catch(err){
-            return res.status(400).send(err)
-        }
-    }
+    }    
 }

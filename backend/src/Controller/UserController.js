@@ -26,6 +26,7 @@ module.exports = {
                 email,
                 name,
                 password: hashedPassword,
+                isFirstLogin: true // Define automaticamente como true na criação
             })
 
             return res.status(200).send(createdUser)

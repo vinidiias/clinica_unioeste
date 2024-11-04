@@ -25,6 +25,10 @@ module.exports ={
             })
 
             //await createPessoa.populate('user') //tras outras informacoes sobre o usurario
+            // Atualiza `isFirstLogin` para false após completar o perfil
+            const userExists = await User.findById(user_id);
+            userExists.isFirstLogin = false;
+            await userExists.save();
 
             return res.status(200).send(createPessoa)
         }
@@ -96,7 +100,7 @@ module.exports ={
 
             if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
 
-            const pessoaAtualizada = await Pessoa.findByIdAndUpdate(
+            const pessoaAtualizada = await Pessoa.findOneAndUpdate(
                 {user: user_id}, 
                 
                 { $set: dadosAtualizados },
