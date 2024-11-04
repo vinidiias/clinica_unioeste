@@ -94,7 +94,7 @@ module.exports ={
             const dadosAtualizados = req.body
 
             const pessoaAtualizada = await Pessoa.findByIdAndUpdate(
-                id, 
+                {user: id}, 
                 
                 { $set: dadosAtualizados },
                 { new: true }
