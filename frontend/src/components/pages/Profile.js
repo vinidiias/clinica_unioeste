@@ -6,7 +6,7 @@ import Escolaridade from '../profile/Escolaridade'
 import Adress from '../profile/Adress'
 
 const Profile = () => {
-  const { pessoa, setPessoa } = useContext(UserContext);
+  const { pessoa } = useContext(UserContext);
   const [localPessoa, setLocalPessoa] = useState(pessoa); // Estado local para armazenar dados da pessoa
 
   useEffect(() => {

@@ -120,6 +120,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
             ra: newPessoa.ra,
             email: newPessoa.email,
             phone: newPessoa.phone,
+            adressComplet: newPessoa.adressComplet
           }))
 
           onClose()
@@ -163,7 +164,8 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
           }
 
           const data = pessoaUpdated.data.pessoa
-          setPessoa({
+          setPessoa(prevStat => ({
+            ...prevStat,
             img: data.img,
             name: data.name,
             age: data.age,
@@ -173,7 +175,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
             ra: data.ra,
             email: data.email,
             phone: data.phone
-          })
+          }))
           console.log(pessoa)
           editToggle()
         }catch(err){

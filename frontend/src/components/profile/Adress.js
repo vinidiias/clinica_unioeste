@@ -4,7 +4,7 @@ import api from '../../services/Api'
 import { UserContext } from '../context/UserContext';
 
 const Adress = ({ adress_completo='' }) => {
-    const {setPessoa} = useContext(UserContext)
+    const {userData, setPessoa, pessoa} = useContext(UserContext)
     const [edit, setEdit] = useState(true)
     const [adress, setAdress] = useState(adress_completo.adress)
     const [number, setNumber] = useState(adress_completo.number)
@@ -13,32 +13,39 @@ const Adress = ({ adress_completo='' }) => {
         setEdit(!edit)
     }
 
-    function validation(adress, number) {
-        return ((adress !== undefined && adress !== '')) && (number !== undefined && number !== '')
+    function validation(adress_complet) {
+        return ((adress_complet.adress !== undefined && adress_complet.adress !== '')) && (adress_complet.number !== undefined && adress_complet.number !== '')
     }
 
     async function editHandle() {
-       if(!validation(adress, number)) {
+      const adressComplet = {
+        adress,
+        number
+    }
+      console.log(adressComplet)
+       if(!validation(adressComplet)) {
             console.log('Dados de endereço incompleto(s)! Preencha todos os campos.')
             return
        }
        try{
-            const adress_complet = {
-                adress,
-                number
-            }
-            console.log(adress_complet)
-            /*
-            ...logica de backend e atualizar o userContext
-            await api.patch('/pessoa', {
-                adress_complet,
-            })
-            .then((resp) => console.log(resp))
-            */
+          const adressUpdated = await api.patch(`/pessoa/${userData.user_id}`, {adressComplet}, {
+            headers: {'auth': `${userData.user_id}`}
+          })
+
+          if (!adressUpdated.data.pessoa) {
+            console.error('Dados da pessoa não foram retornados:', adressUpdated);
+            return;
+          }
+          
+          const data = adressUpdated.data.pessoa
+
            setPessoa(prevStat => ({
             ...prevStat,
-            adress_user: adress_complet
+            adressComplet: data.adressComplet
            }))
+
+           console.log(pessoa)
+           editToggle()
        } catch(err){
         console.log(err)
        }
