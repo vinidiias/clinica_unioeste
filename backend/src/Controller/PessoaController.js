@@ -96,7 +96,7 @@ module.exports ={
 
             if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
 
-            const pessoaAtualizada = await Pessoa.findByIdAndUpdate(
+            const pessoaAtualizada = await Pessoa.findOneAndUpdate(
                 {user: user_id}, 
                 
                 { $set: dadosAtualizados },
