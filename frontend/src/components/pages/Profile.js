@@ -18,6 +18,8 @@ const Profile = () => {
     turno: 'Manhã'
   }
 
+  console.log(pessoa)
+
   return (
     <div className={styles.profile}>
         <PersonalData 
@@ -31,11 +33,11 @@ const Profile = () => {
           mail={pessoa.email}
           tel={pessoa.phone}
         />
-        <Escolaridade
-          education={education}
-        />
         <Adress
           adress_completo={pessoa.adressComplet}
+        />
+                <Escolaridade
+          education={pessoa.education}
         />
     </div>
   );

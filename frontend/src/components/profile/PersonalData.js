@@ -51,10 +51,12 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
     }
 
     function validateInputs(data) {
-      if((!data.adressComplet.adress || data.adressComplet.adress === '') || 
-          !data.adressComplet.number || data.adressComplet.number === '') {
+      if(data.adressComplet){
+        if((!data.adressComplet.adress || data.adressComplet.adress === '') || 
+            !data.adressComplet.number || data.adressComplet.number === '') {
             return 0
-      }
+        }
+      } 
       for(let key in data) {
         if(!data[key] || data[key] === '') return 0
       }
@@ -78,7 +80,6 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
         }
       }
 
-      console.log(personal_data)
 
       if (validateInputs(personal_data)) {
         try {
@@ -105,6 +106,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
           )
  
           const pessoa = personCreated.data
+          console.log(pessoa)
 
           setUserData((prevStat) => ({
             ...prevStat,
@@ -121,10 +123,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
             ra: pessoa.ra,
             email: pessoa.email,
             phone: pessoa.phone,
-            adressComplet: {
-                adress: pessoa.adress,
-                number: pessoa.number,
-            }
+            adressComplet: pessoa.adressComplet
           })
 
           onClose()
@@ -135,8 +134,9 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
       } else alert("Campos vázios! Preencha todas as informações");
     }
 
-    function editHandle(){
+    async function editHandle(){
       const personal_data = {
+        img,
         name,
         age,
         sexo,
@@ -146,8 +146,28 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
         email,
         phone
       }
-      console.log(personal_data)
-      editToggle()
+
+      if(validateInputs(personal_data)){
+        try{
+          console.log(`ID enviado: ${userData.user_id}`)
+          const pessoaUpdated = await api.patch(`/pessoa/${userData.user_id}`, {
+            img,
+            name,
+            age,
+            sexo,
+            birth,
+            cpf,
+            ra,
+            email,
+            phone
+          })
+          console.log(pessoaUpdated.data)
+          editToggle()
+        }catch(err){
+          console.log(err)
+        }
+      } else alert('Campos vázio(s)!')
+
     }
 
     return (
