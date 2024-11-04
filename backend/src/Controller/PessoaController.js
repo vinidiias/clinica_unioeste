@@ -1,4 +1,5 @@
 const Pessoa = require('../Models/Pessoa')
+const User = require('../Models/User')
 const { index } = require('./UserController')
 
 module.exports ={
@@ -7,7 +8,7 @@ module.exports ={
         const { user_id } = req.params 
         const { auth } = req.headers
 
-        if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'})
+        //if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'})
     
         try{
             const createPessoa = await Pessoa.create({
@@ -24,9 +25,10 @@ module.exports ={
                 user: user_id
             })
 
-            //await createPessoa.populate('user') //tras outras informacoes sobre o usurario
+            await createPessoa.populate('user') //tras outras informacoes sobre o usurario
             // Atualiza `isFirstLogin` para false após completar o perfil
-            const userExists = await User.findById(user_id);
+            console.log(user_id)
+            const userExists = await User.findById(user_id)
             userExists.isFirstLogin = false;
             await userExists.save();
 
