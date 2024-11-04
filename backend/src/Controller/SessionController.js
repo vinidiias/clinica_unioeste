@@ -17,16 +17,20 @@ module.exports = {
             if (userExists.isFirstLogin) {
                 return res.status(200).json({
                     message: 'Seja Bem-vindo, por favor complete seu cadastro',
-                    //firstLogin: true, // Informa que é o primeiro login
-                    user: userExists.name
+                    firstLogin: true, // Informa que é o primeiro login
+                    email: userExists.email,
+                    user: userExists.name,
+                    user_id: userExists._id
                 });
             }
     
             // Se não for o primeiro login, permite o acesso direto
             return res.status(201).json({
                 message: 'Login realizado com sucesso',
-                //firstLogin: false, // Indica que não é o primeiro login
-                user: userExists.name
+                firstLogin: false, // Indica que não é o primeiro login
+                email: userExists.email,
+                user: userExists.name,
+                user_id: userExists._id
             });
     
         } catch (err) {
