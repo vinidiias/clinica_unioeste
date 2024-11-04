@@ -90,11 +90,14 @@ module.exports ={
 
     async updatePessoa (req, res){
         try{
-            const { id } = req.params 
             const dadosAtualizados = req.body
+            const { user_id } = req.params 
+            const { auth } = req.headers
+
+            if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
 
             const pessoaAtualizada = await Pessoa.findByIdAndUpdate(
-                {user: id}, 
+                {user: user_id}, 
                 
                 { $set: dadosAtualizados },
                 { new: true }
