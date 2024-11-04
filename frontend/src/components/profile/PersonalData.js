@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import styles from './PersonalData.module.css'
+import { UserContext } from '../context/UserContext';
+import { useNavigate } from 'react-router-dom';
 
 
-const PersonalData =  ({ img, nome='', idade='', sex='M', nascimento='', CPF='', RA='', mail='', tel='' }) => {
+const PersonalData =  ({ customClass, onClose, img, nome='', idade='', sex='M', nascimento='', CPF='', RA='', mail='', tel='' }) => {
     const [edit, setEdit] = useState(true)
     const [selectedFile, setSelectedFile] = useState('')
     const [name, setName] = useState(nome)
@@ -13,6 +15,12 @@ const PersonalData =  ({ img, nome='', idade='', sex='M', nascimento='', CPF='',
     const [ra, setRa] = useState(RA)
     const [email, setEmail] = useState(mail)
     const [phone, setPhone] = useState(tel)
+    const {userData, setUserData} = useContext(UserContext)
+    const navigate = useNavigate()
+
+    useEffect(() => {
+      if(customClass === 'column') setEdit(false)
+    }, [edit, customClass])
 
     function handleFileChange(e) {
       const file = e.target.files[0]
@@ -25,6 +33,15 @@ const PersonalData =  ({ img, nome='', idade='', sex='M', nascimento='', CPF='',
     function editToggle() {
         setEdit(!edit)
         console.log(edit)
+    }
+
+    function submitHandle() {
+      onClose()
+      setUserData(prevStat => ({
+        ...prevStat,
+        isFirst: false,
+      }))
+      navigate('/home')
     }
 
     function editHandle(){
@@ -43,27 +60,27 @@ const PersonalData =  ({ img, nome='', idade='', sex='M', nascimento='', CPF='',
     }
 
     return (
-      <div className={styles.containers + ' ' + styles.margin}>
+      <div className={styles.containers + " " + styles.margin}>
         <div className={styles.header}>
           <h3>Dados pessoais</h3>
         </div>
-        <div className={styles.infos}>
-          <div
-            className={styles.divImg}
-          >
+        <div className={styles.infos + " " + styles[customClass]}>
+          <div className={styles.divImg}>
             <label htmlFor="name">Foto</label>
             {selectedFile && !edit ? (
               <>
-                <div style={{display:'flex', alignItems: 'center', justifyContent: 'center'}}>
-                  <button
-                    className={styles.editButtonImg}
-                  >
-                    Editar
-                  </button>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <button className={styles.editButtonImg}>Editar</button>
                   <img
                     className={styles.img}
                     src={selectedFile}
-                    alt='foto perfil'
+                    alt="foto perfil"
                   />
                 </div>
               </>
@@ -71,15 +88,15 @@ const PersonalData =  ({ img, nome='', idade='', sex='M', nascimento='', CPF='',
               <img
                 className={styles.imgEdit}
                 src={selectedFile}
-                alt='foto perfil'
+                alt="foto perfil"
               />
             ) : (
-              <label htmlFor='file-img'>
+              <label htmlFor="file-img">
                 <input
-                  id='file-img'
-                  name='file-img'
+                  id="file-img"
+                  name="file-img"
                   className={styles.file}
-                  placeholder='teste'
+                  placeholder="teste"
                   type="file"
                   accept="image/png, image/jpeg"
                   required
@@ -188,8 +205,14 @@ const PersonalData =  ({ img, nome='', idade='', sex='M', nascimento='', CPF='',
               />
             </div>
             <div className={styles.submitEdit}>
-              <button onClick={editToggle}>Editar dados</button>
-              {!edit && <button onClick={editHandle}>Confirmar</button>}
+              {userData.isFirst ? (
+                <button onClick={submitHandle}>Confirmar</button>
+              ) : (
+                <>
+                  <button onClick={editToggle}>Editar dados</button>
+                  {!edit && <button onClick={editHandle}>Confirmar</button>}
+                </>
+              )}
             </div>
           </div>
         </div>

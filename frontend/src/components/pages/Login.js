@@ -7,13 +7,19 @@ import { UserContext } from '../context/UserContext'
 import RegisterForm from '../login/RegisterForm'
 import LoginForm from '../login/LoginForm'
 import api from '../../services/Api'
+import PersonalDataScreenOverlay from '../profile/PersonalDataScreenOverlay'
 
 
 
 const Login = () => {
   const {userData, setUserData} = useContext(UserContext)
   const [showLogin, setShowLogin] = useState(false)
+  const [isOverlayVisible, setOverlayVisible] = useState(false)
   const navigate = useNavigate()
+
+  const toggleOverlay = () => {
+    setOverlayVisible(!isOverlayVisible)
+  }
 
   const toggleChange = () => {
     setShowLogin(!showLogin)
@@ -21,25 +27,25 @@ const Login = () => {
 
   async function registerHandler(email, name, password) {
     try{
-      const user = await api.post('/user', {
+      const userCreated = await api.post('/user', {
         email,
         name,
         password
       })
-      .then((resp) => {
-        const user = resp.data
-        console.log(resp.data)
-        setUserData(prevStat => ({
-          ...prevStat,
-          email: user.email,
-          name: user.name
-        }))
-      })
-      .then(() =>{
-        console.log(userData)
-        setShowLogin(!showLogin)
-      })
-      .catch((err) => console.log(err))
+
+      if(!userCreated) return alert('Erro ao criar conta. Tente novamente...')
+
+      const user = userCreated.data
+
+      //depois de validado então envia informações para o Context (session da aplicação)
+      setUserData(prevStat => ({
+        ...prevStat,
+        email: user.email,
+        name: user.name,
+        user_id: user._id,
+      }))
+
+      setShowLogin(!showLogin)
     } catch(err){
       console.log(err)
     }
@@ -47,14 +53,12 @@ const Login = () => {
 
   async function loginHandler(email, password) {
     try{
-      const user = await api.post('/session', {
+      const userCreated = await api.post('/session', {
         email,
         password
       })
-      .then((resp) => {
-        const user = resp.data
-        console.log(user)
-
+        const user = userCreated.data
+          
         setUserData(prevStat => ({
           ...prevStat,
           isLogged: true,
@@ -62,10 +66,12 @@ const Login = () => {
           name: user.name,
           user_id: user._id,
         }))
-        navigate('/home')
-      })
-      .catch((err) => console.log(err))
-    } catch(err) {
+
+        console.log(userData.isFirst)
+        if(userData.isFirst) setOverlayVisible(true)
+        else navigate('/home')
+      } 
+    catch(err) {
       console.log(err)
     }
   }
@@ -83,6 +89,9 @@ const Login = () => {
 
     return (
       <>
+        {isOverlayVisible && (
+          <PersonalDataScreenOverlay customClass="column" onClose={toggleOverlay} />
+        )}
         {showLogin ? (
           <motion.div
           key="signup"

@@ -1,4 +1,5 @@
 const Ficha = require('../Models/Ficha');
+const { index, indexByUser } = require('./PessoaController');
 const { create } = require('./UserController');
 
 module.exports = {
@@ -8,7 +9,8 @@ module.exports = {
         const { user_id } = req.params
         const { auth } = req.headers
 
-
+        if( user_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
+    
         try {
             // Cria o documento usando o modelo Ficha
             const createFicha = await Ficha.create({
@@ -70,5 +72,6 @@ module.exports = {
         catch (err){
             return res.status(400).send(err)
         }
+
     }
 }
