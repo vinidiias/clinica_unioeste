@@ -18,7 +18,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
     const [phone, setPhone] = useState(tel)
     const [adress, setAdress] = useState('')
     const [number, setNumber] = useState('')
-    const {userData, setUserData, setPessoa} = useContext(UserContext)
+    const {userData, setUserData, setPessoa, pessoa} = useContext(UserContext)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -31,7 +31,6 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
       if(file){
         const base64Img = await convertToBase64(file)
         setImg(base64Img)
-        console.log(img)
       }
     }
 
@@ -47,7 +46,6 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
 
     function editToggle() {
         setEdit(!edit)
-        console.log(edit)
     }
 
     function validateInputs(data) {
@@ -80,7 +78,6 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
         }
       }
 
-
       if (validateInputs(personal_data)) {
         try {
           const personCreated = await api.post(
@@ -105,26 +102,25 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
             }
           )
  
-          const pessoa = personCreated.data
-          console.log(pessoa)
+          const newPessoa = personCreated.data
 
           setUserData((prevStat) => ({
             ...prevStat,
             isFirst: false,
           }))
 
-          setPessoa({
-            img: pessoa.img,
-            name: pessoa.name,
-            age: pessoa.age,
-            sexo: pessoa.sexo,
-            birth: pessoa.birth,
-            cpf: pessoa.cpf,
-            ra: pessoa.ra,
-            email: pessoa.email,
-            phone: pessoa.phone,
-            adressComplet: pessoa.adressComplet
-          })
+          setPessoa(prevStat => ({
+            ...prevStat,
+            img: newPessoa.img,
+            name: newPessoa.name,
+            age: newPessoa.age,
+            sexo: newPessoa.sexo,
+            birth: newPessoa.birth,
+            cpf: newPessoa.cpf,
+            ra: newPessoa.ra,
+            email: newPessoa.email,
+            phone: newPessoa.phone,
+          }))
 
           onClose()
           navigate("/home")
@@ -149,7 +145,6 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
 
       if(validateInputs(personal_data)){
         try{
-          console.log(`ID enviado: ${userData.user_id}`)
           const pessoaUpdated = await api.patch(`/pessoa/${userData.user_id}`, {
             img,
             name,
@@ -160,8 +155,26 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
             ra,
             email,
             phone
+          }, {headers: {'auth': `${userData.user_id}`}})
+          
+          if (!pessoaUpdated.data.pessoa) {
+            console.error('Dados da pessoa não foram retornados:', pessoaUpdated);
+            return;
+          }
+
+          const data = pessoaUpdated.data.pessoa
+          setPessoa({
+            img: data.img,
+            name: data.name,
+            age: data.age,
+            sexo: data.sexo,
+            birth: data.birth,
+            cpf: data.cpf,
+            ra: data.ra,
+            email: data.email,
+            phone: data.phone
           })
-          console.log(pessoaUpdated.data)
+          console.log(pessoa)
           editToggle()
         }catch(err){
           console.log(err)
