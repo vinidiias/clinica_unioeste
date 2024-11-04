@@ -25,6 +25,10 @@ module.exports ={
             })
 
             //await createPessoa.populate('user') //tras outras informacoes sobre o usurario
+            // Atualiza `isFirstLogin` para false após completar o perfil
+            const userExists = await User.findById(user_id);
+            userExists.isFirstLogin = false;
+            await userExists.save();
 
             return res.status(200).send(createPessoa)
         }
