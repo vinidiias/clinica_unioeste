@@ -67,8 +67,10 @@ const Login = () => {
           user_id: user._id,
         }))
 
-        console.log(userData.isFirst)
-        if(userData.isFirst) setOverlayVisible(true)
+        console.log(user.firstLogin)
+        if(user.firstLogin) {
+          setOverlayVisible(true)
+        }
         else navigate('/home')
       } 
     catch(err) {
