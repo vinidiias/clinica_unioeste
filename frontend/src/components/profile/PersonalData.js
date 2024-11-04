@@ -98,13 +98,13 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
               }
             },
             {
-              headers: { auth: `${userData.user_id}` },
+              headers: { 'auth': `${userData.user_id}` },
             }
           )
  
           const newPessoa = personCreated.data
 
-          setUserData((prevStat) => ({
+          setUserData(prevStat => ({
             ...prevStat,
             isFirst: false,
           }))

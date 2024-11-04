@@ -57,6 +57,7 @@ const Login = () => {
         email,
         password
       })
+      console.log(userCreated.data.email)
         const user = userCreated.data
           
         setUserData(prevStat => ({
@@ -67,7 +68,7 @@ const Login = () => {
           user_id: user._id,
         }))
 
-        console.log(user.firstLogin)
+        console.log(userData)
         if(user.firstLogin) {
           setOverlayVisible(true)
         }
