@@ -175,10 +175,6 @@
     display: none;
 }
 
-.divImg .file::placeholder {
-    content: none;
-}
-
 .divImg span {
     display: block;
     border: 1px solid rgb(141, 141, 141);

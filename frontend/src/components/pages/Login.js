@@ -1,7 +1,7 @@
 import styles from './Login.module.css'
 
 import { useNavigate } from 'react-router-dom'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { UserContext } from '../context/UserContext'
 import RegisterForm from '../login/RegisterForm'
@@ -57,19 +57,19 @@ const Login = () => {
         email,
         password
       })
-      console.log(userCreated.data.email)
-        const user = userCreated.data
+      console.log(userCreated.data)
+        const data = userCreated.data
           
         setUserData(prevStat => ({
           ...prevStat,
           isLogged: true,
-          email: user.email,
-          name: user.name,
-          user_id: user._id,
+          email: data.email,
+          name: data.user,
+          user_id: data.user_id,
         }))
 
         console.log(userData)
-        if(user.firstLogin) {
+        if(data.firstLogin) {
           setOverlayVisible(true)
         }
         else navigate('/home')
