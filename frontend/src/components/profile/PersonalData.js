@@ -80,6 +80,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
 
       if (validateInputs(personal_data)) {
         try {
+          console.log(userData.user_id)
           const personCreated = await api.post(
             `/${userData.user_id}/pessoa`,
             {
@@ -235,14 +236,28 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
               </label>
             ) : !edit ? (
               <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <button className={styles.editButtonImg}>Editar</button>
-              <img className={styles.img} src={img} alt="foto perfil" />
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <label 
+                className={styles.editButtonImg}
+                htmlFor="file-img">
+                  <input
+                    id="file-img"
+                    name="file-img"
+                    className={styles.file}
+                    placeholder="teste"
+                    type="file"
+                    accept="image/png, image/jpeg"
+                    required
+                    onChange={handleFileChange}
+                  />
+                  <span>Editar</span>
+                </label>
+                <img className={styles.img} src={img} alt="foto perfil" />
               </div>
             ) : (
               <img className={styles.imgEdit} src={img} alt="foto perfil" />
