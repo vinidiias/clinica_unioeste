@@ -131,7 +131,7 @@ useEffect(() => {
 
     return (
       <form className={styles.ficha_form}>
-        <div>
+        <div className={styles.flex}>
           <Input
             type="text"
             handleOnChange={handleChange}
@@ -140,16 +140,14 @@ useEffect(() => {
             autoComplete="username"
             customClass="flex_1"
           />
+          <Input
+            type="number"
+            name="age"
+            text="Idade"
+            handleOnChange={handleChange}
+          />
         </div>
         <div className={styles.flex}>
-          <div>
-            <Input
-              type="number"
-              name="age"
-              text="Idade"
-              handleOnChange={handleChange}
-            />
-          </div>
           <Input
             type="date"
             name="birth"
@@ -162,7 +160,7 @@ useEffect(() => {
             </label>
             <CheckBox
               side="right"
-              isSelected={sex === 'F'}
+              isSelected={sex === "F"}
               name="sex"
               value="F"
               text="( )F"
@@ -173,7 +171,7 @@ useEffect(() => {
             />
             <CheckBox
               side="right"
-              isSelected={sex === 'M'}
+              isSelected={sex === "M"}
               name="sex"
               value="M"
               text="( )M"
@@ -235,11 +233,11 @@ useEffect(() => {
           customClass="flex_1"
           handleOnChange={handleChange}
         />
-        <div style={{ marginBottom: "1em" }} className={styles.flex}>
+        <div className={styles.flex}>
           <label htmlFor="level-Fundamental I" className={styles.label}>
             Escolaridade:
           </label>
-          <div>
+          <div className={styles.student}>
             <CheckBox
               isSelected={education.type === "Fundamental I"}
               name="level"
@@ -288,63 +286,65 @@ useEffect(() => {
               value="Pós Graduação"
               handleOnChange={(e) => setTypeEducation(e.target.value)}
             />
-            {((typeEducation === 'Pós Graduação') ||
-            (typeEducation === 'Graduação')) && (
-              <div style={{ marginTop: "1em" }}>
-                <div className={styles.flex}>
-                  <Input
-                    type="text"
-                    name="curso"
-                    text="Curso"
-                    handleOnChange={(e) => setCurso(e.target.value)}
-                  />
-                  <Input
-                    type="text"
-                    name="periodo"
-                    text="Ano/período"
-                    handleOnChange={(e) => setPeriodo(e.target.value)}
-                  />
-                </div>
-                <div className={styles.flex}>
-                  <label htmlFor="curso" className={styles.label}>
-                    Turno do seu curso:
-                  </label>
-                  <CheckBox
-                    isSelected={turno === "Manhã"}
-                    side="right"
-                    value="Manhã"
-                    name="course_schedule"
-                    text="Manhã"
-                    handleOnChange={(e) => setTurno(e.target.value)}
-                  />
-                  <CheckBox
-                    isSelected={turno === "Tarde"}
-                    side="right"
-                    value="Tarde"
-                    name="course_schedule"
-                    text="Tarde"
-                    handleOnChange={(e) => setTurno(e.target.value)}
-                  />
-                  <CheckBox
-                    isSelected={turno === "Noite"}
-                    side="right"
-                    value="Noite"
-                    name="course_schedule"
-                    text="Noite"
-                    handleOnChange={(e) => setTurno(e.target.value)}
-                  />
-                </div>
-              </div>
-            )}
           </div>
         </div>
-        <div>
+        {(typeEducation === "Pós Graduação" ||
+          typeEducation === "Graduação") && (
+          <>
+            <div className={styles.flex}>
+              <Input
+                type="text"
+                name="curso"
+                text="Curso"
+                handleOnChange={(e) => setCurso(e.target.value)}
+              />
+              <Input
+                type="text"
+                name="periodo"
+                text="Ano/período"
+                handleOnChange={(e) => setPeriodo(e.target.value)}
+              />
+            </div>
+            <div className={styles.flex}>
+              <label htmlFor="curso" className={styles.label}>
+                Turno do seu curso:
+              </label>
+              <div className={styles.turnos}>
+                <CheckBox
+                  isSelected={turno === "Manhã"}
+                  side="right"
+                  value="Manhã"
+                  name="course_schedule"
+                  text="Manhã"
+                  handleOnChange={(e) => setTurno(e.target.value)}
+                />
+                <CheckBox
+                  isSelected={turno === "Tarde"}
+                  side="right"
+                  value="Tarde"
+                  name="course_schedule"
+                  text="Tarde"
+                  handleOnChange={(e) => setTurno(e.target.value)}
+                />
+                <CheckBox
+                  isSelected={turno === "Noite"}
+                  side="right"
+                  value="Noite"
+                  name="course_schedule"
+                  text="Noite"
+                  handleOnChange={(e) => setTurno(e.target.value)}
+                />
+              </div>
+            </div>
+          </>
+        )}
+        <>
           <Table
             setPreferredDay={setPreferredDay}
             preferredDay={preferredDay}
           />
-        </div>
-        <div style={{ marginBottom: "1em" }} className={styles.flex}>
+        </>
+        <div className={styles.flex}>
           <CheckBox
             isSelected={isVinculo}
             customClass="bold"
@@ -391,7 +391,7 @@ useEffect(() => {
             </div>
           )}
         </div>
-        {typeVinculo === 'Agente' && (
+        {typeVinculo === "Agente" && (
           <div>
             <Input
               type="text"
@@ -415,26 +415,28 @@ useEffect(() => {
             }
           />
         </div>
-        <div style={{ marginBottom: "1em" }} className={styles.flex}>
+        <div className={styles.flex}>
           <label htmlFor="work-Trabalha" className={styles.label}>
             Você trabalha?
           </label>
-          <CheckBox
-            isSelected={typeWork === "Não trabalha"}
-            side="right"
-            value="Não trabalha"
-            name="work"
-            text="( ) Não"
-            handleOnChange={(e) => setTypeWork(e.target.value)}
-          />
-          <CheckBox
-            isSelected={typeWork === "Trabalha"}
-            side="right"
-            handleOnChange={(e) => setTypeWork(e.target.value)}
-            value="Trabalha"
-            name="work"
-            text="( ) Sim"
-          />
+          <div className={styles.acompanhamento}>
+            <CheckBox
+              isSelected={typeWork === "Não trabalha"}
+              side="right"
+              value="Não trabalha"
+              name="work"
+              text="( ) Não"
+              handleOnChange={(e) => setTypeWork(e.target.value)}
+            />
+            <CheckBox
+              isSelected={typeWork === "Trabalha"}
+              side="right"
+              handleOnChange={(e) => setTypeWork(e.target.value)}
+              value="Trabalha"
+              name="work"
+              text="( ) Sim"
+            />
+          </div>
         </div>
         {work.type === "Trabalha" && (
           <div>
@@ -446,11 +448,11 @@ useEffect(() => {
             />
           </div>
         )}
-        <div style={{ marginBottom: "1em" }} className={styles.flex}>
+        <div className={styles.flex}>
           <label htmlFor="psycho-Acompanha" className={styles.label}>
             Já realizou algum acompanhamento psicológico?
           </label>
-          <div className={styles.flex}>
+          <div className={styles.acompanhamento}>
             <CheckBox
               isSelected={typePsicologa === "Não acompanha"}
               side="right"
@@ -469,22 +471,22 @@ useEffect(() => {
             />
           </div>
         </div>
-        {typePsicologa === 'Acompanha' && (
-          <div>
+        {typePsicologa === "Acompanha" && (
+          <>
             <Input
+              customClass="responsive"
               type="text"
               name="psycho_schedule"
               text="Por quanto tempo acompanhamento psicológico?"
               handleOnChange={(e) => setTimePsicologa(e.target.value)}
             />
-          </div>
+          </>
         )}
-
-        <div style={{ marginBottom: "1em" }} className={styles.flex}>
+        <div className={styles.flex}>
           <label htmlFor="psychiatric-Acompanha" className={styles.label}>
             Já realizou algum acompanhamento psiquiátrico?
           </label>
-          <div className={styles.flex}>
+          <div className={styles.acompanhamento}>
             <CheckBox
               isSelected={typePsiquiatra === "Não acompanha"}
               side="right"
@@ -503,15 +505,16 @@ useEffect(() => {
             />
           </div>
         </div>
-        {typePsiquiatra === 'Acompanha' && (
-          <div>
+        {typePsiquiatra === "Acompanha" && (
+          <>
             <Input
+              customClass="responsive"
               type="text"
               name="psychiatric_schedule"
               text="Por quanto tempo fez acompanhamento psiquiátrico?"
               handleOnChange={(e) => setTimePsiquiatra(e.target.value)}
             />
-          </div>
+          </>
         )}
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label htmlFor="observation" className={styles.label}>
@@ -524,7 +527,7 @@ useEffect(() => {
             onChange={(e) => setObservation(e.target.value)}
           ></textarea>
         </div>
-        <button onClick={showDate}>Enviar</button>
+        <button className={styles.btnSubmit} onClick={showDate}>Enviar</button>
       </form>
     );
 }
