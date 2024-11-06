@@ -1,16 +1,28 @@
 
-.table table {
+.table_container table {
     border-collapse: collapse;
     width: 100%;
     max-width: 600px;
     margin-bottom: 1em;
 }
 
-.table p {
+.table_container p {
+    font-size: .8em;
+    font-weight: 600;
+    margin-right: 5px;
     margin-bottom: 10px;
 }
 
-.table th, td {
+.table_container .table {
+    display: flex;
+    justify-content: center;
+}
+
+.table_container .table tr {
+    font-size: .9em;
+}
+
+.table_container th, td {
     border: 1px solid black;
     text-align: center;
     padding: 5px;

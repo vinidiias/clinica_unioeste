@@ -1,21 +1,23 @@
 import styles from './Login.module.css'
+import PersonalDataScreenOverlay from '../profile/PersonalDataScreenOverlay'
 
 import { useNavigate } from 'react-router-dom'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState, useSyncExternalStore } from 'react'
 import { motion } from 'framer-motion'
 import { UserContext } from '../context/UserContext'
+import Loading from '../layout/Loading'
 import RegisterForm from '../login/RegisterForm'
 import LoginForm from '../login/LoginForm'
 import api from '../../services/Api'
-import PersonalDataScreenOverlay from '../profile/PersonalDataScreenOverlay'
 
 
 
 const Login = () => {
   const {userData, setUserData} = useContext(UserContext)
+  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
   const [showLogin, setShowLogin] = useState(false)
   const [isOverlayVisible, setOverlayVisible] = useState(false)
-  const navigate = useNavigate()
 
   const toggleOverlay = () => {
     setOverlayVisible(!isOverlayVisible)
@@ -27,6 +29,7 @@ const Login = () => {
 
   async function registerHandler(email, name, password) {
     try{
+      setLoading(true)
       const userCreated = await api.post('/user', {
         email,
         name,
@@ -46,6 +49,7 @@ const Login = () => {
       }))
 
       setShowLogin(!showLogin)
+      setLoading(false)
     } catch(err){
       console.log(err)
     }
@@ -53,11 +57,11 @@ const Login = () => {
 
   async function loginHandler(email, password) {
     try{
+      setLoading(true)
       const userCreated = await api.post('/session', {
         email,
         password
       })
-      console.log(userCreated.data)
         const data = userCreated.data
           
         setUserData(prevStat => ({
@@ -72,7 +76,10 @@ const Login = () => {
         if(data.firstLogin) {
           setOverlayVisible(true)
         }
-        else navigate('/home')
+        else {
+          navigate('/home')
+        }
+        setLoading(false)
       } 
     catch(err) {
       console.log(err)
@@ -93,16 +100,21 @@ const Login = () => {
     return (
       <>
         {isOverlayVisible && (
-          <PersonalDataScreenOverlay customClass="column" onClose={toggleOverlay} />
+          <PersonalDataScreenOverlay
+            customClass="column"
+            onClose={toggleOverlay}
+          />
         )}
-        {showLogin ? (
+        {loading ? (
+          <Loading />
+        ) : showLogin ? (
           <motion.div
-          key="signup"
-          variants={cardVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          className={styles.login}
+            key="signup"
+            variants={cardVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className={styles.login}
           >
             <h1> Criar conta</h1>
             <RegisterForm
@@ -112,18 +124,15 @@ const Login = () => {
           </motion.div>
         ) : (
           <motion.div
-          key="login"
-          variants={cardVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          className={styles.login}
+            key="login"
+            variants={cardVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className={styles.login}
           >
             <h1>Entrar</h1>
-            <LoginForm
-              handleSubmit={loginHandler}
-              handleClick={toggleChange}
-            />
+            <LoginForm handleSubmit={loginHandler} handleClick={toggleChange} />
           </motion.div>
         )}
       </>

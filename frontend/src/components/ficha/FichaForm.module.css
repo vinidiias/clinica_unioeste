@@ -1,27 +1,63 @@
-@media (max-width: 633px) {
-    .flex {
-        flex-wrap: wrap;
-    }
-    .sex {
-        flex-wrap: wrap;
-    }
-}
 
 .ficha_form {
+    border: 2px solid rgb(180, 180, 180);
+    width: 60%;
     padding: 1em;
     background-color: gainsboro;
 }
 
+@media(max-width: 908px) {
+    .ficha_form {
+        width: 80%;
+    }
 
+    .flex {
+        flex-wrap: wrap;
+    }
+}
+
+
+@media (max-width: 594px) {
+    .ficha_form {
+        width: 100%;
+    }
+
+    .flex {
+        flex-direction: column;
+    }
+}
 
 .flex {
     display: flex;
+    width: 100%;
     column-gap: 10px;
 }
+
 .sex {
     display: flex;
     align-self: center;
-    margin-bottom: 1em;
+    width: 100%;
+}
+
+.sex label {
+    margin-right: 1em;
+}
+
+.turnos {
+    display: flex;
+    column-gap: 1em;
+}
+
+.student {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+.acompanhamento {
+    display: flex;
+    column-gap: 1em;
 }
 
 .ficha_form textarea {
@@ -29,7 +65,15 @@
 }
 
 .label {
+    flex-basis: auto;
+    flex-grow: 0;
+    flex-shrink: 0;
     font-size: .8em;
     font-weight: 500;
     margin-right: 5px;
   }
+
+.btnSubmit {
+    padding: .1em;
+    color: black;
+}
