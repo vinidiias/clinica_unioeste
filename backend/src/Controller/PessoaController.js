@@ -1,5 +1,7 @@
 const Pessoa = require('../Models/Pessoa')
 const User = require('../Models/User')
+const { verifyCEP } = require('../Validations/cepValidation')
+const { isValidCPF } = require('../Validations/cpfValidation')
 const { index } = require('./UserController')
 
 module.exports ={
@@ -11,6 +13,9 @@ module.exports ={
         if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'})
     
         try{
+            //const cpfIsValid = await isValidCPF(cpf)
+            //if(!cpfIsValid) return res.status(400).send({ message: 'CPF inválid' })
+
             const createPessoa = await Pessoa.create({
                 img,
                 name,
