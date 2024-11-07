@@ -49,7 +49,9 @@ module.exports = {
             
         try{
             const deletedUser = await User.findByIdAndDelete(user_id)
-            return res.status(200).send({ status: 'deleted', user: deletedUser})
+            if(!deletedUser) return res.status(400).send({ message: 'Usuário não encontrado'})
+
+            return res.status(200).send({ status: 'Deletado com sucesso', user: deletedUser})
         }
         catch(err){
             return res.status(400).send(err)

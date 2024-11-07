@@ -2,19 +2,23 @@ const Pessoa = require('../Models/Pessoa')
 const User = require('../Models/User')
 const { verifyCEP } = require('../Validations/cepValidation')
 const { isValidCPF } = require('../Validations/cpfValidation')
+const { calcularIdade } = require('../Validations/dataValidation')
 const { index } = require('./UserController')
 
 module.exports ={
     async create (req,res) {
-        const { img, name, age, sexo, birth, cpf, ra, email, phone, adressComplet} = req.body
+        const { img, name, sexo, birth, cpf, ra, email, phone, adressComplet} = req.body
         const { user_id } = req.params 
         const { auth } = req.headers
 
         if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'})
     
         try{
-            //const cpfIsValid = await isValidCPF(cpf)
-            //if(!cpfIsValid) return res.status(400).send({ message: 'CPF inválid' })
+            const cpfIsValid = await isValidCPF(cpf, birth)
+            if(!cpfIsValid) return res.status(400).send({ message: 'CPF inválid' })
+
+
+            const age = calcularIdade(birth)
 
             const createPessoa = await Pessoa.create({
                 img,
@@ -31,9 +35,10 @@ module.exports ={
             })
 
             await createPessoa.populate('user') //tras outras informacoes sobre o usurario
-            // Atualiza `isFirstLogin` para false após completar o perfil
-            //console.log(user_id)
+            
             const userExists = await User.findById(user_id)
+            if(!userExists) return res.status(400).send({ message: 'Usuário não encontrado'})
+            
             userExists.isFirstLogin = false;
             await userExists.save();
 
@@ -46,12 +51,17 @@ module.exports ={
     
     async delete (req, res) {
         const { pessoa_id, user_id } = req.params
-        if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'})
-        return
+        const { auth } = req.headers
+
+        if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
+        
+       
 
         try{
             const deletePesosa = await Pessoa.findByIdAndDelete(pessoa_id)
-            return res.status(200).send({ status: 'deleted', user: deletePesosa})
+            if(!deletePesosa) return res.status(400).send({ message: 'Pessoa não encontrada'})
+                
+            return res.status(200).send({ status: 'Deletado com sucesso', user: deletePesosa})
         }
         catch(err){
             return res.status(400).send(err)
@@ -76,7 +86,7 @@ module.exports ={
 
     async indexByUser (req, res) {
         const { user_id } = req.params
-        if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'})
+        if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
         
         try{
             const allPessoaOfUser = await Pessoa.find({
@@ -116,7 +126,7 @@ module.exports ={
             );
 
             if(!pessoaAtualizada){
-                return res.status(400).send({ message: "Pessoa nao encontrada"})
+                return res.status(400).send({ message: "Pessoa não encontrada"})
             }
             res.status(200).send({ message: "Dados atualizados com sucesso", pessoa: pessoaAtualizada })
         }
