@@ -1,5 +1,6 @@
 const User = require('../Models/User')
 const bcrypt = require('bcrypt')
+const { verifyEmail } = require('../Validations/emailValidation')
 
 async function hashPassword(password) {
     try{
@@ -15,13 +16,17 @@ module.exports = {
     async create(req, res) {
         
         const { email, name, password } = req.body
-       
+
         try{
+            const emailIsValid = await verifyEmail(email)
+            if(!emailIsValid) return res.status(400).send({ message: 'Email inválido' })
+
+                
             const userAlreadyExists = await User.findOne({ email })
-            if(userAlreadyExists) return res.status(400).send({ message: 'User already exists' })
-
+            if(userAlreadyExists) return res.status(400).send({ message: 'Usuário já existe' })
+        
             const hashedPassword = await hashPassword(password)
-
+        
             const createdUser = await User.create({
                 email,
                 name,
@@ -30,8 +35,9 @@ module.exports = {
             })
 
             return res.status(200).send(createdUser)
-        } catch(err) {
-            return res.status(400).send(err)
+
+        } catch (err) {
+            res.status(400).send(err);
         }
     },
 
