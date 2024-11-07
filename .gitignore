@@ -26,6 +26,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-#Ignorar o negocio do cpf que ainda nao sei usar
-backend/swagger.json
+# Ignorar o arquivo .env na pasta backend
 backend/.env
+
+# Ignorar o arquivo swagger.json na pasta backend
+backend/swagger.json
