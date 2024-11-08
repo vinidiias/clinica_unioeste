@@ -27,7 +27,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # Ignorar o arquivo .env na pasta backend
-backend/.env
+backend/.env.local
 
 # Ignorar o arquivo swagger.json na pasta backend
 backend/swagger.json
