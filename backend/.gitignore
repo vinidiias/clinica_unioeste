@@ -1,0 +1,5 @@
+# Ignorar o arquivo .env do backend
+.env
+
+# Ignorar o arquivo swagger.json na pasta backend
+swagger.json
