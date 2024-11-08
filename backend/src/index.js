@@ -14,9 +14,22 @@ mongoose.connect(dbUri, {
     console.log('Connected to database')
 }).catch((err) => console.log(err))
 
+const allowedOrigins = ['http://localhost:3000', 'https://clinica-unioeste-pi.vercel.app']; // Substitua pela URL do frontend hospedado
 app.use(cors({
-    origin: 'http://localhost:3333'
-}))
+    origin: function (origin, callback) {
+        // Verifica se a origem da requisição está na lista de origens permitidas
+        if (allowedOrigins.includes(origin) || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
+
+
 app.use(express.json({ limit: '10mb' }))
 app.use(router)
 
