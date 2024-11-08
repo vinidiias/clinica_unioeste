@@ -14,7 +14,9 @@ mongoose.connect(dbUri, {
     console.log('Connected to database')
 }).catch((err) => console.log(err))
 
-app.use(cors())
+app.use(cors({
+    origin: 'http://localhost:3333'
+}))
 app.use(express.json({ limit: '10mb' }))
 app.use(router)
 
