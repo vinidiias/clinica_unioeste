@@ -14,11 +14,11 @@ module.exports ={
         if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'})
     
         try{
-            const cpfIsValid = await isValidCPF(cpf, birth)
+            const cpfIsValid = await isValidCPF(cpf, birth) //verifica se o cpf é valido
             if(!cpfIsValid) return res.status(400).send({ message: 'CPF inválid' })
 
 
-            const age = calcularIdade(birth)
+            const age = calcularIdade(birth) // calcula a idade da pessoa pela dada de nascimento
 
             const createPessoa = await Pessoa.create({
                 img,
@@ -36,7 +36,7 @@ module.exports ={
 
             await createPessoa.populate('user') //tras outras informacoes sobre o usurario
             
-            const userExists = await User.findById(user_id)
+            const userExists = await User.findById(user_id) //verifica se o usuario existe
             if(!userExists) return res.status(400).send({ message: 'Usuário não encontrado'})
             
             userExists.isFirstLogin = false;
@@ -134,5 +134,4 @@ module.exports ={
             return res.status(400).send(err)
         }
     }
-
 }
