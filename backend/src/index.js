@@ -29,6 +29,16 @@ app.use(cors({
     credentials: true
 }));
 
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.header("Access-Control-Allow-Origin", origin);
+    }
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"); // Inclua os métodos permitidos
+    res.header("Access-Control-Allow-Credentials", "true"); // Permite cookies e autenticação, se necessário
+    next();
+});
 
 app.use(express.json({ limit: '10mb' }))
 app.use(router)
