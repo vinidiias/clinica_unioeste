@@ -14,10 +14,9 @@ mongoose.connect(dbUri, {
     console.log('Connected to database')
 }).catch((err) => console.log(err))
 
-const allowedOrigins = ['http://localhost:3000', 'https://clinica-unioeste-pi.vercel.app']; // Substitua pela URL do frontend hospedado
+const allowedOrigins = ['http://localhost:3000', 'https://clinica-unioeste-pi.vercel.app'];
 app.use(cors({
     origin: function (origin, callback) {
-        // Verifica se a origem da requisição está na lista de origens permitidas
         if (allowedOrigins.includes(origin) || !origin) {
             callback(null, true);
         } else {
@@ -25,20 +24,9 @@ app.use(cors({
         }
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
+    allowedHeaders: ['Content-Type', 'auth'],
+    credentials: true,
 }));
-
-app.use((req, res, next) => {
-    const origin = req.headers.origin;
-    if (allowedOrigins.includes(origin)) {
-        res.header("Access-Control-Allow-Origin", origin);
-    }
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"); // Inclua os métodos permitidos
-    res.header("Access-Control-Allow-Credentials", "true"); // Permite cookies e autenticação, se necessário
-    next();
-});
 
 app.use(express.json({ limit: '10mb' }))
 app.use(router)
