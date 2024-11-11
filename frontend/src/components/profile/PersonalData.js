@@ -193,7 +193,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
         </div>
         <div className={styles.infos + " " + styles[customClass]}>
           <div className={styles.divImg}>
-            <label htmlFor="name">Foto</label>
+            <label htmlFor="file-img">Foto</label>
             {customClass === "column" ? (
               <div
                 style={{

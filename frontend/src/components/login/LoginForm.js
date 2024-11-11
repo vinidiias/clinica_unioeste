@@ -26,7 +26,7 @@ const LoginForm = ({ handleSubmit, handleClick }) => {
     <form onSubmit={submit}>
       <Input
         type="email"
-        name="name"
+        name="email-overlay"
         text="Email"
         value={email}
         placeholder="Digite seu email"
