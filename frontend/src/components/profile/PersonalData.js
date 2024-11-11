@@ -65,7 +65,6 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
       const personal_data = {
         img,
         name,
-        age,
         sexo,
         birth,
         cpf,
@@ -83,26 +82,11 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
           console.log(userData.user_id)
           const personCreated = await api.post(
             `/${userData.user_id}/pessoa`,
-            {
-              img,
-              name,
-              age,
-              sexo,
-              birth,
-              cpf,
-              ra,
-              email,
-              phone,
-              adressComplet : {
-                adress,
-                number
-              }
-            },
+            personal_data,
             {
               headers: { 'auth': `${userData.user_id}` },
             }
-          )
- 
+          ) 
           const newPessoa = personCreated.data
 
           setUserData(prevStat => ({
@@ -136,7 +120,6 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
       const personal_data = {
         img,
         name,
-        age,
         sexo,
         birth,
         cpf,
@@ -150,7 +133,6 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
           const pessoaUpdated = await api.patch(`/pessoa/${userData.user_id}`, {
             img,
             name,
-            age,
             sexo,
             birth,
             cpf,
@@ -276,7 +258,8 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
                 autoComplete="additional-name"
               />
             </div>
-            <div className={styles.input}>
+            {customClass !== 'column' && (
+              <div className={styles.input}>
               <label htmlFor="age">Idade</label>
               <input
                 onChange={(e) => setAge(e.target.value)}
@@ -287,6 +270,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
                 id="age"
               />
             </div>
+            )}
             <div className={styles.input}>
               <label htmlFor="sexuality">Sexo</label>
               <select
