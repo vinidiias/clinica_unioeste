@@ -15,7 +15,7 @@ module.exports ={
     
         try{
             //const cpfIsValid = await isValidCPF(cpf, birth) //verifica se o cpf é valido
-            i//f(!cpfIsValid) return res.status(400).send({ message: 'CPF inválid' })
+            //if(!cpfIsValid) return res.status(400).send({ message: 'CPF inválid' })
 
 
             const age = calcularIdade(birth) // calcula a idade da pessoa pela dada de nascimento
