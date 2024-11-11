@@ -15,7 +15,7 @@ const FichaForm = () => {
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
   const [adress, setAdress] = useState('')
-  const [numberAdress, setNumberAdress] = useState('')
+  const [number, setNumber] = useState('')
   const [profission, setProfission] = useState('')
   const [education, setEducation] = useState({
     type:'',
@@ -104,6 +104,30 @@ useEffect(() => {
 
   function showDate(e){
     e.preventDefault()
+    const fichaData = {
+      name,
+      age,
+      birth,
+      sex,
+      ra,
+      cpf,
+      phone,
+      email,
+      adressComplet: {
+        adress,
+        number
+      },
+      profission,
+      education,
+      preferredDay,
+      vinculo,
+      comunidade,
+      work,
+      psicologa,
+      psiquiatra,
+      observation
+    }
+    console.log(fichaData)
   }
 
   function handleChange(e) {
@@ -119,7 +143,7 @@ useEffect(() => {
       phone: setPhone,
       email: setEmail,
       adress: setAdress,
-      numberAdress: setNumberAdress,
+      number: setNumber,
       profission: setProfission,
       observation: setObservation
     }
@@ -221,7 +245,7 @@ useEffect(() => {
           />
           <Input
             type="number"
-            name="numberAdress"
+            name="number"
             text="Número"
             handleOnChange={handleChange}
           />
