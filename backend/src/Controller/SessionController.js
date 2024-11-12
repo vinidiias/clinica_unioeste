@@ -1,5 +1,5 @@
 const { ReturnDocument } = require('mongodb')
-const User = require('../Models/User')
+const User = require('../Models/UserModel')
 const bcrypt = require('bcrypt')
 
 module.exports = {
