@@ -87,6 +87,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
               headers: { 'auth': `${userData.user_id}` },
             }
           ) 
+          console.log(personCreated)
           const newPessoa = personCreated.data
 
           setUserData(prevStat => ({
