@@ -1,24 +1,21 @@
 const axios = require('axios');
 
-async function isValidCPF(cpf, dataNascimento) {
-    // Construa a URL substituindo o token e o CPF
-    const url = URL_CPF
-        .replace('${TOKEN}', TOKEN_CPF)
-        .replace('${CPF}', cpf)
-        .replace('${DATA_NASCIMENTO}', dataNascimento)
+function isValidCPF(cpf) {
+    cpf = cpf.replace(/[^\d]+/g, '');
+    if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
 
-    try {
-        const response = await axios.get(url)
-        
-        if (response.data.erro) {
-            return null // Retorna null se houver um erro na resposta
-        }
-        
-        return response.data // Retorna os dados se a consulta for bem-sucedida
-    } catch (err) {
-        console.error(err)// Loga o erro para depuração
-        return null // Retorna null em caso de erro
-    }
+    let sum = 0, remainder;
+
+    for (let i = 1; i <= 9; i++) sum += parseInt(cpf[i - 1]) * (11 - i);
+    remainder = (sum * 10) % 11;
+    if (remainder === 10 || remainder === 11) remainder = 0;
+    if (remainder !== parseInt(cpf[9])) return false;
+
+    sum = 0;
+    for (let i = 1; i <= 10; i++) sum += parseInt(cpf[i - 1]) * (12 - i);
+    remainder = (sum * 10) % 11;
+    if (remainder === 10 || remainder === 11) remainder = 0;
+    return remainder === parseInt(cpf[10]);
 }
 
-module.exports = { isValidCPF }
+module.exports = { isValidCPF };

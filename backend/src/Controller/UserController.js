@@ -1,6 +1,7 @@
-const User = require('../Models/User')
+const User = require('../Models/UserModel')
 const bcrypt = require('bcrypt')
 const { verifyEmail } = require('../Validations/emailValidation')
+const { UserEmpty } = require('../Validations/emptyValidation')
 
 async function hashPassword(password) {
     try{
@@ -16,6 +17,9 @@ module.exports = {
     async create(req, res) {
         
         const { email, name, password } = req.body
+
+        const flag = UserEmpty(email, name, password)
+        if(flag) return res.status(400).send({ message: 'Campo vazio'})
 
         try{
             const emailIsValid = await verifyEmail(email)
