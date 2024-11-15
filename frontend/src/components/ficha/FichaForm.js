@@ -207,7 +207,7 @@ useEffect(() => {
         </div>
         <div className={styles.flex}>
           <Input
-            type="number"
+            type="text"
             name="ra"
             text="RA"
             handleOnChange={handleChange}
@@ -221,7 +221,7 @@ useEffect(() => {
         </div>
         <div className={styles.flex}>
           <Input
-            type="number"
+            type="text"
             name="phone"
             text="Telefone ( )"
             autoComplete="tel"
@@ -244,7 +244,7 @@ useEffect(() => {
             handleOnChange={handleChange}
           />
           <Input
-            type="number"
+            type="text"
             name="number"
             text="Número"
             handleOnChange={handleChange}
@@ -369,17 +369,17 @@ useEffect(() => {
           />
         </>
         <div className={styles.flex}>
-          <CheckBox
-            isSelected={isVinculo}
-            customClass="bold"
-            side="right"
-            value="Vínculo com Unioeste"
-            name="vinculo_com_unioeste"
-            text="Vínculo com Unioeste:"
-            handleOnChange={(e) => setIsVinculo(!isVinculo)}
-          />
-          {vinculo.type && (
-            <div className={styles.flex}>
+            <CheckBox
+              isSelected={isVinculo}
+              customClass="bold"
+              side="right"
+              value="Vínculo com Unioeste"
+              name="vinculo_com_unioeste"
+              text="Vínculo com Unioeste:"
+              handleOnChange={(e) => setIsVinculo(!isVinculo)}
+            />
+          {isVinculo && (
+            <>
               <CheckBox
                 isSelected={typeVinculo === "Docente"}
                 side="right"
@@ -412,11 +412,11 @@ useEffect(() => {
                 text="Estagiário"
                 handleOnChange={(e) => setTypeVinculo(e.target.value)}
               />
-            </div>
+            </>
           )}
         </div>
         {typeVinculo === "Agente" && (
-          <div>
+          <>
             <Input
               type="text"
               name="setor"
@@ -424,7 +424,7 @@ useEffect(() => {
               customClass="flex_1"
               handleOnChange={(e) => setSetor(e.target.value)}
             />
-          </div>
+          </>
         )}
         <div style={{ marginBottom: "1em" }}>
           <CheckBox
@@ -463,14 +463,14 @@ useEffect(() => {
           </div>
         </div>
         {work.type === "Trabalha" && (
-          <div>
+          <>
             <Input
               type="time"
               name="work_schedule"
               text="Trabalha em qual horário?"
               handleOnChange={(e) => setHorarioWork(e.target.value)}
             />
-          </div>
+          </>
         )}
         <div className={styles.flex}>
           <label htmlFor="psycho-Acompanha" className={styles.label}>
