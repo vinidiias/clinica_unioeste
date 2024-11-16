@@ -2,7 +2,7 @@ import styles from './Login.module.css'
 import PersonalDataScreenOverlay from '../profile/PersonalDataScreenOverlay'
 
 import { useNavigate } from 'react-router-dom'
-import { useContext, useEffect, useState, useSyncExternalStore } from 'react'
+import { useContext, useState } from 'react'
 import { motion } from 'framer-motion'
 import { UserContext } from '../context/UserContext'
 import Loading from '../layout/Loading'

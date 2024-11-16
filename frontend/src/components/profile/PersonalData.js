@@ -1,8 +1,9 @@
-import { useContext, useEffect, useState } from 'react';
 import styles from './PersonalData.module.css'
+import api from '../../services/Api';
+import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
-import api from '../../services/Api';
+import days from 'dayjs'
 
 
 const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='', sex='M', nascimento='', CPF='', RA='', mail='', tel=''}) => {
@@ -11,7 +12,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
     const [name, setName] = useState(nome)
     const [age, setAge] = useState(idade)
     const [sexo, setSexo] = useState(sex)
-    const [birth, setBirth] = useState(nascimento)
+    const [birthday, setBirthday] = useState(nascimento)
     const [cpf, setCpf] = useState(CPF)
     const [ra, setRa] = useState(RA)
     const [email, setEmail] = useState(mail)
@@ -62,14 +63,14 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
     }
 
     async function submitHandle() {
+      const birth = (days(birthday).format('DD-MM-YYYY'))
+      
       const personal_data = {
         img,
-        name,
         sexo,
         birth,
         cpf,
         ra,
-        email,
         phone,
         adressComplet : {
           adress,
@@ -98,13 +99,13 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
           setPessoa(prevStat => ({
             ...prevStat,
             img: newPessoa.img,
-            name: newPessoa.name,
+            name: userData.name,
             age: newPessoa.age,
             sexo: newPessoa.sexo,
             birth: newPessoa.birth,
             cpf: newPessoa.cpf,
             ra: newPessoa.ra,
-            email: newPessoa.email,
+            email: userData.email,
             phone: newPessoa.phone,
             adressComplet: newPessoa.adressComplet
           }))
@@ -118,6 +119,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
     }
 
     async function editHandle(){
+      const birth = days(birthday).format('DD-MM-YYYY')
       const personal_data = {
         img,
         name,
@@ -225,9 +227,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
                   justifyContent: "center",
                 }}
               >
-                <label 
-                className={styles.editButtonImg}
-                htmlFor="file-img">
+                <label className={styles.editButtonImg} htmlFor="file-img">
                   <input
                     id="file-img"
                     name="file-img"
@@ -247,30 +247,32 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
             )}
           </div>
           <div className={styles.item}>
-            <div className={styles.input}>
-              <label htmlFor="name">Nome</label>
-              <input
-                onChange={(e) => setName(e.target.value)}
-                value={name}
-                disabled={edit}
-                type="text"
-                name="name"
-                id="name"
-                autoComplete="additional-name"
-              />
-            </div>
-            {customClass !== 'column' && (
+            {customClass !== "column" && (
               <div className={styles.input}>
-              <label htmlFor="age">Idade</label>
-              <input
-                onChange={(e) => setAge(e.target.value)}
-                value={age}
-                disabled={edit}
-                type="text"
-                name="age"
-                id="age"
-              />
-            </div>
+                <label htmlFor="name">Nome</label>
+                <input
+                  onChange={(e) => setName(e.target.value)}
+                  value={name}
+                  disabled={edit}
+                  type="text"
+                  name="name"
+                  id="name"
+                  autoComplete="additional-name"
+                />
+              </div>
+            )}
+            {customClass !== "column" && (
+              <div className={styles.input}>
+                <label htmlFor="age">Idade</label>
+                <input
+                  onChange={(e) => setAge(e.target.value)}
+                  value={age}
+                  disabled={edit}
+                  type="text"
+                  name="age"
+                  id="age"
+                />
+              </div>
             )}
             <div className={styles.input}>
               <label htmlFor="sexuality">Sexo</label>
@@ -288,10 +290,10 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
           </div>
           <div className={styles.item}>
             <div className={styles.input}>
-              <label htmlFor="birth">Data de nascimento</label>
+              <label htmlFor="birthday">Data de nascimento</label>
               <input
-                onChange={(e) => setBirth(e.target.value)}
-                value={birth}
+                onChange={(e) => setBirthday(e.target.value)}
+                value={birthday}
                 disabled={edit}
                 type="date"
                 name="birth"
@@ -334,18 +336,20 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
                 autoComplete="home tel"
               />
             </div>
-            <div className={styles.input}>
-              <label htmlFor="email">Email</label>
-              <input
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
-                disabled={edit}
-                type="email"
-                name="email"
-                id="email"
-                autoComplete="home email"
-              />
-            </div>
+            {customClass !== "column" && (
+              <div className={styles.input}>
+                <label htmlFor="email">Email</label>
+                <input
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                  disabled={edit}
+                  type="email"
+                  name="email"
+                  id="email"
+                  autoComplete="home email"
+                />
+              </div>
+            )}
             {customClass === "column" && (
               <div className={styles.item}>
                 <div className={styles.input}>
