@@ -1,4 +1,4 @@
-const { default: mongoose } = require('mongoose')
+const { mongoose } = require('mongoose')
 const Pessoa = require('../Models/PessoaModel')
 const User = require('../Models/UserModel')
 const { isValidCPF } = require('../Validations/cpfValidation')
@@ -8,7 +8,7 @@ const { PessoaEmpty } = require('../Validations/emptyValidation')
 
 module.exports ={
     async create (req,res) {
-        const { img, name, sexo, birth, cpf, ra, email, phone, adressComplet} = req.body
+        const { img, sexo, birth, cpf, ra, phone, adressComplet} = req.body
         const { user_id } = req.params 
         const { auth } = req.headers
 
@@ -25,8 +25,6 @@ module.exports ={
             const existPessoa = await Pessoa.findOne({ user: user_id }) //verifica se ja existe uma pessoa cadastrada
             if(existPessoa) return res.status(400).send({ message: 'Pessoa já está cadastrada'})
 
-            if(userExists.name !== name || userExists.email !== email) return res.status(400).send({ message: 'Nome ou email não correspondem ao cadastrado'})
-
             const cpfIsValid = await isValidCPF(cpf) //verifica se o cpf é valido
             if(!cpfIsValid) return res.status(400).send({ message: 'CPF inválid' })
 
@@ -34,25 +32,25 @@ module.exports ={
             
             const createPessoa = await Pessoa.create({
                 img,
-                name,
                 age,
                 sexo,
                 birth,
                 cpf,
                 ra,
-                email,
                 phone,
                 adressComplet,
                 user: user_id,
             })
 
-            const pessoaComUser = await Pessoa.findById(createPessoa._id).populate('user');
-            res.status(200).send(pessoaComUser);//tras outras informacoes sobre o usurario
-            
             userExists.isFirstLogin = false;
             await userExists.save();
 
-            return res.status(200).send(createPessoa)
+            const pessoaComUser = await Pessoa.findById(createPessoa._id).populate('user');            
+ 
+            return res.status(200).send({
+                pessoa: createPessoa,
+                message: 'Pessoa criada com sucesso!'
+            })
         }
         catch(err){
             return res.status(400).send(err)
@@ -104,6 +102,10 @@ module.exports ={
             const allPessoaOfUser = await Pessoa.find({
                 user: user_id
             })
+
+
+            allPessoaOfUser[0].age = calcularIdade(allPessoaOfUser[0].birth) // calcula a idade da pessoa pela dada de nascimento
+
             return res.status(200).send(allPessoaOfUser)
         } catch (err) {
             return res.status(400).send(err);
@@ -128,6 +130,10 @@ module.exports ={
             const { auth } = req.headers
 
             if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
+
+            if(dadosAtualizados.birth) {
+                dadosAtualizados.age = calcularIdade(dadosAtualizados.birth) // calcula a idade da pessoa pela dada de nascimento
+            }
 
             const pessoaAtualizada = await Pessoa.findOneAndUpdate(
                 {user: user_id}, 

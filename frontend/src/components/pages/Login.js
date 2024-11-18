@@ -13,7 +13,7 @@ import api from '../../services/Api'
 
 
 const Login = () => {
-  const {userData, setUserData} = useContext(UserContext)
+  const {userData, setUserData, setPessoa} = useContext(UserContext)
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [showLogin, setShowLogin] = useState(false)
@@ -77,12 +77,37 @@ const Login = () => {
           setOverlayVisible(true)
         }
         else {
-          navigate('/home')
+          try{
+            const getPessoa = await api.get(`${data.user_id}/pessoa`, {headers: {'auth': `${data.user_id}` }})
+            
+            if(getPessoa.data[0]) {
+              const data = getPessoa.data[0]
+
+              setPessoa(prevStat => ({
+                ...prevStat,
+                img: data.img,
+                name: data.name,
+                age: data.age,
+                sexo: data.sexo,
+                birth: data.birth,
+                cpf: data.cpf,
+                ra: data.ra,
+                email: data.email,
+                phone: data.phone,
+                adressComplet: data.adressComplet
+              }))
+              navigate('/home')
+
+            }
+          }catch(err) {
+            console.log(err)
+          }
         }
-        setLoading(false)
       } 
     catch(err) {
       console.log(err)
+    } finally {
+      setLoading(false)
     }
   }
 

@@ -15,7 +15,7 @@ routes.delete('/:user_id/user', userController.delete)
 //Pessoas
 routes.post('/:user_id/pessoa', PessoaController.create)
 routes.get('/pessoas', PessoaController.indexAll)
-routes.get('/:user_id/:pessoa', PessoaController.indexByUser)
+routes.get('/:user_id/pessoa', PessoaController.indexByUser)
 routes.patch('/pessoa/:user_id', PessoaController.updatePessoa)
 routes.delete('/pessoa/delete', PessoaController.deleteAll)
 routes.delete('/:user_id/pessoa/:pessoa_id', PessoaController.delete)

@@ -60,7 +60,7 @@ const Escolaridade = ({ education='' }) => {
                 name="level"
                 id="level"
               >
-                <option value="default">Selecione</option>
+                <option value="default" disabled hidden>Selecione</option>
                 <option value="Fundamental I">Fundamental I</option>
                 <option value="fundamental II">Fundamental II</option>
                 <option value="Ensino Médio">Ensino Médio</option>
@@ -118,23 +118,6 @@ const Escolaridade = ({ education='' }) => {
             )}
           </div>
           <div className={styles.item}>
-            {(level === "Graduação" || level === "Pós Graduação") && (
-              <div className={styles.input}>
-                <label htmlFor="turno">Ano/Periodo</label>
-                <select
-                  onChange={(e) => setTurno(e.target.turno)}
-                  value={turno}
-                  disabled={edit}
-                  name="turno"
-                  id="turno"
-                >
-                  <option value="default">Selecione</option>
-                  <option value="Manhã">Manhã</option>
-                  <option value="Tarde">Tarde</option>
-                  <option value="Noite">Noite</option>
-                </select>
-              </div>
-            )}
             <div className={styles.submitEdit}>
               <button onClick={editToggle}>Editar dados</button>
               {!edit && <button onClick={editHandle}>Confirmar</button>}

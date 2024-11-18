@@ -3,7 +3,6 @@ import api from '../../services/Api';
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
-import days from 'dayjs'
 
 
 const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='', sex='M', nascimento='', CPF='', RA='', mail='', tel=''}) => {
@@ -12,7 +11,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
     const [name, setName] = useState(nome)
     const [age, setAge] = useState(idade)
     const [sexo, setSexo] = useState(sex)
-    const [birthday, setBirthday] = useState(nascimento)
+    const [birth, setBirth] = useState(nascimento)
     const [cpf, setCpf] = useState(CPF)
     const [ra, setRa] = useState(RA)
     const [email, setEmail] = useState(mail)
@@ -62,9 +61,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
       return 1
     }
 
-    async function submitHandle() {
-      const birth = (days(birthday).format('DD-MM-YYYY'))
-      
+    async function submitHandle() {      
       const personal_data = {
         img,
         sexo,
@@ -88,8 +85,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
               headers: { 'auth': `${userData.user_id}` },
             }
           ) 
-          console.log(personCreated)
-          const newPessoa = personCreated.data
+          const newPessoa = personCreated.data.pessoa
 
           setUserData(prevStat => ({
             ...prevStat,
@@ -119,7 +115,6 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
     }
 
     async function editHandle(){
-      const birth = days(birthday).format('DD-MM-YYYY')
       const personal_data = {
         img,
         name,
@@ -150,6 +145,8 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
           }
 
           const data = pessoaUpdated.data.pessoa
+          console.log(data)
+
           setPessoa(prevStat => ({
             ...prevStat,
             img: data.img,
@@ -162,7 +159,6 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
             email: data.email,
             phone: data.phone
           }))
-          console.log(pessoa)
           editToggle()
         }catch(err){
           console.log(err)
@@ -265,8 +261,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
               <div className={styles.input}>
                 <label htmlFor="age">Idade</label>
                 <input
-                  onChange={(e) => setAge(e.target.value)}
-                  value={age}
+                  value={idade}
                   disabled={edit}
                   type="text"
                   name="age"
@@ -290,10 +285,10 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
           </div>
           <div className={styles.item}>
             <div className={styles.input}>
-              <label htmlFor="birthday">Data de nascimento</label>
+              <label htmlFor="birth">Data de nascimento</label>
               <input
-                onChange={(e) => setBirthday(e.target.value)}
-                value={birthday}
+                onChange={(e) => setBirth(e.target.value)}
+                value={birth}
                 disabled={edit}
                 type="date"
                 name="birth"
