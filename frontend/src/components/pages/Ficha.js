@@ -1,4 +1,5 @@
 import FichaForm from "../ficha/FichaForm"
+import styles from './Ficha.module.css'
 
 import { UserContext } from "../context/UserContext"
 import { useNavigate } from "react-router-dom"

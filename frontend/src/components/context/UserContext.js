@@ -4,6 +4,7 @@ export const UserContext = createContext()
 
 export function UserProvider(props) {
     const [userData, setUserData] = useState({
+        isFirst: true,
         isLogged: false,
         name: '',
         email: '',
@@ -13,13 +14,16 @@ export function UserProvider(props) {
         img: '',
         name: '',
         age: '',
+        sexo: '',
         birth: '',
         cpf: '',
         ra: '',
-        phone: '',
         email: '',
-        profissao: '',
-        education: '',    
+        phone: '',
+        adressComplet: {
+            adress: '',
+            number: '',
+        }
     })
 
     return (

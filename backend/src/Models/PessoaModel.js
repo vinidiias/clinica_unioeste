@@ -1,15 +1,7 @@
 const mongoose = require('mongoose')
 
 const pessoaSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        require: true,
-    },
-    age: {
-        type: String,
-        require: true,
-    },
-    data_nasc: {
+    birth: {
         type: String,
         require: true,
     },
@@ -25,24 +17,24 @@ const pessoaSchema = new mongoose.Schema({
         type: String, 
         require: true,
     },
-    telefone: {
+    phone: {
         type: String, 
         require: true,
     },
-    adrress: {
-        adrres: {
+    adressComplet: {
+        adress: {
             type: String, 
             require: true,
         }, 
-        adrres_number:{
+        number:{
             type: String, 
             require: true,
         },
     },
-    profissao: {
-        type: String,
-        require: true
-    },
+    img: {
+        type: String, // ou Buffer se você estiver armazenando os dados da imagem
+        required: false // ou false, dependendo da sua necessidade
+      },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

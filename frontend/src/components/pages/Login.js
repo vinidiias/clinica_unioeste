@@ -1,9 +1,11 @@
 import styles from './Login.module.css'
+import PersonalDataScreenOverlay from '../profile/PersonalDataScreenOverlay'
 
 import { useNavigate } from 'react-router-dom'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState, useSyncExternalStore } from 'react'
 import { motion } from 'framer-motion'
 import { UserContext } from '../context/UserContext'
+import Loading from '../layout/Loading'
 import RegisterForm from '../login/RegisterForm'
 import LoginForm from '../login/LoginForm'
 import api from '../../services/Api'
@@ -12,8 +14,14 @@ import api from '../../services/Api'
 
 const Login = () => {
   const {userData, setUserData} = useContext(UserContext)
-  const [showLogin, setShowLogin] = useState(false)
   const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
+  const [showLogin, setShowLogin] = useState(false)
+  const [isOverlayVisible, setOverlayVisible] = useState(false)
+
+  const toggleOverlay = () => {
+    setOverlayVisible(!isOverlayVisible)
+  }
 
   const toggleChange = () => {
     setShowLogin(!showLogin)
@@ -21,25 +29,27 @@ const Login = () => {
 
   async function registerHandler(email, name, password) {
     try{
-      const user = await api.post('/user', {
+      setLoading(true)
+      const userCreated = await api.post('/user', {
         email,
         name,
         password
       })
-      .then((resp) => {
-        const user = resp.data
-        console.log(resp.data)
-        setUserData(prevStat => ({
-          ...prevStat,
-          email: user.email,
-          name: user.name
-        }))
-      })
-      .then(() =>{
-        console.log(userData)
-        setShowLogin(!showLogin)
-      })
-      .catch((err) => console.log(err))
+
+      if(!userCreated) return alert('Erro ao criar conta. Tente novamente...')
+
+      const user = userCreated.data
+
+      //depois de validado então envia informações para o Context (session da aplicação)
+      setUserData(prevStat => ({
+        ...prevStat,
+        email: user.email,
+        name: user.name,
+        user_id: user._id,
+      }))
+
+      setShowLogin(!showLogin)
+      setLoading(false)
     } catch(err){
       console.log(err)
     }
@@ -47,25 +57,31 @@ const Login = () => {
 
   async function loginHandler(email, password) {
     try{
-      const user = await api.post('/session', {
+      setLoading(true)
+      const userCreated = await api.post('/session', {
         email,
         password
       })
-      .then((resp) => {
-        const user = resp.data
-        console.log(user)
-
+        const data = userCreated.data
+          
         setUserData(prevStat => ({
           ...prevStat,
           isLogged: true,
-          email: user.email,
-          name: user.name,
-          user_id: user._id,
+          email: data.email,
+          name: data.user,
+          user_id: data.user_id,
         }))
-        navigate('/home')
-      })
-      .catch((err) => console.log(err))
-    } catch(err) {
+
+        console.log(userData)
+        if(data.firstLogin) {
+          setOverlayVisible(true)
+        }
+        else {
+          navigate('/home')
+        }
+        setLoading(false)
+      } 
+    catch(err) {
       console.log(err)
     }
   }
@@ -83,14 +99,22 @@ const Login = () => {
 
     return (
       <>
-        {showLogin ? (
+        {isOverlayVisible && (
+          <PersonalDataScreenOverlay
+            customClass="column"
+            onClose={toggleOverlay}
+          />
+        )}
+        {loading ? (
+          <Loading />
+        ) : showLogin ? (
           <motion.div
-          key="signup"
-          variants={cardVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          className={styles.login}
+            key="signup"
+            variants={cardVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className={styles.login}
           >
             <h1> Criar conta</h1>
             <RegisterForm
@@ -100,18 +124,15 @@ const Login = () => {
           </motion.div>
         ) : (
           <motion.div
-          key="login"
-          variants={cardVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          className={styles.login}
+            key="login"
+            variants={cardVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className={styles.login}
           >
             <h1>Entrar</h1>
-            <LoginForm
-              handleSubmit={loginHandler}
-              handleClick={toggleChange}
-            />
+            <LoginForm handleSubmit={loginHandler} handleClick={toggleChange} />
           </motion.div>
         )}
       </>

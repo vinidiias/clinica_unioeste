@@ -1,15 +1,18 @@
 import styles from './Profile.module.css'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../context/UserContext'
-import logoPerfil from '../../img/logoPerfil.jpg'
-
-
 import PersonalData from '../profile/PersonalData'
 import Escolaridade from '../profile/Escolaridade'
 import Adress from '../profile/Adress'
 
 const Profile = () => {
-  const {pessoa} = useContext(UserContext)
+  const { pessoa } = useContext(UserContext);
+  const [localPessoa, setLocalPessoa] = useState(pessoa); // Estado local para armazenar dados da pessoa
+
+  useEffect(() => {
+    // Atualiza o estado local sempre que 'pessoa' mudar
+    setLocalPessoa(pessoa);
+  }, [pessoa]); // Dependência em 'pessoa'
 
   let education = {
     level: 'graduacao',
@@ -21,24 +24,24 @@ const Profile = () => {
   return (
     <div className={styles.profile}>
         <PersonalData 
-          img={logoPerfil}
-          nome={pessoa.name}
-          idade={pessoa.age}
-          nascimento={pessoa.birth}
-          CPF={pessoa.cpf}
-          RA={pessoa.ra}
-          mail={pessoa.email}
-          tel={pessoa.phone}
+          imgProfile={localPessoa.img} // Usando estado local
+          nome={localPessoa.name}
+          idade={localPessoa.age}
+          sex={localPessoa.sexo}
+          nascimento={localPessoa.birth}
+          CPF={localPessoa.cpf}
+          RA={localPessoa.ra}
+          mail={localPessoa.email}
+          tel={localPessoa.phone}
+        />
+        <Adress
+          adress_completo={localPessoa.adressComplet} // Usando estado local
         />
         <Escolaridade
-          education={education}
-        />
-
-        <Adress
-          adress_completo={pessoa.adress_completo}
+          education={education} // Presumindo que a educação não muda
         />
     </div>
   );
 }
 
-export default Profile
+export default Profile;

@@ -13,6 +13,10 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,  
+    }, 
+    isFirstLogin: {  // Campo para verificar o primeiro login
+        type: Boolean, 
+        default: true 
     }
 });
 

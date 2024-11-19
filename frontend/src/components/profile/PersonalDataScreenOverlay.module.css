@@ -1,0 +1,28 @@
+
+
+.overlay {
+    position: absolute;
+    width: 850px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;   
+}
+@media(max-width: 900px) {
+    .overlay {
+        width: 700px;
+    }
+}
+
+@media(max-width: 771px) {
+    .overlay {
+        width: 600px;
+    }
+}
+
+@media(max-width: 680px) {
+    .overlay {
+        width: 70%;
+    }
+}

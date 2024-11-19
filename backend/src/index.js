@@ -14,8 +14,21 @@ mongoose.connect(dbUri, {
     console.log('Connected to database')
 }).catch((err) => console.log(err))
 
-app.use(cors())
-app.use(express.json())
+const allowedOrigins = ['http://localhost:3000', 'https://clinica-unioeste-pi.vercel.app'];
+app.use(cors({
+    origin: function (origin, callback) {
+        if (allowedOrigins.includes(origin) || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'auth'],
+    credentials: true,
+}));
+
+app.use(express.json({ limit: '10mb' }))
 app.use(router)
 
 app.listen(3333, () => console.log('Server is running on port 3333'))

@@ -1,49 +1,71 @@
-const Pessoa = require('../Models/Pessoa')
-const { index } = require('./UserController')
+const { default: mongoose } = require('mongoose')
+const Pessoa = require('../Models/PessoaModel')
+const User = require('../Models/UserModel')
+const { isValidCPF } = require('../Validations/cpfValidation')
+const { calcularIdade } = require('../Validations/dataValidation')
+const { PessoaEmpty } = require('../Validations/emptyValidation')
 
 module.exports ={
     async create (req,res) {
-        const { name, age, data_nasc, sexo, ra, cpf, telefone, adrres, adrres_number, profissao} = req.body
-        
+        const { img, name, sexo, birth, cpf, ra, email, phone, adressComplet} = req.body
         const { user_id } = req.params 
         const { auth } = req.headers
 
+        const flag = PessoaEmpty(sexo, birth, cpf, ra, phone, adressComplet)
+        if(flag) return res.status(400).send({ message: 'Campo vazio'})
+
+        const userExists = await User.findById(user_id) 
+        if(!userExists) return res.status(400).send({ message: 'Usuário não encontrado'})
+
         if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'})
+
+        const existPessoa = await Pessoa.findOne({ user: user_id }) 
+        if(existPessoa) return res.status(400).send({ message: 'Pessoa já está cadastrada'})
     
         try{
-            const adrress = { //criar um objeto do endereco
-                adrres, 
-                adrres_number
-            }
+            if(userExists.name !== name || userExists.email !== email) return res.status(400).send({ message: 'Nome ou email não correspondem ao cadastrado'})
+
+            const cpfIsValid = await isValidCPF(cpf)
+            if(!cpfIsValid) return res.status(400).send({ message: 'CPF inválid' })
+
+            const age = calcularIdade(birth) 
 
             const createPessoa = await Pessoa.create({
-                name,
-                age,
-                data_nasc,
+                img,
                 sexo,
-                ra,
+                birth,
                 cpf,
-                telefone,
-                adrress,
-                profissao,
-                user: user_id
+                ra,
+                phone,
+                adressComplet,
+                user: user_id, 
             })
-            await createPessoa.populate('user') //tras outras informacoes sobre o usurario
+            
+            userExists.isFirstLogin = false
+            await userExists.save()
 
-            return res.status(200).send(createPessoa)
+            const pessoaComUser = await Pessoa.findById(createPessoa._id).populate('user')
+            return res.status(200).send({
+                pessoa: createPessoa,
+                message: 'Pessoa cadastrada com sucesso'
+            })
         }
         catch(err){
             return res.status(400).send(err)
         }
     },
+    
     async delete (req, res) {
         const { pessoa_id, user_id } = req.params
-        if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'})
-        return
+        const { auth } = req.headers
 
+        if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
+        
         try{
             const deletePesosa = await Pessoa.findByIdAndDelete(pessoa_id)
-            return res.status(200).send({ status: 'deleted', user: deletePesosa})
+            if(!deletePesosa) return res.status(400).send({ message: 'Pessoa não encontrada'})
+                
+            return res.status(200).send({ status: 'Deletado com sucesso', user: deletePesosa})
         }
         catch(err){
             return res.status(400).send(err)
@@ -53,22 +75,24 @@ module.exports ={
     async deleteAll(req, res) {
         try {
             // Deleta todas as pessoas
-            const deletePessoas = await Pessoa.deleteMany({});
+            const deletePessoas = await Pessoa.deleteMany({})
     
             // Verifica se houve alguma exclusão
             if (deletePessoas.deletedCount > 0) {
-                return res.status(200).send({ status: 'deleted', count: deletePessoas.deletedCount });
+                return res.status(200).send({ status: 'deleted', count: deletePessoas.deletedCount })
             } else {
-                return res.status(404).send({ status: 'no records found to delete' });
+                return res.status(404).send({ status: 'no records found to delete' })
             }
         } catch (err) {
-            return res.status(400).send(err);
+            return res.status(400).send(err)
         }
     }, 
 
     async indexByUser (req, res) {
         const { user_id } = req.params
-        if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'})
+        const { auth } = req.headers
+
+        if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
         
         try{
             const allPessoaOfUser = await Pessoa.find({
@@ -92,20 +116,28 @@ module.exports ={
     }, 
 
     async updatePessoa (req, res){
-        try{
-            const { id } = req.params 
-            const dadosAtualizados = req.body
+        const dadosAtualizados = req.body
+        const { user_id } = req.params 
+        const { auth } = req.headers
 
-            const pessoaAtualizada = await Pessoa.findByIdAndUpdate(
-                id, 
+        if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
+
+        try{
+            
+            if(dadosAtualizados.birth){
+                dadosAtualizados.age = calcularIdade(dadosAtualizados.birth)
+            }
+
+            const pessoaAtualizada = await Pessoa.findOneAndUpdate(
+                {user: user_id}, 
                 
                 { $set: dadosAtualizados },
                 { new: true }
 
-            );
+            )
 
             if(!pessoaAtualizada){
-                return res.status(400).send({ message: "Pessoa nao encontrada"})
+                return res.status(400).send({ message: "Pessoa não encontrada"})
             }
             res.status(200).send({ message: "Dados atualizados com sucesso", pessoa: pessoaAtualizada })
         }
@@ -113,5 +145,4 @@ module.exports ={
             return res.status(400).send(err)
         }
     }
-
 }
