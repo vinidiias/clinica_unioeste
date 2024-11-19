@@ -3,7 +3,6 @@ const Pessoa = require('../Models/PessoaModel')
 const User = require('../Models/UserModel')
 const { isValidCPF } = require('../Validations/cpfValidation')
 const { calcularIdade } = require('../Validations/dataValidation')
-const { index } = require('./UserController')
 const { PessoaEmpty } = require('../Validations/emptyValidation')
 
 module.exports ={
@@ -15,44 +14,41 @@ module.exports ={
         const flag = PessoaEmpty(sexo, birth, cpf, ra, phone, adressComplet)
         if(flag) return res.status(400).send({ message: 'Campo vazio'})
 
+        const userExists = await User.findById(user_id) 
+        if(!userExists) return res.status(400).send({ message: 'Usuário não encontrado'})
+
         if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'})
+
+        const existPessoa = await Pessoa.findOne({ user: user_id }) 
+        if(existPessoa) return res.status(400).send({ message: 'Pessoa já está cadastrada'})
     
         try{
-            
-            const userExists = await User.findById(user_id) //verifica se o usuario existe
-            if(!userExists) return res.status(400).send({ message: 'Usuário não encontrado'})
-
-            const existPessoa = await Pessoa.findOne({ user: user_id }) //verifica se ja existe uma pessoa cadastrada
-            if(existPessoa) return res.status(400).send({ message: 'Pessoa já está cadastrada'})
-
             if(userExists.name !== name || userExists.email !== email) return res.status(400).send({ message: 'Nome ou email não correspondem ao cadastrado'})
 
-            const cpfIsValid = await isValidCPF(cpf) //verifica se o cpf é valido
+            const cpfIsValid = await isValidCPF(cpf)
             if(!cpfIsValid) return res.status(400).send({ message: 'CPF inválid' })
 
-            const age = calcularIdade(birth) // calcula a idade da pessoa pela dada de nascimento
-            
+            const age = calcularIdade(birth) 
+
             const createPessoa = await Pessoa.create({
                 img,
-                name,
-                age,
                 sexo,
                 birth,
                 cpf,
                 ra,
-                email,
                 phone,
                 adressComplet,
-                user: user_id,
+                user: user_id, 
             })
-
-            const pessoaComUser = await Pessoa.findById(createPessoa._id).populate('user');
-            res.status(200).send(pessoaComUser);//tras outras informacoes sobre o usurario
             
-            userExists.isFirstLogin = false;
-            await userExists.save();
+            userExists.isFirstLogin = false
+            await userExists.save()
 
-            return res.status(200).send(createPessoa)
+            const pessoaComUser = await Pessoa.findById(createPessoa._id).populate('user')
+            return res.status(200).send({
+                pessoa: createPessoa,
+                message: 'Pessoa cadastrada com sucesso'
+            })
         }
         catch(err){
             return res.status(400).send(err)
@@ -65,8 +61,6 @@ module.exports ={
 
         if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
         
-       
-
         try{
             const deletePesosa = await Pessoa.findByIdAndDelete(pessoa_id)
             if(!deletePesosa) return res.status(400).send({ message: 'Pessoa não encontrada'})
@@ -122,12 +116,17 @@ module.exports ={
     }, 
 
     async updatePessoa (req, res){
-        try{
-            const dadosAtualizados = req.body
-            const { user_id } = req.params 
-            const { auth } = req.headers
+        const dadosAtualizados = req.body
+        const { user_id } = req.params 
+        const { auth } = req.headers
 
-            if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
+        if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
+
+        try{
+            
+            if(dadosAtualizados.birth){
+                dadosAtualizados.age = calcularIdade(dadosAtualizados.birth)
+            }
 
             const pessoaAtualizada = await Pessoa.findOneAndUpdate(
                 {user: user_id}, 
@@ -135,7 +134,7 @@ module.exports ={
                 { $set: dadosAtualizados },
                 { new: true }
 
-            );
+            )
 
             if(!pessoaAtualizada){
                 return res.status(400).send({ message: "Pessoa não encontrada"})
