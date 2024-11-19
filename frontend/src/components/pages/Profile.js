@@ -14,8 +14,8 @@ const Profile = () => {
     setLocalPessoa(pessoa);
   }, [pessoa]); // Dependência em 'pessoa'
 
-  let education = {
-    level: 'graduacao',
+  const education = {
+    level: 'Graduação',
     curso: 'Ciências da Computação',
     periodo: '4° ano',
     turno: 'Manhã'

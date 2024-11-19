@@ -1,4 +1,4 @@
-const { default: mongoose } = require('mongoose')
+const { mongoose } = require('mongoose')
 const Pessoa = require('../Models/PessoaModel')
 const User = require('../Models/UserModel')
 const { isValidCPF } = require('../Validations/cpfValidation')
@@ -7,7 +7,7 @@ const { PessoaEmpty } = require('../Validations/emptyValidation')
 
 module.exports ={
     async create (req,res) {
-        const { img, name, sexo, birth, cpf, ra, email, phone, adressComplet} = req.body
+        const { img, sexo, birth, cpf, ra, phone, adressComplet} = req.body
         const { user_id } = req.params 
         const { auth } = req.headers
 
@@ -98,6 +98,10 @@ module.exports ={
             const allPessoaOfUser = await Pessoa.find({
                 user: user_id
             })
+
+
+            allPessoaOfUser[0].age = calcularIdade(allPessoaOfUser[0].birth) // calcula a idade da pessoa pela dada de nascimento
+
             return res.status(200).send(allPessoaOfUser)
         } catch (err) {
             return res.status(400).send(err);
@@ -126,6 +130,10 @@ module.exports ={
             
             if(dadosAtualizados.birth){
                 dadosAtualizados.age = calcularIdade(dadosAtualizados.birth)
+            }
+
+            if(dadosAtualizados.birth) {
+                dadosAtualizados.age = calcularIdade(dadosAtualizados.birth) // calcula a idade da pessoa pela dada de nascimento
             }
 
             const pessoaAtualizada = await Pessoa.findOneAndUpdate(

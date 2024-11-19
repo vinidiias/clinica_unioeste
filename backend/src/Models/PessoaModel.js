@@ -33,7 +33,7 @@ const pessoaSchema = new mongoose.Schema({
     },
     img: {
         type: String, // ou Buffer se você estiver armazenando os dados da imagem
-        required: false // ou false, dependendo da sua necessidade
+        require: false // ou false, dependendo da sua necessidade
       },
     user: {
         type: mongoose.Schema.Types.ObjectId,
