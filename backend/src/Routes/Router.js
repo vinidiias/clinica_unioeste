@@ -10,6 +10,7 @@ const routes = Router()
 //Usuarios
 routes.post('/user', userController.create)
 routes.get('/user', userController.index)
+routes.patch('/user/:user_id', userController.updateUser)
 routes.delete('/:user_id/user', userController.delete)
 
 //Pessoas

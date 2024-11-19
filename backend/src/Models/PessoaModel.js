@@ -1,14 +1,6 @@
 const mongoose = require('mongoose')
 
 const pessoaSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        require: true,
-    },
-    age: {
-        type: String,
-        require: true,
-    },
     birth: {
         type: String,
         require: true,
@@ -29,10 +21,6 @@ const pessoaSchema = new mongoose.Schema({
         type: String, 
         require: true,
     },
-    email: {
-        type: String, 
-        require: true,
-    },
     adressComplet: {
         adress: {
             type: String, 
@@ -50,7 +38,7 @@ const pessoaSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        require: true,
+        required: true,
     }
 })
 

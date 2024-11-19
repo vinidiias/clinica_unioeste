@@ -1,5 +1,4 @@
 function calcularIdade (dataNascimento){
-    console.log('Entrada' + ' ' + dataNascimento)
     const [ano, mes, dia] = dataNascimento.split('-').map(Number)
     const nascimento = new Date(ano, mes-1, dia)
     const atual = new Date()
