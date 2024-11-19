@@ -70,5 +70,47 @@ module.exports = {
         catch(err){
             return res.status(400).send(err)
         }
+    },
+
+    async updateUser (req, res) {
+        const {email, password, ...dadosAtualizado} = req.body
+        const { user_id } = req.params
+        const { auth } = req.headers
+
+        const userAtual = await User.findById(user_id)
+        if(!userAtual) return res.status(400).send({ message: 'Usuario nao encontrado' })
+
+        if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado' })
+
+        try{
+            if(email){
+                const emailValido = await verifyEmail(email)
+                if(!emailValido) return res.status(400).send({ message: 'Email invalido'} )
+
+                dadosAtualizado.email = email
+            }
+
+            if(password){
+                const hashedPassword = await hashPassword(password)
+                dadosAtualizado.password = hashedPassword
+            }
+
+            // Atualiza apenas os campos enviados no body
+            Object.keys(dadosAtualizado).forEach((key) =>{
+                if(dadosAtualizado[key] !== undefined && dadosAtualizado[key] !== '') {
+                    userAtual[key] = dadosAtualizado[key]
+                }
+            })
+
+            const userAtualizado = await userAtual.save()
+
+            return res.status(200).send({ 
+                message: 'Dados do usuario atualizado com sucesso',
+                user: userAtualizado
+            })
+        }
+        catch(err){
+            return res.status(400).send(err)
+        }
     }
 }
