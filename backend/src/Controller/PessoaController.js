@@ -133,13 +133,14 @@ module.exports ={
                 
                 { $set: dadosAtualizados },
                 { new: true }
-
             )
 
             if(!pessoaAtualizada){
                 return res.status(400).send({ message: "Pessoa não encontrada"})
             }
-            res.status(200).send({ message: "Dados atualizados com sucesso", pessoa: pessoaAtualizada })
+            res.status(200).send({ 
+                message: "Dados atualizados com sucesso", 
+                pessoa: pessoaAtualizada })
         }
         catch(err){
             return res.status(400).send(err)
