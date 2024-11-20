@@ -22,7 +22,7 @@ module.exports = {
         const flag = FicharioEmpty(profession, education, vinculo, work, psicologa, psiquiatria)
         if(flag) return res.status(400).send({ message: 'Campo vazio' })
 
-        if( user_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
+        if( user_id !== auth) return res.status(400).send({ message: 'Não autorizado' })
     
         try {
             //Verificar se ja existe uma ficha assosciada ao usuario
@@ -103,7 +103,9 @@ module.exports = {
             const deleteFicharios = await Ficha.deleteMany({})
 
             if(deleteFicharios.deletedCount > 0) {
-                return res.status(200).send({ message: 'Todos deletados com sucesso', count: deleteFicharios.deletedCount })
+                return res.status(200).send({ 
+                    message: 'Todos deletados com sucesso', 
+                    count: deleteFicharios.deletedCount })
             }
             else {
                 return res.status(400).send({ message: 'Não há nehnuma ficha para deletar' })
