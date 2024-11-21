@@ -12,13 +12,11 @@ export function UserProvider(props) {
     })
     const [pessoa, setPessoa] = useState({
         img: '',
-        name: '',
         age: '',
         sexo: '',
         birth: '',
         cpf: '',
         ra: '',
-        email: '',
         phone: '',
         adressComplet: {
             adress: '',

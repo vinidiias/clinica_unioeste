@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { useContext, useState } from 'react'
 import { motion } from 'framer-motion'
 import { UserContext } from '../context/UserContext'
+import { calcularIdade } from '../util/CalculaIdade'
 import Loading from '../layout/Loading'
 import RegisterForm from '../login/RegisterForm'
 import LoginForm from '../login/LoginForm'
@@ -39,12 +40,14 @@ const Login = () => {
       if(!userCreated) return alert('Erro ao criar conta. Tente novamente...')
 
       const user = userCreated.data
+      console.log(`dados do usuario: ${user}`)
 
       //depois de validado então envia informações para o Context (session da aplicação)
       setUserData(prevStat => ({
         ...prevStat,
         email: user.email,
         name: user.name,
+        password: user.password,
         user_id: user._id,
       }))
 
@@ -63,45 +66,20 @@ const Login = () => {
         password
       })
         const data = userCreated.data
-          
-        setUserData(prevStat => ({
-          ...prevStat,
+        
+        const user = {
           isLogged: true,
           email: data.email,
           name: data.user,
           user_id: data.user_id,
-        }))
-
-        console.log(userData)
-        if(data.firstLogin) {
-          setOverlayVisible(true)
         }
-        else {
-          try{
-            const getPessoa = await api.get(`${data.user_id}/pessoa`, {headers: {'auth': `${data.user_id}` }})
-            
-            if(getPessoa.data[0]) {
-              const data = getPessoa.data[0]
 
-              setPessoa(prevStat => ({
-                ...prevStat,
-                img: data.img,
-                name: data.name,
-                age: data.age,
-                sexo: data.sexo,
-                birth: data.birth,
-                cpf: data.cpf,
-                ra: data.ra,
-                email: data.email,
-                phone: data.phone,
-                adressComplet: data.adressComplet
-              }))
-              navigate('/home')
+        sessionStorage.setItem('user', JSON.stringify(user))
 
-            }
-          }catch(err) {
-            console.log(err)
-          }
+        if (data.firstLogin) {
+          setOverlayVisible(true);
+        } else {
+          navigate("/home");
         }
       } 
     catch(err) {
