@@ -6,7 +6,7 @@ import Escolaridade from '../profile/Escolaridade'
 import Adress from '../profile/Adress'
 
 const Profile = () => {
-  const { pessoa } = useContext(UserContext);
+  const { pessoa, userData } = useContext(UserContext);
   const [localPessoa, setLocalPessoa] = useState(pessoa); // Estado local para armazenar dados da pessoa
 
   useEffect(() => {
@@ -20,18 +20,18 @@ const Profile = () => {
     periodo: '4° ano',
     turno: 'Manhã'
   }
-
+console.log(userData)
   return (
     <div className={styles.profile}>
         <PersonalData 
           imgProfile={localPessoa.img} // Usando estado local
-          nome={localPessoa.name}
+          nome={userData.name}
           idade={localPessoa.age}
           sex={localPessoa.sexo}
           nascimento={localPessoa.birth}
           CPF={localPessoa.cpf}
           RA={localPessoa.ra}
-          mail={localPessoa.email}
+          mail={userData.email}
           tel={localPessoa.phone}
         />
         <Adress

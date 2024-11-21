@@ -9,7 +9,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
     const [edit, setEdit] = useState(true)
     const [img, setImg] = useState(imgProfile)
     const [name, setName] = useState(nome)
-    const [age, setAge] = useState(idade)
+    const [password, setPassword] = useState('')
     const [sexo, setSexo] = useState(sex)
     const [birth, setBirth] = useState(nascimento)
     const [cpf, setCpf] = useState(CPF)
@@ -48,7 +48,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
         setEdit(!edit)
     }
 
-    function validateInputs(data) {
+    function validate_PersonalData(data) {
       if(data.adressComplet){
         if((!data.adressComplet.adress || data.adressComplet.adress === '') || 
             !data.adressComplet.number || data.adressComplet.number === '') {
@@ -58,6 +58,13 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
       for(let key in data) {
         if(!data[key] || data[key] === '') return 0
       }
+      return 1
+    }
+
+    function validate_UserData(data) {
+      if((!data.name || data.name === '') ||
+         (!data.email || data.email === ''))
+          return 0
       return 1
     }
 
@@ -75,7 +82,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
         }
       }
 
-      if (validateInputs(personal_data)) {
+      if (validate_PersonalData(personal_data)) {
         try {
           console.log(userData.user_id)
           const personCreated = await api.post(
@@ -115,29 +122,28 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
     }
 
     async function editHandle(){
+      const user = {
+        name,
+        email,
+        password
+      }
+
       const personal_data = {
         img,
-        name,
         sexo,
         birth,
         cpf,
         ra,
-        email,
         phone
       }
 
-      if(validateInputs(personal_data)){
+      if(validate_PersonalData(personal_data) && validate_UserData(user)){
         try{
-          const pessoaUpdated = await api.patch(`/pessoa/${userData.user_id}`, {
-            img,
-            name,
-            sexo,
-            birth,
-            cpf,
-            ra,
-            email,
-            phone
-          }, {headers: {'auth': `${userData.user_id}`}})
+          const pessoaUpdated = await api.patch(
+            `/pessoa/${userData.user_id}`,
+            personal_data,
+            { headers: { auth: `${userData.user_id}` } }
+          );
           
           if (!pessoaUpdated.data.pessoa) {
             console.error('Dados da pessoa não foram retornados:', pessoaUpdated);
@@ -145,20 +151,28 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
           }
 
           const data = pessoaUpdated.data.pessoa
-          console.log(data)
 
           setPessoa(prevStat => ({
             ...prevStat,
             img: data.img,
-            name: data.name,
             age: data.age,
             sexo: data.sexo,
             birth: data.birth,
             cpf: data.cpf,
             ra: data.ra,
-            email: data.email,
             phone: data.phone
           }))
+
+          try {
+            const userUpdated = await api.patch(
+              `/user/${userData.user_id}`,
+              user,
+              { headers: { auth: `${userData.user_id}` } }
+            )
+          } catch (err) {
+            console.log(err);
+          }
+
           editToggle()
         }catch(err){
           console.log(err)
@@ -342,6 +356,19 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
                   name="email"
                   id="email"
                   autoComplete="home email"
+                />
+              </div>
+            )}
+            {customClass !== "column" && (
+              <div className={styles.input}>
+                <label htmlFor="password">Alterar senha</label>
+                <input
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={edit}
+                  type="password"
+                  name="password"
+                  id="password"
+                  autoComplete="current-password"
                 />
               </div>
             )}

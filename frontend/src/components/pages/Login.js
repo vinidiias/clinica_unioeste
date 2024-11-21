@@ -39,12 +39,14 @@ const Login = () => {
       if(!userCreated) return alert('Erro ao criar conta. Tente novamente...')
 
       const user = userCreated.data
+      console.log(`dados do usuario: ${user}`)
 
       //depois de validado então envia informações para o Context (session da aplicação)
       setUserData(prevStat => ({
         ...prevStat,
         email: user.email,
         name: user.name,
+        password: user.password,
         user_id: user._id,
       }))
 
@@ -72,7 +74,6 @@ const Login = () => {
           user_id: data.user_id,
         }))
 
-        console.log(userData)
         if(data.firstLogin) {
           setOverlayVisible(true)
         }
