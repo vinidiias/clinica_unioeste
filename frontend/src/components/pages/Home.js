@@ -23,7 +23,6 @@ const Home = () => {
 
     return (
       <div className={styles.home}>
-        <h1>Meus sistemas</h1>
         <div className={styles.systems}>
           <System text="Dados Pessoais" icon={<FaHistory  style={{color:'#fff'}} /> } handleClick={navigateprofile} />
           <System text="Consultas" icon={<FaPlusCircle style={{color:'#fff'}} />} handleClick={navigateficha} />

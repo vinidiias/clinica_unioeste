@@ -1,5 +1,6 @@
 import styles from './PersonalData.module.css'
 import api from '../../services/Api';
+import { calcularIdade } from '../util/CalculaIdade'
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
@@ -84,15 +85,15 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
 
       if (validate_PersonalData(personal_data)) {
         try {
-          console.log(userData.user_id)
           const personCreated = await api.post(
             `/${userData.user_id}/pessoa`,
             personal_data,
             {
-              headers: { 'auth': `${userData.user_id}` },
+              headers: { auth: `${userData.user_id}` },
             }
           ) 
           const newPessoa = personCreated.data.pessoa
+          console.log(newPessoa)
 
           setUserData(prevStat => ({
             ...prevStat,
@@ -102,13 +103,11 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
           setPessoa(prevStat => ({
             ...prevStat,
             img: newPessoa.img,
-            name: userData.name,
-            age: newPessoa.age,
+            age: calcularIdade(newPessoa.birth),
             sexo: newPessoa.sexo,
             birth: newPessoa.birth,
             cpf: newPessoa.cpf,
             ra: newPessoa.ra,
-            email: userData.email,
             phone: newPessoa.phone,
             adressComplet: newPessoa.adressComplet
           }))
@@ -151,11 +150,10 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
           }
 
           const data = pessoaUpdated.data.pessoa
-
           setPessoa(prevStat => ({
             ...prevStat,
             img: data.img,
-            age: data.age,
+            age: calcularIdade(data.birth),
             sexo: data.sexo,
             birth: data.birth,
             cpf: data.cpf,
@@ -172,10 +170,10 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
           } catch (err) {
             console.log(err);
           }
-
-          editToggle()
         }catch(err){
           console.log(err)
+        }finally {
+          editToggle()
         }
       } else alert('Campos vázio(s)!')
 
@@ -368,7 +366,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
                   type="password"
                   name="password"
                   id="password"
-                  autoComplete="current-password"
+                  autoComplete="new-password"
                 />
               </div>
             )}

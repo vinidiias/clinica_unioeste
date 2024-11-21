@@ -1,18 +1,38 @@
 import styles from './Profile.module.css'
 import { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../context/UserContext'
+import { useNavigate } from 'react-router-dom'
+import Loading from '../layout/Loading'
 import PersonalData from '../profile/PersonalData'
 import Escolaridade from '../profile/Escolaridade'
 import Adress from '../profile/Adress'
+import api from '../../services/Api'
+import { calcularIdade } from '../util/CalculaIdade'
 
 const Profile = () => {
-  const { pessoa, userData } = useContext(UserContext);
-  const [localPessoa, setLocalPessoa] = useState(pessoa); // Estado local para armazenar dados da pessoa
+  const { setPessoa, pessoa, userData } = useContext(UserContext);
+  const storedUser = JSON.parse(sessionStorage.getItem('user'))
+  const navigate = useNavigate()
+  const [localPessoa, setLocalPessoa] = useState({})
 
-  useEffect(() => {
-    // Atualiza o estado local sempre que 'pessoa' mudar
-    setLocalPessoa(pessoa);
-  }, [pessoa]); // Dependência em 'pessoa'
+  useEffect(() => async () => {
+    try{
+      const getPessoa = await api.get(`/${storedUser.user_id}/pessoa`, {
+        headers: { auth: `${storedUser.user_id}` },
+      })
+      
+      if(!getPessoa) navigate('/')
+
+      const data = getPessoa.data[0]
+
+      setLocalPessoa(data)
+
+    } catch(err) {
+      console.log(err)
+    }
+  }, [])
+
+
 
   const education = {
     level: 'Graduação',
@@ -20,27 +40,32 @@ const Profile = () => {
     periodo: '4° ano',
     turno: 'Manhã'
   }
-console.log(userData)
+
   return (
-    <div className={styles.profile}>
-        <PersonalData 
-          imgProfile={localPessoa.img} // Usando estado local
-          nome={userData.name}
-          idade={localPessoa.age}
-          sex={localPessoa.sexo}
-          nascimento={localPessoa.birth}
-          CPF={localPessoa.cpf}
-          RA={localPessoa.ra}
-          mail={userData.email}
-          tel={localPessoa.phone}
-        />
-        <Adress
-          adress_completo={localPessoa.adressComplet} // Usando estado local
-        />
-        <Escolaridade
-          education={education} // Presumindo que a educação não muda
-        />
-    </div>
+    <>
+      {Object.keys(localPessoa).length === 0 ? (
+        <Loading />
+      ) : (
+        <div className={styles.profile}>
+          <PersonalData
+            nome={storedUser.name}
+            idade={calcularIdade(localPessoa.birth)}
+            sex={localPessoa.sexo}
+            nascimento={localPessoa.birth}
+            CPF={localPessoa.cpf}
+            RA={localPessoa.ra}
+            mail={storedUser.email}
+            tel={localPessoa.phone}
+          />
+          <Adress
+            adress_completo={localPessoa.adressComplet} // Usando estado local
+          />
+          <Escolaridade
+            education={education} // Presumindo que a educação não muda
+          />
+        </div>
+      )}
+    </>
   );
 }
 
