@@ -19,8 +19,10 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
     const [phone, setPhone] = useState(tel)
     const [adress, setAdress] = useState('')
     const [number, setNumber] = useState('')
-    const {userData, setUserData, setPessoa, pessoa} = useContext(UserContext)
+    const {userData, setUserData, setPessoa} = useContext(UserContext)
     const navigate = useNavigate()
+
+    //console.log(userData)
 
     useEffect(() => {
       if(customClass === 'column') setEdit(false)
@@ -95,22 +97,9 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
           const newPessoa = personCreated.data.pessoa
           console.log(newPessoa)
 
-          setUserData(prevStat => ({
-            ...prevStat,
-            isFirst: false,
-          }))
-
-          setPessoa(prevStat => ({
-            ...prevStat,
-            img: newPessoa.img,
-            age: calcularIdade(newPessoa.birth),
-            sexo: newPessoa.sexo,
-            birth: newPessoa.birth,
-            cpf: newPessoa.cpf,
-            ra: newPessoa.ra,
-            phone: newPessoa.phone,
-            adressComplet: newPessoa.adressComplet
-          }))
+          let user = JSON.parse(sessionStorage.getItem('user'))
+          user.isFirst = false
+          sessionStorage.setItem('user', JSON.stringify(user))
 
           onClose()
           navigate("/home")
@@ -120,7 +109,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
       } else alert("Campos vázios! Preencha todas as informações");
     }
 
-    async function editHandle(){
+    async function editHandle(){      
       const user = {
         name,
         email,
@@ -142,24 +131,12 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
             `/pessoa/${userData.user_id}`,
             personal_data,
             { headers: { auth: `${userData.user_id}` } }
-          );
+          )
           
           if (!pessoaUpdated.data.pessoa) {
             console.error('Dados da pessoa não foram retornados:', pessoaUpdated);
-            return;
+            return
           }
-
-          const data = pessoaUpdated.data.pessoa
-          setPessoa(prevStat => ({
-            ...prevStat,
-            img: data.img,
-            age: calcularIdade(data.birth),
-            sexo: data.sexo,
-            birth: data.birth,
-            cpf: data.cpf,
-            ra: data.ra,
-            phone: data.phone
-          }))
 
           try {
             const userUpdated = await api.patch(
@@ -167,6 +144,19 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
               user,
               { headers: { auth: `${userData.user_id}` } }
             )
+
+            if(userUpdated) {
+              let user = JSON.parse(sessionStorage.getItem('user'))
+
+              if(user) {
+                user.name = userUpdated.data.user.name
+                user.email = userUpdated.data.user.email
+                sessionStorage.setItem("user", JSON.stringify(user));
+              } else {
+                console.error("Nenhum usuario encontrado");
+              }
+            }
+
           } catch (err) {
             console.log(err);
           }
@@ -186,7 +176,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
         </div>
         <div className={styles.infos + " " + styles[customClass]}>
           <div className={styles.divImg}>
-            <label htmlFor="file-img">Foto</label>
+            <label htmlFor="name">Foto</label>
             {customClass === "column" ? (
               <div
                 style={{
@@ -196,7 +186,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
                 }}
               >
                 {img ? (
-                  <img className={styles.imgEdit} src={img} alt="foto perfil" />
+                  <img id="file-img" className={styles.imgEdit} src={img} alt="foto perfil" />
                 ) : (
                   <label htmlFor="file-img">
                     <input
@@ -248,7 +238,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
                   />
                   <span>Editar</span>
                 </label>
-                <img className={styles.img} src={img} alt="foto perfil" />
+                <img id='file-img' className={styles.img} src={img} alt="foto perfil" />
               </div>
             ) : (
               <img className={styles.imgEdit} src={img} alt="foto perfil" />

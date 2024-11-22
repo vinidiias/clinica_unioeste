@@ -1,6 +1,5 @@
 import styles from './Profile.module.css'
 import { useContext, useEffect, useState } from 'react'
-import { UserContext } from '../context/UserContext'
 import { useNavigate } from 'react-router-dom'
 import Loading from '../layout/Loading'
 import PersonalData from '../profile/PersonalData'
@@ -8,29 +7,44 @@ import Escolaridade from '../profile/Escolaridade'
 import Adress from '../profile/Adress'
 import api from '../../services/Api'
 import { calcularIdade } from '../util/CalculaIdade'
+import { UserContext } from '../context/UserContext'
 
 const Profile = () => {
-  const { setPessoa, pessoa, userData } = useContext(UserContext);
-  const storedUser = JSON.parse(sessionStorage.getItem('user'))
+  const { setUserData } = useContext(UserContext)
   const navigate = useNavigate()
+  const [localUser, setLocalUser] = useState({})
   const [localPessoa, setLocalPessoa] = useState({})
 
-  useEffect(() => async () => {
-    try{
-      const getPessoa = await api.get(`/${storedUser.user_id}/pessoa`, {
-        headers: { auth: `${storedUser.user_id}` },
-      })
-      
-      if(!getPessoa) navigate('/')
+  useEffect(() => {
+    const fetchData = async () => {
+      const user = JSON.parse(sessionStorage.getItem('user'))
 
-      const data = getPessoa.data[0]
+      setUserData(prevStat => ({
+        ...prevStat,
+        isFirst: user.isFirst,
+        email: user.email,
+        name: user.name,
+        user_id: user.user_id,
+      }))
 
-      setLocalPessoa(data)
+      try{
+        const getPessoa = await api.get(`/${user.user_id}/pessoa`, {
+          headers: { auth: `${user.user_id}` },
+        });
+        
+        if(!getPessoa) navigate('/')
+  
+        const data = getPessoa.data[0]
 
-    } catch(err) {
-      console.log(err)
+        setLocalUser(user)
+        setLocalPessoa(data)
+  
+      } catch(err) {
+        console.log(err)
+      }
     }
-  }, [])
+    fetchData()
+  }, [navigate, localPessoa, localUser, setUserData])
 
 
 
@@ -48,13 +62,14 @@ const Profile = () => {
       ) : (
         <div className={styles.profile}>
           <PersonalData
-            nome={storedUser.name}
+            imgProfile={localPessoa.img}
+            nome={localUser.name}
             idade={calcularIdade(localPessoa.birth)}
             sex={localPessoa.sexo}
             nascimento={localPessoa.birth}
             CPF={localPessoa.cpf}
             RA={localPessoa.ra}
-            mail={storedUser.email}
+            mail={localUser.email}
             tel={localPessoa.phone}
           />
           <Adress

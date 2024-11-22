@@ -1,12 +1,8 @@
 import styles from './Home.module.css'
-
-import { useNavigate } from 'react-router-dom';
-
-import { FaPlusCircle } from "react-icons/fa";
-import { FaAddressCard } from "react-icons/fa";
-import { FaHistory } from "react-icons/fa";
-
 import System from '../system/System';
+import { useNavigate } from 'react-router-dom';
+import { FaPlusCircle } from "react-icons/fa";
+import { FaHistory } from "react-icons/fa";
 
 const Home = () => {
   const navigate = useNavigate()

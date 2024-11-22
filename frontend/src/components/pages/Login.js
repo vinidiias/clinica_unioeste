@@ -47,7 +47,6 @@ const Login = () => {
         ...prevStat,
         email: user.email,
         name: user.name,
-        password: user.password,
         user_id: user._id,
       }))
 
@@ -69,6 +68,7 @@ const Login = () => {
         
         const user = {
           isLogged: true,
+          isFirst: data.firstLogin,
           email: data.email,
           name: data.user,
           user_id: data.user_id,
