@@ -4,7 +4,7 @@ import Input from '../form/Input'
 import CheckBox from '../form/CheckBox'
 import Table from '../form/Table'
 
-const FichaForm = () => {
+const FichaForm = ({ pessoa }) => {
 
   const [name, setName] = useState('')
   const [age, setAge] = useState('')

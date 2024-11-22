@@ -11,6 +11,7 @@ const NavBar = () => {
                     <h1>Clínica</h1>
                 </Link>
                 <ul className={styles.list}>
+                    <li><Link to="/home">Menu</Link></li>
                     <li><Link to="/contact">Contato</Link></li>
                     <li><Link to="/about">Sobre</Link></li>
                 </ul>

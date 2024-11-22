@@ -3,21 +3,45 @@ import styles from './Ficha.module.css'
 
 import { UserContext } from "../context/UserContext"
 import { useNavigate } from "react-router-dom"
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useState } from "react"
+import api from "../../services/Api"
 
 const Ficha = () => {
-    const {userData} = useContext(UserContext)
+    const user = JSON.parse(sessionStorage.getItem('user'))
+    console.log(user)
     const navigate = useNavigate()
+    const [pessoa, setPessoa] = useState({})
 
     useEffect(() => {
-        if(!userData.isLogged){
+        if(!user.isLogged){
             navigate('/')
         }
-    }, [userData, navigate])
+    }, [user, navigate])
 
-    return (
-        <FichaForm />
-    )
+    useEffect(() => {
+        const getPessoa = async () => {
+            try {
+                const dataPessoa = await api.get(`/${user.user_id}/pessoa`,
+                    {headers: {auth: `${user.user_id}`}}
+                )
+                
+                const dataUser = {
+                    name: user.name,
+                    email: user.email
+                }
+
+                Object.assign(dataPessoa.data[0], dataUser)
+                console.log(dataPessoa.data[0])
+                setPessoa(dataPessoa.data[0])
+            } catch(err) {
+                console.log(err)
+            }
+        }
+
+        getPessoa()
+    }, [])
+
+    return <FichaForm pessoa={pessoa} />;
 }
 
 export default Ficha
