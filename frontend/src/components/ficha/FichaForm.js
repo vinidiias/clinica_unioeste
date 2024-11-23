@@ -5,18 +5,7 @@ import CheckBox from '../form/CheckBox'
 import Table from '../form/Table'
 import Loading from '../layout/Loading'
 
-const FichaForm = ({ pessoa }) => {
-console.log(pessoa)
-  const [name, setName] = useState(pessoa.name)
-  const [age, setAge] = useState(pessoa.age)
-  const [birth, setBirth] = useState(pessoa.birth)
-  const [sex, setSex] = useState(pessoa.sexo)
-  const [ra, setRa] = useState(pessoa.ra)
-  const [cpf, setCpf] = useState(pessoa.cpf)
-  const [phone, setPhone] = useState(pessoa.phone)
-  const [email, setEmail] = useState(pessoa.email)
-  const [adress, setAdress] = useState(pessoa.adressComplet.adress)
-  const [number, setNumber] = useState(pessoa.adressComplet.number)
+const FichaForm = () => {
   const [profission, setProfission] = useState('')
   const [education, setEducation] = useState({
     type:'',
@@ -106,18 +95,6 @@ useEffect(() => {
   function submit(e){
     e.preventDefault()
     const fichaData = {
-      name,
-      age,
-      birth,
-      sex,
-      ra,
-      cpf,
-      phone,
-      email,
-      adressComplet: {
-        adress,
-        number
-      },
       profission,
       education,
       preferredDay,
@@ -135,16 +112,6 @@ useEffect(() => {
     const { name, value } = e.target
 
     const setters = {
-      name: setName,
-      age: setAge,
-      birth: setBirth,
-      sex: setSex,
-      ra: setRa,
-      cpf: setCpf,
-      phone: setPhone,
-      email: setEmail,
-      adress: setAdress,
-      number: setNumber,
       profission: setProfission,
       observation: setObservation
     }
@@ -157,121 +124,6 @@ useEffect(() => {
     return (
       <>
         <form className={styles.ficha_form}>
-        <div className={styles.flex}>
-            <Input
-              type="text"
-              handleOnChange={handleChange}
-              name="name"
-              text="Nome"
-              disable={true}
-              value={name}
-              autoComplete="username"
-              customClass="flex_1"
-            />
-            <Input
-              type="text"
-              handleOnChange={handleChange}
-              name="age"
-              text="Idade"
-              disable={true}
-              value={age}
-            />
-          </div>
-          <div className={styles.flex}>
-            <Input
-              type="date"
-              name="birth"
-              text="Data de Nascimento"
-              disable={true}
-              value={birth}
-              handleOnChange={handleChange}
-            />
-            <div className={styles.sex}>
-              <label htmlFor="sex-F" className={styles.label}>
-                Sexo:
-              </label>
-              <CheckBox
-                side="right"
-                isSelected={sex === "F"}
-                disable={true}
-                name="sex"
-                value="F"
-                text="( )F"
-                handleOnChange={(e) => {
-                  setSex(e.target.value);
-                }}
-                customClass="title"
-              />
-              <CheckBox
-                side="right"
-                isSelected={sex === "M"}
-                disable={true}
-                name="sex"
-                value="M"
-                text="( )M"
-                handleOnChange={(e) => {
-                  setSex(e.target.value);
-                }}
-              />
-            </div>
-          </div>
-          <div className={styles.flex}>
-            <Input
-              type="text"
-              name="ra"
-              text="RA"
-              value={ra}
-              disable={true}
-              handleOnChange={handleChange}
-            />
-            <Input
-              type="text"
-              name="cpf"
-              text="CPF"
-              value={cpf}
-              disable={true}
-              handleOnChange={handleChange}
-            />
-          </div>
-          <div className={styles.flex}>
-            <Input
-              type="text"
-              name="phone"
-              text="Telefone ( )"
-              value={phone}
-              disable={true}
-              autoComplete="tel"
-              handleOnChange={handleChange}
-            />
-            <Input
-              type="email"
-              name="email"
-              text="Email"
-              value={email}
-              disable={true}
-              autoComplete="email"
-              handleOnChange={handleChange}
-            />
-          </div>
-          <div className={styles.flex}>
-            <Input
-              type="text"
-              name="adress"
-              text="Endereço"
-              value={adress}
-              disable={true}
-              autoComplete="adress"
-              handleOnChange={handleChange}
-            />
-            <Input
-              type="text"
-              name="number"
-              text="Número"
-              value={number}
-              disable={true}
-              handleOnChange={handleChange}
-            />
-          </div>
           <Input
             type="text"
             name="profission"
@@ -437,7 +289,7 @@ useEffect(() => {
               </>
             )}
           </div>
-          {typeVinculo === "Agente" && (
+          {(typeVinculo === "Agente" && isVinculo) && (
             <>
               <Input
                 type="text"

@@ -14,6 +14,13 @@ const Profile = () => {
   const navigate = useNavigate()
   const [localUser, setLocalUser] = useState({})
   const [localPessoa, setLocalPessoa] = useState({})
+  const user = JSON.parse(sessionStorage.getItem('user'))
+
+  useEffect(() => {
+      if(!user.isLogged){
+          navigate('/')
+      }
+  }, [user, navigate])
 
   useEffect(() => {
     const fetchData = async () => {
