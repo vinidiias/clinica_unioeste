@@ -36,6 +36,10 @@
     font-size: .9em;
 }
 
+.form_control input:disabled {
+    cursor: no-drop;
+}
+
 .column {
     flex-direction: column;
     align-items: start;

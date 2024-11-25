@@ -10,6 +10,7 @@ import Contato from './components/pages/Contato';
 import Ficha from './components/pages/Ficha';
 import Profile from './components/pages/Profile'
 import { UserProvider } from './components/context/UserContext'
+import ScreeningQueue from './components/pages/ScreeningQueue';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path='/about' element={<Container customClass='height'><About /></Container>} />
           <Route path='/contact' element={<Container customClass='height'><Contato /></Container>} />
           <Route path='/ficha' element={<Container customClass='auto'><Ficha /></Container>} />
+          <Route path='/screening' element={<Container customClass='height'><ScreeningQueue /></Container>} />
         </Routes>
         <Footer />
         </UserProvider>

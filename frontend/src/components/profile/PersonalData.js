@@ -1,15 +1,16 @@
-import { useContext, useEffect, useState } from 'react';
 import styles from './PersonalData.module.css'
+import api from '../../services/Api';
+import { calcularIdade } from '../util/CalculaIdade'
+import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
-import api from '../../services/Api';
 
 
 const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='', sex='M', nascimento='', CPF='', RA='', mail='', tel=''}) => {
     const [edit, setEdit] = useState(true)
     const [img, setImg] = useState(imgProfile)
     const [name, setName] = useState(nome)
-    const [age, setAge] = useState(idade)
+    const [password, setPassword] = useState('')
     const [sexo, setSexo] = useState(sex)
     const [birth, setBirth] = useState(nascimento)
     const [cpf, setCpf] = useState(CPF)
@@ -18,8 +19,10 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
     const [phone, setPhone] = useState(tel)
     const [adress, setAdress] = useState('')
     const [number, setNumber] = useState('')
-    const {userData, setUserData, setPessoa, pessoa} = useContext(UserContext)
+    const {userData, setUserData, setPessoa} = useContext(UserContext)
     const navigate = useNavigate()
+
+    //console.log(userData)
 
     useEffect(() => {
       if(customClass === 'column') setEdit(false)
@@ -48,7 +51,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
         setEdit(!edit)
     }
 
-    function validateInputs(data) {
+    function validate_PersonalData(data) {
       if(data.adressComplet){
         if((!data.adressComplet.adress || data.adressComplet.adress === '') || 
             !data.adressComplet.number || data.adressComplet.number === '') {
@@ -61,16 +64,20 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
       return 1
     }
 
-    async function submitHandle() {
+    function validate_UserData(data) {
+      if((!data.name || data.name === '') ||
+         (!data.email || data.email === ''))
+          return 0
+      return 1
+    }
+
+    async function submitHandle() {      
       const personal_data = {
         img,
-        name,
-        age,
         sexo,
         birth,
         cpf,
         ra,
-        email,
         phone,
         adressComplet : {
           adress,
@@ -78,51 +85,21 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
         }
       }
 
-      if (validateInputs(personal_data)) {
+      if (validate_PersonalData(personal_data)) {
         try {
-          console.log(userData.user_id)
           const personCreated = await api.post(
             `/${userData.user_id}/pessoa`,
+            personal_data,
             {
-              img,
-              name,
-              age,
-              sexo,
-              birth,
-              cpf,
-              ra,
-              email,
-              phone,
-              adressComplet : {
-                adress,
-                number
-              }
-            },
-            {
-              headers: { 'auth': `${userData.user_id}` },
+              headers: { auth: `${userData.user_id}` },
             }
-          )
- 
-          const newPessoa = personCreated.data
+          ) 
+          const newPessoa = personCreated.data.pessoa
+          console.log(newPessoa)
 
-          setUserData(prevStat => ({
-            ...prevStat,
-            isFirst: false,
-          }))
-
-          setPessoa(prevStat => ({
-            ...prevStat,
-            img: newPessoa.img,
-            name: newPessoa.name,
-            age: newPessoa.age,
-            sexo: newPessoa.sexo,
-            birth: newPessoa.birth,
-            cpf: newPessoa.cpf,
-            ra: newPessoa.ra,
-            email: newPessoa.email,
-            phone: newPessoa.phone,
-            adressComplet: newPessoa.adressComplet
-          }))
+          let user = JSON.parse(sessionStorage.getItem('user'))
+          user.isFirst = false
+          sessionStorage.setItem('user', JSON.stringify(user))
 
           onClose()
           navigate("/home")
@@ -132,55 +109,61 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
       } else alert("Campos vázios! Preencha todas as informações");
     }
 
-    async function editHandle(){
+    async function editHandle(){      
+      const user = {
+        name,
+        email,
+        password
+      }
+
       const personal_data = {
         img,
-        name,
-        age,
         sexo,
         birth,
         cpf,
         ra,
-        email,
         phone
       }
 
-      if(validateInputs(personal_data)){
+      if(validate_PersonalData(personal_data) && validate_UserData(user)){
         try{
-          const pessoaUpdated = await api.patch(`/pessoa/${userData.user_id}`, {
-            img,
-            name,
-            age,
-            sexo,
-            birth,
-            cpf,
-            ra,
-            email,
-            phone
-          }, {headers: {'auth': `${userData.user_id}`}})
+          const pessoaUpdated = await api.patch(
+            `/pessoa/${userData.user_id}`,
+            personal_data,
+            { headers: { auth: `${userData.user_id}` } }
+          )
           
           if (!pessoaUpdated.data.pessoa) {
             console.error('Dados da pessoa não foram retornados:', pessoaUpdated);
-            return;
+            return
           }
 
-          const data = pessoaUpdated.data.pessoa
-          setPessoa(prevStat => ({
-            ...prevStat,
-            img: data.img,
-            name: data.name,
-            age: data.age,
-            sexo: data.sexo,
-            birth: data.birth,
-            cpf: data.cpf,
-            ra: data.ra,
-            email: data.email,
-            phone: data.phone
-          }))
-          console.log(pessoa)
-          editToggle()
+          try {
+            const userUpdated = await api.patch(
+              `/user/${userData.user_id}`,
+              user,
+              { headers: { auth: `${userData.user_id}` } }
+            )
+
+            if(userUpdated) {
+              let user = JSON.parse(sessionStorage.getItem('user'))
+
+              if(user) {
+                user.name = userUpdated.data.user.name
+                user.email = userUpdated.data.user.email
+                sessionStorage.setItem("user", JSON.stringify(user));
+              } else {
+                console.error("Nenhum usuario encontrado");
+              }
+            }
+
+          } catch (err) {
+            console.log(err);
+          }
         }catch(err){
           console.log(err)
+        }finally {
+          editToggle()
         }
       } else alert('Campos vázio(s)!')
 
@@ -193,7 +176,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
         </div>
         <div className={styles.infos + " " + styles[customClass]}>
           <div className={styles.divImg}>
-            <label htmlFor="file-img">Foto</label>
+            <label htmlFor="name">Foto</label>
             {customClass === "column" ? (
               <div
                 style={{
@@ -203,7 +186,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
                 }}
               >
                 {img ? (
-                  <img className={styles.imgEdit} src={img} alt="foto perfil" />
+                  <img id="file-img" className={styles.imgEdit} src={img} alt="foto perfil" />
                 ) : (
                   <label htmlFor="file-img">
                     <input
@@ -242,9 +225,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
                   justifyContent: "center",
                 }}
               >
-                <label 
-                className={styles.editButtonImg}
-                htmlFor="file-img">
+                <label className={styles.editButtonImg} htmlFor="file-img">
                   <input
                     id="file-img"
                     name="file-img"
@@ -257,36 +238,39 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
                   />
                   <span>Editar</span>
                 </label>
-                <img className={styles.img} src={img} alt="foto perfil" />
+                <img id='file-img' className={styles.img} src={img} alt="foto perfil" />
               </div>
             ) : (
               <img className={styles.imgEdit} src={img} alt="foto perfil" />
             )}
           </div>
           <div className={styles.item}>
-            <div className={styles.input}>
-              <label htmlFor="name">Nome</label>
-              <input
-                onChange={(e) => setName(e.target.value)}
-                value={name}
-                disabled={edit}
-                type="text"
-                name="name"
-                id="name"
-                autoComplete="additional-name"
-              />
-            </div>
-            <div className={styles.input}>
-              <label htmlFor="age">Idade</label>
-              <input
-                onChange={(e) => setAge(e.target.value)}
-                value={age}
-                disabled={edit}
-                type="text"
-                name="age"
-                id="age"
-              />
-            </div>
+            {customClass !== "column" && (
+              <div className={styles.input}>
+                <label htmlFor="name">Nome</label>
+                <input
+                  onChange={(e) => setName(e.target.value)}
+                  value={name}
+                  disabled={edit}
+                  type="text"
+                  name="name"
+                  id="name"
+                  autoComplete="additional-name"
+                />
+              </div>
+            )}
+            {customClass !== "column" && (
+              <div className={styles.input}>
+                <label htmlFor="age">Idade</label>
+                <input
+                  value={idade}
+                  disabled={edit}
+                  type="text"
+                  name="age"
+                  id="age"
+                />
+              </div>
+            )}
             <div className={styles.input}>
               <label htmlFor="sexuality">Sexo</label>
               <select
@@ -349,18 +333,33 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
                 autoComplete="home tel"
               />
             </div>
-            <div className={styles.input}>
-              <label htmlFor="email">Email</label>
-              <input
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
-                disabled={edit}
-                type="email"
-                name="email"
-                id="email"
-                autoComplete="home email"
-              />
-            </div>
+            {customClass !== "column" && (
+              <div className={styles.input}>
+                <label htmlFor="email">Email</label>
+                <input
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                  disabled={edit}
+                  type="email"
+                  name="email"
+                  id="email"
+                  autoComplete="home email"
+                />
+              </div>
+            )}
+            {customClass !== "column" && (
+              <div className={styles.input}>
+                <label htmlFor="password">Alterar senha</label>
+                <input
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={edit}
+                  type="password"
+                  name="password"
+                  id="password"
+                  autoComplete="new-password"
+                />
+              </div>
+            )}
             {customClass === "column" && (
               <div className={styles.item}>
                 <div className={styles.input}>

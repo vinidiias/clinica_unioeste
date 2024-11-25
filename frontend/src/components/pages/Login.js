@@ -2,7 +2,7 @@ import styles from './Login.module.css'
 import PersonalDataScreenOverlay from '../profile/PersonalDataScreenOverlay'
 
 import { useNavigate } from 'react-router-dom'
-import { useContext, useEffect, useState, useSyncExternalStore } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { UserContext } from '../context/UserContext'
 import Loading from '../layout/Loading'
@@ -10,14 +10,16 @@ import RegisterForm from '../login/RegisterForm'
 import LoginForm from '../login/LoginForm'
 import api from '../../services/Api'
 
-
-
 const Login = () => {
-  const {userData, setUserData} = useContext(UserContext)
+  const { setUserData } = useContext(UserContext)
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [showLogin, setShowLogin] = useState(false)
   const [isOverlayVisible, setOverlayVisible] = useState(false)
+
+  useEffect(() => {
+    setUserData({})
+  },[setUserData])
 
   const toggleOverlay = () => {
     setOverlayVisible(!isOverlayVisible)
@@ -39,6 +41,7 @@ const Login = () => {
       if(!userCreated) return alert('Erro ao criar conta. Tente novamente...')
 
       const user = userCreated.data
+      console.log(`dados do usuario: ${user}`)
 
       //depois de validado então envia informações para o Context (session da aplicação)
       setUserData(prevStat => ({
@@ -63,26 +66,28 @@ const Login = () => {
         password
       })
         const data = userCreated.data
-          
-        setUserData(prevStat => ({
-          ...prevStat,
+        
+        const user = {
           isLogged: true,
+          isFirst: data.firstLogin,
           email: data.email,
           name: data.user,
           user_id: data.user_id,
-        }))
+        }
+        
+        setUserData(user)
+        sessionStorage.setItem('user', JSON.stringify(user))
 
-        console.log(userData)
-        if(data.firstLogin) {
-          setOverlayVisible(true)
+        if (data.firstLogin) {
+          setOverlayVisible(true);
+        } else {
+          navigate("/home");
         }
-        else {
-          navigate('/home')
-        }
-        setLoading(false)
       } 
     catch(err) {
       console.log(err)
+    } finally {
+      setLoading(false)
     }
   }
 

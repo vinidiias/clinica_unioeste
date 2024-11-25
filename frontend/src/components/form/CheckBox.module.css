@@ -21,6 +21,10 @@
     color: #000;
 }
 
+.form_control input:disabled {
+    cursor: no-drop;
+}
+
 .column {
     flex-direction: column;
     align-items: start;
