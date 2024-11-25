@@ -1,0 +1,61 @@
+.screening {
+    padding: 1em;
+    width: 100%;
+    background-color: #dcdcdc;
+}
+
+.queue_container {
+    border: 1px solid rgb(173, 173, 173);
+    border-radius: 5px;
+    background-color: white;
+    height: 100%;
+}
+
+.btns {
+    margin-bottom: 1em;
+}
+
+.btns button {
+    padding: .2em;
+}
+
+.header {
+    padding: .8em;
+    display: grid;
+    grid-template-columns: 1fr repeat(6, 3fr);
+    border-bottom: 1px solid rgb(189, 189, 189);
+}
+
+.header h3 {
+    font-size: .8em;
+}
+
+.patients {
+    cursor: pointer;
+    padding: .8em;
+    display: grid;
+    align-items: center;
+    grid-template-columns: 1fr repeat(6, 3fr);
+    border-bottom: 1px solid rgb(189, 189, 189);
+    transition: .5s;
+}
+
+.patients h3 {
+    font-weight: 400;
+    font-size: .8em;
+}
+
+.patients img {
+    object-fit: cover;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.over {
+    background-color: rgb(243, 243, 243)
+}
+
+.selected {
+    background-color: gainsboro;
+}

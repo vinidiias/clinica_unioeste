@@ -1,23 +1,19 @@
 import FichaForm from "../ficha/FichaForm"
-import styles from './Ficha.module.css'
-
-import { UserContext } from "../context/UserContext"
 import { useNavigate } from "react-router-dom"
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useState } from "react"
 
 const Ficha = () => {
-    const {userData} = useContext(UserContext)
+    const user = JSON.parse(sessionStorage.getItem('user'))
     const navigate = useNavigate()
 
     useEffect(() => {
-        if(!userData.isLogged){
+        if(!user.isLogged){
             navigate('/')
         }
-    }, [userData, navigate])
+    }, [user, navigate])
 
-    return (
-        <FichaForm />
-    )
+    return <FichaForm />
+   
 }
 
 export default Ficha
