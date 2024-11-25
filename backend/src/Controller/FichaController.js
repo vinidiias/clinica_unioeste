@@ -1,25 +1,27 @@
 const mongoose = require('mongoose')
 const Ficha = require('../Models/FichaModel')
+const Pessoa = require('../Models/PessoaModel')
 const { FicharioEmpty } = require('../Validations/emptyValidation')
 
 
 module.exports = {
     async create(req, res) {
-        const { profession,
+        const {
+            profission,
             education,
             preferredDay,
             vinculo,
-            externalCommunity,
+            comunidade,
             work,
             psicologa,
-            psiquiatria,
+            psiquiatra,
             observation
         } = req.body;
         
         const { user_id } = req.params
         const { auth } = req.headers
 
-        const flag = FicharioEmpty(profession, education, vinculo, work, psicologa, psiquiatria)
+        const flag = FicharioEmpty(profission, education, vinculo, work, psicologa, psiquiatra)
         if(flag) return res.status(400).send({ message: 'Campo vazio' })
 
         if( user_id !== auth) return res.status(400).send({ message: 'Não autorizado' })
@@ -31,14 +33,14 @@ module.exports = {
 
             // Cria o documento usando o modelo Ficha
             const createFicha = await Ficha.create({
-                profession, 
+                profission, 
                 education, 
                 preferredDay,
                 vinculo,
-                externalCommunity,
+                comunidade,
                 work,
                 psicologa,
-                psiquiatria,
+                psiquiatra,
                 observation,
                 user: user_id,
             })
@@ -57,9 +59,22 @@ module.exports = {
     async indexAll (req, res) {
         try{
             const allFichario = await Ficha.find().populate('user')
-            return res.status(200).send(allFichario)
+
+            const result = await Promise.all (
+                allFichario.map(async (ficha) => {
+                    console.log(ficha.user)
+                    const pessoa = await Pessoa.findOne({ user:ficha.user._id })
+                    return {
+                        ficha,
+                        pessoa
+                    }
+                })
+            )
+
+            res.status(200).send(result)
         }
         catch(err){
+            console.log(err)
             return res.status(400).send(err)
         }
     }, 

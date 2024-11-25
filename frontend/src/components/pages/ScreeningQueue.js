@@ -1,14 +1,35 @@
 import styles from './ScreeningQueue.module.css'
 import eu from '../../img/eu.jpeg'
+import api from '../../services/Api'
+import Loading from '../layout/Loading'
 import { FaRegSquare } from "react-icons/fa6";
 import { FaCheckSquare } from "react-icons/fa";
 import { FaCaretSquareDown } from "react-icons/fa";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const ScreeningQueue = () => {
     const [isSelected, setIsSelected] = useState(false)
     const [over, setOver] = useState(false)
+    const [fichas, setFichas] = useState([])
     
+    useEffect(() => {
+      const allFichas = async () => {
+        try{
+          const allfichas = await api.get('/ficharios')
+
+          if(Array.isArray(fichas)) {
+            console.log(allfichas.data)
+            setFichas(allfichas.data)
+          }
+         
+        } catch(err) {
+          console.log(err)
+        }
+      }
+
+      allFichas()
+    }, [fichas.length])
+
     function handleClick(index) {
         return isSelected === index ? setIsSelected(!isSelected) : setIsSelected(index)
     }
@@ -16,7 +37,9 @@ const ScreeningQueue = () => {
     return (
       <div className={styles.screening}>
         <div className={styles.queue_container}>
-          <div className={styles.header}>
+          {fichas.length === 0 ? <Loading /> : (
+            <>
+            <div className={styles.header}>
             <h3>ID</h3>
             <FaCaretSquareDown />
             <h3>Foto</h3>
@@ -25,12 +48,10 @@ const ScreeningQueue = () => {
             <h3>Indicado</h3>
             <h3>Data</h3>
           </div>
-          {Array(10)
-            .fill(null)
-            .map((_, index) => (
+          {fichas.map((ficha, index) => (
               <div
                 className={`${styles.patients} ${styles[isSelected === index ? "selected" : " "]} ${styles[over === index ? "over" : " "]}`}
-                key={index}
+                key={ficha._id}
                 tabIndex={0}
                 onClick={() => handleClick(index)}
                 onMouseOver={() => setOver(index)}
@@ -38,13 +59,15 @@ const ScreeningQueue = () => {
               >
                 <h3>{index}</h3>
                 {isSelected === index ?  <FaCheckSquare /> : <FaRegSquare />}
-                <img src={eu} alt="" />
-                <h3>Vinícius de Oliveira Dias</h3>
-                <h3>Acadêmico</h3>
+                {ficha.pessoa.img ? <img src={ficha.pessoa.img} alt="" /> : <h3>Sem foto</h3>}
+                <h3>{ficha.ficha.user.name}</h3>
+                <h3>{ficha.pessoa.vinculo}</h3>
                 <h3>Não</h3>
                 <h3>23/11/2024</h3>
               </div>
             ))}
+            </>
+          )}
         </div>
       </div>
     );
