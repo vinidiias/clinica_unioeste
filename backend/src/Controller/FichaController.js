@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 const Ficha = require('../Models/FichaModel')
-const { FicharioEmpty } = require('../Validations/emptyValidation');
-const ficha = require('../Models/FichaModel');
-const Pesosa = require('../Models/PessoaModel')
+const Pessoa = require('../Models/PessoaModel')
+const { FicharioEmpty } = require('../Validations/emptyValidation')
+
 
 
 module.exports = {

@@ -121,12 +121,12 @@ module.exports ={
 
     async updatePessoa (req, res){
         const {cpf, birth, phone, ...dadosAtualizado} = req.body
-        const { pessoa_id } = req.params 
+        const { user_id } = req.params 
         const { auth } = req.headers
 
-        if(pessoa_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
+        if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
 
-        const PessoaAtual = await Pessoa.findById(pessoa_id)
+        const PessoaAtual = await Pessoa.findById(user_id)
         if(!PessoaAtual) return res.status(400).send({ message: 'Usuario nao encontrado' })
 
         try{
