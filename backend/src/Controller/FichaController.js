@@ -2,11 +2,13 @@ const mongoose = require('mongoose')
 const Ficha = require('../Models/FichaModel')
 const { FicharioEmpty } = require('../Validations/emptyValidation');
 const ficha = require('../Models/FichaModel');
+const Pesosa = require('../Models/PessoaModel')
 
 
 module.exports = {
     async create(req, res) {
-        const {  profission,
+        const {  
+            profission,
             education,
             preferredDay,
             vinculo,
@@ -20,7 +22,7 @@ module.exports = {
         const { user_id } = req.params
         const { auth } = req.headers
 
-        const flag = FicharioEmpty(profession, education, vinculo, work, psicologa, psiquiatria)
+        const flag = FicharioEmpty(profission, education, vinculo, work, psicologa, psiquiatra)
         if(flag) return res.status(400).send({ message: 'Campo vazio' })
 
         if( user_id !== auth) return res.status(400).send({ message: 'Não autorizado' })

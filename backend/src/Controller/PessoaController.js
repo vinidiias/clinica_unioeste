@@ -24,8 +24,6 @@ module.exports ={
         if(existPessoa) return res.status(400).send({ message: 'Pessoa já está cadastrada'})
     
         try{
-            //if(userExists.name !== name || userExists.email !== email) return res.status(400).send({ message: 'Nome ou email não correspondem ao cadastrado'})
-
             const cpfIsValid = await isValidCPF(cpf)
             if(!cpfIsValid) return res.status(400).send({ message: 'CPF inválid' })
 
