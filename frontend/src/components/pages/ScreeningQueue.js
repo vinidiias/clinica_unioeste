@@ -28,7 +28,7 @@ const ScreeningQueue = () => {
       }
 
       allFichas()
-    }, [fichas.length])
+    }, [fichas.length, fichas])
 
     function handleClick(index) {
         return isSelected === index ? setIsSelected(!isSelected) : setIsSelected(index)
