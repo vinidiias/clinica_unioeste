@@ -2,8 +2,9 @@ const { default: mongoose } = require('mongoose')
 const Pessoa = require('../Models/PessoaModel')
 const User = require('../Models/UserModel')
 const { isValidCPF } = require('../Validations/cpfValidation')
-const { calcularIdade } = require('../Validations/dataValidation')
+const { calcularIdade, verifyDate, isValidDate } = require('../Validations/dataValidation')
 const { PessoaEmpty } = require('../Validations/emptyValidation')
+const { isValidPhoneNumber } = require('../Validations/phoneValidation')
 
 module.exports ={
     async create (req,res) {
@@ -23,12 +24,17 @@ module.exports ={
         if(existPessoa) return res.status(400).send({ message: 'Pessoa já está cadastrada'})
     
         try{
-            if(userExists.name !== name || userExists.email !== email) return res.status(400).send({ message: 'Nome ou email não correspondem ao cadastrado'})
+            //if(userExists.name !== name || userExists.email !== email) return res.status(400).send({ message: 'Nome ou email não correspondem ao cadastrado'})
 
             const cpfIsValid = await isValidCPF(cpf)
             if(!cpfIsValid) return res.status(400).send({ message: 'CPF inválid' })
 
-            const age = calcularIdade(birth) 
+            const dataValida = await verifyDate(birth)
+            if(!dataValida) return res.status(400).send({ message: 'Data invalida'})
+
+            const phoneValid = await isValidPhoneNumber(phone)
+            if(!phoneValid) return res.status(400).send({ message: 'Telefone invalido'})
+
 
             const createPessoa = await Pessoa.create({
                 img,
@@ -116,32 +122,48 @@ module.exports ={
     }, 
 
     async updatePessoa (req, res){
-        const dadosAtualizados = req.body
-        const { user_id } = req.params 
+        const {cpf, birth, phone, ...dadosAtualizado} = req.body
+        const { pessoa_id } = req.params 
         const { auth } = req.headers
 
-        if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
+        if(pessoa_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
+
+        const PessoaAtual = await Pessoa.findById(pessoa_id)
+        if(!PessoaAtual) return res.status(400).send({ message: 'Usuario nao encontrado' })
 
         try{
+            if(cpf){
+                const cpfIsValid = await isValidCPF(cpf)
+                if(!cpfIsValid) return res.status(400).send({ message: 'CPF inválid' })
+                PessoaAtual.cpf = cpf
+            }
             
-            if(dadosAtualizados.birth){
-                dadosAtualizados.age = calcularIdade(dadosAtualizados.birth)
+            if(birth){
+                const dataValida = await verifyDate(birth)
+                if(!dataValida) return res.status(400).send({ message: 'Data invalida'})
+                PessoaAtual.birth = birth
             }
 
-            const pessoaAtualizada = await Pessoa.findOneAndUpdate(
-                {user: user_id}, 
-                
-                { $set: dadosAtualizados },
-                { new: true }
-            )
-
-            if(!pessoaAtualizada){
-                return res.status(400).send({ message: "Pessoa não encontrada"})
+            if(phone){
+                const phoneValid = await isValidPhoneNumber(phone)
+                if(!phoneValid) return res.status(400).send({ message: 'Telefone invalido'})
+                PessoaAtual.phone = phone
             }
-            res.status(200).send({ 
-                message: "Dados atualizados com sucesso", 
-                pessoa: pessoaAtualizada })
-        }
+
+            // Atualiza apenas os campos enviados no body
+            Object.keys(dadosAtualizado).forEach((key) =>{
+                if(dadosAtualizado[key] !== undefined && dadosAtualizado[key] !== '') {
+                    PessoaAtual[key] = dadosAtualizado[key]
+                }
+            })
+
+            const PessoaAtualizado = await PessoaAtual.save()
+
+            return res.status(200).send({ 
+                message: 'Dados da pesosa atualizado com sucesso',
+                pessoa: PessoaAtualizado
+            })
+        } 
         catch(err){
             return res.status(400).send(err)
         }

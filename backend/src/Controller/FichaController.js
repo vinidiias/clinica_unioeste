@@ -1,18 +1,19 @@
 const mongoose = require('mongoose')
 const Ficha = require('../Models/FichaModel')
-const { FicharioEmpty } = require('../Validations/emptyValidation')
+const { FicharioEmpty } = require('../Validations/emptyValidation');
+const ficha = require('../Models/FichaModel');
 
 
 module.exports = {
     async create(req, res) {
-        const { profession,
+        const {  profission,
             education,
             preferredDay,
             vinculo,
-            externalCommunity,
+            comunidade,
             work,
             psicologa,
-            psiquiatria,
+            psiquiatra,
             observation
         } = req.body;
         
@@ -31,21 +32,22 @@ module.exports = {
 
             // Cria o documento usando o modelo Ficha
             const createFicha = await Ficha.create({
-                profession, 
-                education, 
+                profission,
+                education,
                 preferredDay,
                 vinculo,
-                externalCommunity,
+                comunidade,
                 work,
                 psicologa,
-                psiquiatria,
+                psiquiatra,
                 observation,
-                user: user_id,
+                user: user_id
             })
             //console.log(createFicha)
             
             // Popula o campo 'user' com as informações do usuário associado (se houver relação no schema)
-            const fichaComUser = await Ficha.findById(createFicha._id).populate('user')
+            const fichaComUser = await Ficha.findById(createFicha._id).populate('user') //tenta adicionar pessoas tmb sem ser o populate
+
             return res.status(200).send(fichaComUser)//tras outras informacoes sobre o usurario
             
         }
@@ -57,7 +59,18 @@ module.exports = {
     async indexAll (req, res) {
         try{
             const allFichario = await Ficha.find().populate('user')
-            return res.status(200).send(allFichario)
+
+            const result = await Promise.all(
+                allFichario.map(async (ficha) => {
+                    const pessoa = await Pessoa.findOne({ user: ficha.user._id})
+                    return {
+                        ficha,
+                        pessoa
+                    }
+                })
+
+            )
+            return res.status(200).send(result)
         }
         catch(err){
             return res.status(400).send(err)

@@ -16,16 +16,17 @@ async function hashPassword(password) {
 module.exports = {
     async create(req, res) {
         
-        const { email, name, password } = req.body
+        const { email, name, password, role } = req.body
 
-        const flag = UserEmpty(email, name, password)
+        const flag = UserEmpty(email, name, password, role)
         if(flag) return res.status(400).send({ message: 'Campo vazio'})
+
+        //if(!['paciente', 'psicologo'].includes(role)) return res.status(400).send({ message: 'Tipo de usuario invalido'})
 
         try{
             const emailIsValid = await verifyEmail(email)
             if(!emailIsValid) return res.status(400).send({ message: 'Email inválido' })
 
-                
             const userAlreadyExists = await User.findOne({ email })
             if(userAlreadyExists) return res.status(400).send({ message: 'Usuário já existe' })
         
@@ -35,13 +36,14 @@ module.exports = {
                 email,
                 name,
                 password: hashedPassword,
+                role,
                 isFirstLogin: true // Define automaticamente como true na criação
             })
 
             return res.status(200).send(createdUser)
 
         } catch (err) {
-            res.status(400).send(err);
+            res.status(400).send(err)
         }
     },
 
@@ -72,29 +74,34 @@ module.exports = {
         }
     },
 
-    async updateUser (req, res) {
-        const {email, password, ...dadosAtualizado} = req.body
+    async updateUser(req, res) {
+        const { email, password, ...dadosAtualizado } = req.body
         const { user_id } = req.params
         const { auth } = req.headers
+    
+        if (user_id !== auth) return res.status(400).send({ message: 'Não autorizado' })
 
         const userAtual = await User.findById(user_id)
         if(!userAtual) return res.status(400).send({ message: 'Usuario nao encontrado' })
-
-        if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado' })
-
-        try{
-            if(email){
+    
+        try {
+            // Verifica e valida email
+            if (email) {
                 const emailValido = await verifyEmail(email)
-                if(!emailValido) return res.status(400).send({ message: 'Email invalido'} )
-
+                if (!emailValido) return res.status(400).send({ message: 'Email inválido' })
+    
+                const emailExists = await User.findOne({ email, _id: { $ne: user_id } })
+                if (emailExists) return res.status(400).send({ message: 'E-mail já está em uso' })
+    
                 dadosAtualizado.email = email
             }
-
-            if(password){
+    
+            // Verifica e encripta a senha, se for alterada
+            if (password) {
                 const hashedPassword = await hashPassword(password)
                 dadosAtualizado.password = hashedPassword
             }
-
+    
             // Atualiza apenas os campos enviados no body
             Object.keys(dadosAtualizado).forEach((key) =>{
                 if(dadosAtualizado[key] !== undefined && dadosAtualizado[key] !== '') {
@@ -109,8 +116,9 @@ module.exports = {
                 user: userAtualizado
             })
         }
-        catch(err){
-            return res.status(400).send(err)
+        catch (err) {
+            return res.status(400).send(err) // Certifique-se de que só envia uma resposta em caso de erro
         }
     }
+    
 }

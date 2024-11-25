@@ -1,9 +1,12 @@
 const { Router } = require('express')
+const { isPsychologist} = require('../Widdleware/psicologoMiddleware')
 
 const userController = require('../Controller/UserController')
 const SessionController = require('../Controller/SessionController')
 const PessoaController = require('../Controller/PessoaController')
 const FichaController = require('../Controller/FichaController')
+const UserController = require('../Controller/UserController')
+const { isPsicologo } = require('../Widdleware/psicologoMiddleware')
 
 const routes = Router()
 
@@ -17,8 +20,8 @@ routes.delete('/:user_id/user', userController.delete)
 routes.post('/:user_id/pessoa', PessoaController.create)
 routes.get('/pessoas', PessoaController.indexAll)
 routes.get('/:user_id/:pessoa', PessoaController.indexByUser)
-routes.patch('/pessoa/:user_id', PessoaController.updatePessoa)
-routes.delete('/pessoa/delete', PessoaController.deleteAll)
+routes.patch('/pessoa/:pessoa_id', PessoaController.updatePessoa)
+routes.delete('/pessoas/delete', PessoaController.deleteAll)
 routes.delete('/:user_id/pessoa/:pessoa_id', PessoaController.delete)
 
 //Fichas
@@ -30,5 +33,8 @@ routes.delete('/ficharios/delete', FichaController.deleteAll)
 
 //Sessao
 routes.post('/session', SessionController.create)
+
+//Psicologo
+routes.post('/pscicologo', isPsicologo, UserController.create)
 
 module.exports = routes

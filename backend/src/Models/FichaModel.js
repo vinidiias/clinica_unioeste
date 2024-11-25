@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const fichaSchema = new mongoose.Schema({
-    profession: {
+    profission: {
         type: String,
         required: true,
     },
@@ -19,7 +19,7 @@ const fichaSchema = new mongoose.Schema({
             enum: ['Manhã', 'Tarde', 'Noite'],
             required: true,
         },
-        nivel: {
+        type: {
             type: String,
             enum: ['Fundamental I', 'Fundamental II', 'Ensino Médio', 'Ensino Técnico', 'Graduação', 'Pós Graduação'],
             required: true,
@@ -36,8 +36,8 @@ const fichaSchema = new mongoose.Schema({
         enum: ['Docente', 'Agente', 'Acadêmico', 'Estagiário'],
         required: true,
     },
-    externalCommunity: {
-        type: Boolean,
+    comunidade: {
+        type: String,
         default: false,
     },
     work: {
@@ -60,7 +60,7 @@ const fichaSchema = new mongoose.Schema({
             type: String, // Exemplo: "3 anos"
         },
     },
-    psiquiatria: {
+    psiquiatra: {
         type: {
             type: String,
             enum: ['Acompanha', 'Não Acompanha'],
