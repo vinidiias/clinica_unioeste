@@ -1,11 +1,16 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import styles from './FichaForm.module.css'
 import Input from '../form/Input'
 import CheckBox from '../form/CheckBox'
 import Table from '../form/Table'
 import Loading from '../layout/Loading'
+import api from '../../services/Api'
+import { UserContext } from '../context/UserContext'
+import { useNavigate } from 'react-router-dom'
 
 const FichaForm = () => {
+  const { userData } = useContext(UserContext)
+  const navigate = useNavigate()
   const [profission, setProfission] = useState('')
   const [education, setEducation] = useState({
     type:'',
@@ -92,7 +97,7 @@ useEffect(() => {
     else setPsiquiatra({type:typePsiquiatra, time:timePsiquiatra})
   }, [typePsiquiatra, timePsiquiatra])
 
-  function submit(e){
+  async function submit(e){
     e.preventDefault()
     const fichaData = {
       profission,
@@ -106,6 +111,20 @@ useEffect(() => {
       observation
     }
     console.log(fichaData)
+
+    try {
+      const fichaCreated = await api.post(`${userData.user_id}/ficha`, fichaData,
+        {headers: {auth: `${userData.user_id}`}}
+      )
+
+      if(fichaCreated) {
+        console.log(fichaCreated)
+        alert('Ficha criada com sucesso, espere ser atendido.')
+        navigate('/home')
+      }
+    } catch(err) {
+      console.log(err)
+    }
   }
 
   function handleChange(e) {

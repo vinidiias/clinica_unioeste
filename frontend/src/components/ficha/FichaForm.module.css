@@ -3,7 +3,7 @@
     border: 2px solid rgb(180, 180, 180);
     width: 60%;
     padding: 1em;
-    background-color: gainsboro;
+    background-color: #dcdcdc;
 }
 
 @media(max-width: 908px) {

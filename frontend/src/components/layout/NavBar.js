@@ -2,15 +2,11 @@ import styles from './NavBar.module.css'
 import { Link } from 'react-router-dom';
 
 import logoUnioeste from '../../img/logoUnioeste.png'
-import { useEffect, useState } from 'react';
+import { useContext } from 'react';
+import { UserContext } from '../context/UserContext';
 
 const NavBar = () => {
-    const [user, setUser] = useState({})
-
-    useEffect(() => {
-      const user = JSON.parse(sessionStorage.getItem('user'))
-      setUser(user)
-    },[user])
+  const { userData } = useContext(UserContext)
 
     return (
       <nav className={styles.nav}>
@@ -22,9 +18,7 @@ const NavBar = () => {
           />
           <h1>Clínica</h1>
         </Link>
-        {Object.keys(user).length === 0 ? (
-          <></>
-        ) : user.isLogged ? (
+        {userData.isLogged && (
           <ul className={styles.list}>
             <li>
               <Link to="/home">Menu</Link>
@@ -39,8 +33,6 @@ const NavBar = () => {
               <Link to="/">Sair</Link>
             </li>
           </ul>
-        ) : (
-          <></>
         )}
       </nav>
     );

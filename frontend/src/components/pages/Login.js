@@ -10,8 +10,6 @@ import RegisterForm from '../login/RegisterForm'
 import LoginForm from '../login/LoginForm'
 import api from '../../services/Api'
 
-
-
 const Login = () => {
   const { setUserData } = useContext(UserContext)
   const navigate = useNavigate()
@@ -20,8 +18,8 @@ const Login = () => {
   const [isOverlayVisible, setOverlayVisible] = useState(false)
 
   useEffect(() => {
-    sessionStorage.setItem('user', JSON.stringify({}))
-  },[])
+    setUserData({})
+  },[setUserData])
 
   const toggleOverlay = () => {
     setOverlayVisible(!isOverlayVisible)
