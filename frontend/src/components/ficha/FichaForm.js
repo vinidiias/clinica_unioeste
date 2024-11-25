@@ -110,8 +110,7 @@ useEffect(() => {
       psiquiatra,
       observation
     }
-    console.log(fichaData)
-
+    
     try {
       const fichaCreated = await api.post(`${userData.user_id}/ficha`, fichaData,
         {headers: {auth: `${userData.user_id}`}}
