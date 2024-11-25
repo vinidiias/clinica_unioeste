@@ -2,12 +2,14 @@ function isEmpty (value){
     return !value || (typeof value === 'string' && value.trim() === '')
 }
 
-function UserEmpty(email, name, password){
+function UserEmpty(email, name, password, role){
     if(isEmpty(email)) return true
 
     if(isEmpty(name)) return true
 
     if(isEmpty(password)) return true
+
+    if(isEmpty(role)) return true
 
     return false
 }
@@ -78,7 +80,6 @@ function FicharioEmpty(profession, education, vinculo, work, psicologa, psiquiat
 
     // Se todos os campos obrigatórios forem preenchidos, retorna true
     return false
-
 }
 
 module.exports = { UserEmpty, PessoaEmpty, FicharioEmpty }

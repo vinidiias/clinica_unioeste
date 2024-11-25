@@ -4,9 +4,12 @@ const Pessoa = require('../Models/PessoaModel')
 const { FicharioEmpty } = require('../Validations/emptyValidation')
 
 
+
 module.exports = {
     async create(req, res) {
-        const {
+
+        const {  
+
             profission,
             education,
             preferredDay,
@@ -33,8 +36,10 @@ module.exports = {
 
             // Cria o documento usando o modelo Ficha
             const createFicha = await Ficha.create({
-                profission, 
-                education, 
+
+                profission,
+                education,
+
                 preferredDay,
                 vinculo,
                 comunidade,
@@ -42,12 +47,13 @@ module.exports = {
                 psicologa,
                 psiquiatra,
                 observation,
-                user: user_id,
+                user: user_id
             })
             //console.log(createFicha)
             
             // Popula o campo 'user' com as informações do usuário associado (se houver relação no schema)
-            const fichaComUser = await Ficha.findById(createFicha._id).populate('user')
+            const fichaComUser = await Ficha.findById(createFicha._id).populate('user') //tenta adicionar pessoas tmb sem ser o populate
+
             return res.status(200).send(fichaComUser)//tras outras informacoes sobre o usurario
             
         }
@@ -60,18 +66,20 @@ module.exports = {
         try{
             const allFichario = await Ficha.find().populate('user')
 
-            const result = await Promise.all (
+            const result = await Promise.all(
                 allFichario.map(async (ficha) => {
-                    console.log(ficha.user)
-                    const pessoa = await Pessoa.findOne({ user:ficha.user._id })
+                    const pessoa = await Pessoa.findOne({ user: ficha.user._id})
+
                     return {
                         ficha,
                         pessoa
                     }
                 })
-            )
 
-            res.status(200).send(result)
+
+            )
+            return res.status(200).send(result)
+
         }
         catch(err){
             console.log(err)

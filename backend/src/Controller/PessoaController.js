@@ -2,8 +2,9 @@ const { mongoose } = require('mongoose')
 const Pessoa = require('../Models/PessoaModel')
 const User = require('../Models/UserModel')
 const { isValidCPF } = require('../Validations/cpfValidation')
-const { calcularIdade } = require('../Validations/dataValidation')
+const { calcularIdade, verifyDate, isValidDate } = require('../Validations/dataValidation')
 const { PessoaEmpty } = require('../Validations/emptyValidation')
+const { isValidPhoneNumber } = require('../Validations/phoneValidation')
 
 module.exports ={
     async create (req,res) {
@@ -23,12 +24,15 @@ module.exports ={
         if(existPessoa) return res.status(400).send({ message: 'Pessoa já está cadastrada'})
     
         try{
-            if(userExists.name !== name || userExists.email !== email) return res.status(400).send({ message: 'Nome ou email não correspondem ao cadastrado'})
-
             const cpfIsValid = await isValidCPF(cpf)
             if(!cpfIsValid) return res.status(400).send({ message: 'CPF inválid' })
 
-            const age = calcularIdade(birth) 
+            const dataValida = await verifyDate(birth)
+            if(!dataValida) return res.status(400).send({ message: 'Data invalida'})
+
+            const phoneValid = await isValidPhoneNumber(phone)
+            if(!phoneValid) return res.status(400).send({ message: 'Telefone invalido'})
+
 
             const createPessoa = await Pessoa.create({
                 img,
@@ -120,36 +124,50 @@ module.exports ={
     }, 
 
     async updatePessoa (req, res){
-        const dadosAtualizados = req.body
+        const {cpf, birth, phone, ...dadosAtualizado} = req.body
         const { user_id } = req.params 
         const { auth } = req.headers
 
         if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
 
+        const PessoaAtual = await Pessoa.findById(user_id)
+        if(!PessoaAtual) return res.status(400).send({ message: 'Usuario nao encontrado' })
+
         try{
+            if(cpf){
+                const cpfIsValid = await isValidCPF(cpf)
+                if(!cpfIsValid) return res.status(400).send({ message: 'CPF inválid' })
+                PessoaAtual.cpf = cpf
+            }
             
-            if(dadosAtualizados.birth){
-                dadosAtualizados.age = calcularIdade(dadosAtualizados.birth)
+            if(birth){
+                const dataValida = await verifyDate(birth)
+                if(!dataValida) return res.status(400).send({ message: 'Data invalida'})
+                PessoaAtual.birth = birth
             }
 
-            if(dadosAtualizados.birth) {
-                dadosAtualizados.age = calcularIdade(dadosAtualizados.birth) // calcula a idade da pessoa pela dada de nascimento
+
+            if(phone){
+                const phoneValid = await isValidPhoneNumber(phone)
+                if(!phoneValid) return res.status(400).send({ message: 'Telefone invalido'})
+                PessoaAtual.phone = phone
+
             }
 
-            const pessoaAtualizada = await Pessoa.findOneAndUpdate(
-                {user: user_id}, 
-                
-                { $set: dadosAtualizados },
-                { new: true }
-            )
+            // Atualiza apenas os campos enviados no body
+            Object.keys(dadosAtualizado).forEach((key) =>{
+                if(dadosAtualizado[key] !== undefined && dadosAtualizado[key] !== '') {
+                    PessoaAtual[key] = dadosAtualizado[key]
+                }
+            })
 
-            if(!pessoaAtualizada){
-                return res.status(400).send({ message: "Pessoa não encontrada"})
-            }
-            res.status(200).send({ 
-                message: "Dados atualizados com sucesso", 
-                pessoa: pessoaAtualizada })
-        }
+            const PessoaAtualizado = await PessoaAtual.save()
+
+            return res.status(200).send({ 
+                message: 'Dados da pesosa atualizado com sucesso',
+                pessoa: PessoaAtualizado
+            })
+        } 
         catch(err){
             return res.status(400).send(err)
         }
