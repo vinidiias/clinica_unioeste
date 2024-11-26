@@ -86,14 +86,14 @@ useEffect(() => {
   //psicologa object
   useEffect(() => {
     if(typePsicologa !== 'Acompanha')
-      setPsicologa(typePsicologa)
+      setPsicologa({type: typePsicologa})
     else setPsicologa({type:typePsicologa, time:timePsicologa})
   }, [typePsicologa, timePsicologa])
 
   //psiquiatra object
   useEffect(() => {
     if(typePsiquiatra !== 'Acompanha')
-      setPsiquiatra(typePsiquiatra)
+      setPsiquiatra({type: typePsiquiatra})
     else setPsiquiatra({type:typePsiquiatra, time:timePsiquiatra})
   }, [typePsiquiatra, timePsiquiatra])
 
@@ -370,9 +370,9 @@ useEffect(() => {
             </label>
             <div className={styles.acompanhamento}>
               <CheckBox
-                isSelected={typePsicologa === "Não acompanha"}
+                isSelected={typePsicologa === "Não Acompanha"}
                 side="right"
-                value="Não acompanha"
+                value="Não Acompanha"
                 name="psycho"
                 text="( ) Não"
                 handleOnChange={(e) => setTypePsicologa(e.target.value)}
@@ -404,9 +404,9 @@ useEffect(() => {
             </label>
             <div className={styles.acompanhamento}>
               <CheckBox
-                isSelected={typePsiquiatra === "Não acompanha"}
+                isSelected={typePsiquiatra === "Não Acompanha"}
                 side="right"
-                value="Não acompanha"
+                value="Não Acompanha"
                 name="psychiatric"
                 text="( ) Não"
                 handleOnChange={(e) => setTypePsiquiatra(e.target.value)}
