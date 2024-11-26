@@ -12,6 +12,7 @@ import Contato from './components/pages/Contato';
 import Ficha from './components/pages/Ficha';
 import Profile from './components/pages/Profile'
 import ScreeningQueue from './components/pages/ScreeningQueue';
+import InvitePsychologist from './components/pages/InvitePsychologist';
 
 function App() {
   return (
@@ -25,6 +26,14 @@ function App() {
               element={
                 <Container customClass="align">
                   <Login />
+                </Container>
+              }
+            />
+            <Route
+              path="/invite/psychologist"
+              element={
+                <Container customClass="align">
+                  <InvitePsychologist />
                 </Container>
               }
             />

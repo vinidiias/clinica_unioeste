@@ -70,3 +70,7 @@
 .padding_login input {
     padding: .1em 0;
 }
+
+.align {
+    align-items: center;
+}
