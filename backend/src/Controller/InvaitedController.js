@@ -4,14 +4,17 @@ const bcrypt = require('bcrypt')
 const User = require('../Models/UserModel')
 const { v4: uuidv4 } = require('uuid');
 const { UserEmpty } = require('../Validations/emptyValidation');
-const { verifyEmail } = require('../Validations/emailValidation');
+const { emailUnioeste} = require('../Validations/emailValidation')
 
 module.exports = {
     async invited (req, res) {
         const { email } = req.body
 
+        const existingInvite = await Convite.findOne({ email })
+        if(existingInvite) return res.status(400).send({ message: 'Este email ja recebeu um convite'})
+
         try {
-            const isEmailValied = await verifyEmail(email)
+            const isEmailValied = await emailUnioeste(email)
             if(!isEmailValied) return res.status(400).send({ message: 'Email invalido'})
 
             const uniqueId = uuidv4()
@@ -33,7 +36,7 @@ module.exports = {
         const { email, id } = req.body
 
         try{
-            const isEmailValied = await verifyEmail(email)
+            const isEmailValied = await emailUnioeste(email)
             if(!isEmailValied) return res.status(400).send({ message: 'Email invalido'})
 
             const invite = await Convite.findOne({email, uniqueId: id})
@@ -51,11 +54,14 @@ module.exports = {
     async register (req, res)  {
         const { email, name, password, id } = req.body
 
-        const isEmpty = UserEmpty(email, name, password, "0")
+        const existingUser = await User.findOne({ email })
+        if(existingUser) return res.status(400).send({ message: 'Usuario ja existe'})
+
+        const isEmpty = UserEmpty(email, name, password, "psicologo")
         if(!isEmpty) return res.status(400).send({ message: 'Campo vazio'})
 
         try{
-            const isEmailValied = await verifyEmail(email)
+            const isEmailValied = await emailUnioeste(email)
             if(!isEmailValied) return res.status(400).send({ message: 'Email invalido'})
 
             const invite = await Convite.findOne({ email, uniqueId: id})
