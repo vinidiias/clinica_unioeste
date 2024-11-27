@@ -1,17 +1,18 @@
 const { Router } = require('express')
-const { isPsychologist} = require('../Widdleware/psicologoMiddleware')
 
 const userController = require('../Controller/UserController')
 const SessionController = require('../Controller/SessionController')
 const PessoaController = require('../Controller/PessoaController')
 const FichaController = require('../Controller/FichaController')
-const UserController = require('../Controller/UserController')
-const { isPsicologo } = require('../Widdleware/psicologoMiddleware')
+const InvaitedController = require('../Controller/InvaitedController')
 
 const routes = Router()
 
 //Usuarios
-routes.post('/user', userController.create)
+routes.post('/user', (req, res, next) => {
+    req.body.role = 'paciente'
+    next()
+}, userController.create)
 routes.get('/user', userController.index)
 routes.patch('/user/:user_id', userController.updateUser)
 routes.delete('/:user_id/user', userController.delete)
@@ -35,6 +36,8 @@ routes.delete('/ficharios/delete', FichaController.deleteAll)
 routes.post('/session', SessionController.create)
 
 //Psicologo
-routes.post('/pscicologo', isPsicologo, UserController.create)
+routes.post('/convite', InvaitedController.invited)
+routes.post('/validate', InvaitedController.validated)
+routes.post('/register', InvaitedController.register)
 
 module.exports = routes

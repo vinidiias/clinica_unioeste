@@ -103,7 +103,6 @@ module.exports ={
                 user: user_id
             })
 
-
             allPessoaOfUser[0].age = calcularIdade(allPessoaOfUser[0].birth) // calcula a idade da pessoa pela dada de nascimento
 
             return res.status(200).send(allPessoaOfUser)
@@ -111,7 +110,6 @@ module.exports ={
             return res.status(400).send(err);
         }
     },
-
 
     async indexAll (req, res) {
         try{
@@ -145,7 +143,6 @@ module.exports ={
                 if(!dataValida) return res.status(400).send({ message: 'Data invalida'})
                 PessoaAtual.birth = birth
             }
-
 
             if(phone){
                 const phoneValid = await isValidPhoneNumber(phone)
