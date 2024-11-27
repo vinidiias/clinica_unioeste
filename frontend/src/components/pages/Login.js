@@ -10,7 +10,7 @@ import RegisterForm from '../login/RegisterForm'
 import LoginForm from '../login/LoginForm'
 import api from '../../services/Api'
 
-const Login = () => {
+const Login = ({ registerPsychologist }) => {
   const { setUserData } = useContext(UserContext)
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
@@ -126,6 +126,18 @@ const Login = () => {
               handleSubmit={registerHandler}
               handleClick={toggleChange}
             />
+          </motion.div>
+        ) : registerPsychologist ? (
+          <motion.div
+            key="registerPsychologist"
+            variants={cardVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className={styles.login}
+          >
+            <h1>Entrar</h1>
+            <LoginForm handleSubmit={loginHandler} handleClick={toggleChange} />
           </motion.div>
         ) : (
           <motion.div

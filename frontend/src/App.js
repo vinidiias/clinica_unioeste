@@ -30,14 +30,6 @@ function App() {
               }
             />
             <Route
-              path="/invite/psychologist"
-              element={
-                <Container customClass="align">
-                  <InvitePsychologist />
-                </Container>
-              }
-            />
-            <Route
               path="/home"
               element={
                 <Container customClass="height">
@@ -85,6 +77,24 @@ function App() {
                     <ScreeningQueue />
                   </Container>
                 </RoleBasedComponent>
+              }
+            />
+            <Route
+              path="/invite/psychologist"
+              element={
+                <Container customClass="align">
+                  <InvitePsychologist />
+                </Container>
+              }
+            />
+            <Route
+              path="/register/psychologist"
+              element={
+                <Container customClass="align">
+                  <Login
+                    registerPsychologist={true}
+                   />
+                </Container>
               }
             />
           </Routes>
