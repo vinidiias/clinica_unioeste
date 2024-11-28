@@ -4,11 +4,11 @@ import Submit from '../form/Submit'
 
 import { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../context/UserContext'
-import { json, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import api from '../../services/Api'
 
 const LoginForm = ({ registerPsychologist, handleSubmit, handleRegisterPsy, handleClick }) => {
-  const {userData, setUserData} = useContext(UserContext)
+  const {userData} = useContext(UserContext)
   const [searchParams] = useSearchParams()
   const [message, setMessage] = useState('')
   const [isValid, setIsValid] = useState(false)
@@ -33,11 +33,12 @@ const LoginForm = ({ registerPsychologist, handleSubmit, handleRegisterPsy, hand
       .catch(() => setMessage('Convite inválido'))
     }
     else {
-      console.log('Informações ausente de convite')
+      setIsValid(true)
+      setMessage('Informações ausente de convite')
     }
   }, [searchParams])
 
-  const registerPsychologist = (e) => {
+  const registerPsychologistHandle = (e) => {
     e.preventDefault()
 
     if(password !== confirmPassword) {
@@ -62,7 +63,7 @@ const LoginForm = ({ registerPsychologist, handleSubmit, handleRegisterPsy, hand
   }
 
   return (
-    <form onSubmit={submit}>
+    <form onSubmit={!registerPsychologist ? submit : registerPsychologistHandle}>
       {!registerPsychologist ? (
         <>
           <Input
@@ -133,7 +134,9 @@ const LoginForm = ({ registerPsychologist, handleSubmit, handleRegisterPsy, hand
             </button>
           </>
         ) : isValid ? (
-            <Submit text="Ativar conta" />
+            <Submit 
+            customClass="align"
+            text="Ativar conta" />
         ) : (
           <></>
         )}

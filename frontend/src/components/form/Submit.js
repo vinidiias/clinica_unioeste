@@ -1,8 +1,8 @@
 import styles from './Submit.module.css'
 
-const Submit = ({ text, handleClick }) => {
+const Submit = ({ text, handleClick, customClass }) => {
     return (
-      <div>
+      <div className={styles[customClass]}>
         <button onCanPlayThrough={handleClick} className={styles.btn}>{text}</button>
       </div>
     )

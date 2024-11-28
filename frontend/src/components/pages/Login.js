@@ -136,8 +136,8 @@ const Login = ({ registerPsychologist }) => {
             exit="exit"
             className={styles.login}
           >
-            <h1>Entrar</h1>
-            <LoginForm handleSubmit={loginHandler} handleClick={toggleChange} />
+            <h1>Ativar Conta</h1>
+            <LoginForm registerPsychologist={registerPsychologist} />
           </motion.div>
         ) : (
           <motion.div
