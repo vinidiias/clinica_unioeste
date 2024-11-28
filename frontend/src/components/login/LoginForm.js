@@ -33,7 +33,6 @@ const LoginForm = ({ registerPsychologist, handleSubmit, handleRegisterPsy, hand
       .catch(() => setMessage('Convite inválido'))
     }
     else {
-      setIsValid(true)
       setMessage('Informações ausente de convite')
     }
   }, [searchParams])
@@ -63,7 +62,9 @@ const LoginForm = ({ registerPsychologist, handleSubmit, handleRegisterPsy, hand
   }
 
   return (
-    <form onSubmit={!registerPsychologist ? submit : registerPsychologistHandle}>
+    <form
+      onSubmit={!registerPsychologist ? submit : registerPsychologistHandle}
+    >
       {!registerPsychologist ? (
         <>
           <Input
@@ -94,6 +95,7 @@ const LoginForm = ({ registerPsychologist, handleSubmit, handleRegisterPsy, hand
         </>
       ) : isValid ? (
         <>
+          <h1>Ativar Conta</h1>
           <Input
             type="email"
             name="email-overlay"
@@ -134,9 +136,7 @@ const LoginForm = ({ registerPsychologist, handleSubmit, handleRegisterPsy, hand
             </button>
           </>
         ) : isValid ? (
-            <Submit 
-            customClass="align"
-            text="Ativar conta" />
+          <Submit customClass="align" text="Ativar conta" />
         ) : (
           <></>
         )}

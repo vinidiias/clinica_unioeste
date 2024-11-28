@@ -10,7 +10,7 @@ import { calcularIdade } from '../util/CalculaIdade'
 import { UserContext } from '../context/UserContext'
 
 const Profile = () => {
-  const { setUserData } = useContext(UserContext)
+  const { setUserData, userData } = useContext(UserContext)
   const navigate = useNavigate()
   const [localUser, setLocalUser] = useState({})
   const [localPessoa, setLocalPessoa] = useState({})
@@ -37,7 +37,9 @@ const Profile = () => {
       try{
         const getPessoa = await api.get(`/${user.user_id}/pessoa`, {
           headers: { auth: `${user.user_id}` },
-        });
+        })
+
+        console.log('chegou')
         
         if(!getPessoa) navigate('/')
   

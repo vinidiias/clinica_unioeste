@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
-import Input from '../form/Input'
 import styles from './InvitePsychologist.module.css'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
+import Input from '../form/Input'
 import Submit from '../form/Submit'
+import api from '../../services/Api'
 
 const InvitePsychologist = () => {
     const [email, setEmail] = useState('')
@@ -21,9 +22,23 @@ const InvitePsychologist = () => {
     const handleInvite = async (e) => {
         e.preventDefault()
 
-        console.log(email)
+        if(!email || email === '') return alert('Email inválido')
 
-        alert('Convite enviado com sucesso!')
+        try{
+          console.log(email)
+          const emailSent = await api.post('/convite', {email})
+
+          console.log(emailSent.data)
+
+          if(emailSent) {
+            console.log(emailSent.data)
+            alert('Convite enviado com sucesso!')
+          }
+          console.log(emailSent)
+        }catch(err) {
+          console.log(err)
+        }
+
     }
 
     return (

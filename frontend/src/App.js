@@ -72,7 +72,7 @@ function App() {
             <Route
               path="/screening"
               element={
-                <RoleBasedComponent allowedRoles={["admin", "moderator"]}>
+                <RoleBasedComponent allowedRoles={["admin"]}>
                   <Container customClass="height">
                     <ScreeningQueue />
                   </Container>
@@ -82,18 +82,18 @@ function App() {
             <Route
               path="/invite/psychologist"
               element={
-                <Container customClass="align">
-                  <InvitePsychologist />
-                </Container>
+                <RoleBasedComponent allowedRoles={["admin"]}>
+                  <Container customClass="align">
+                    <InvitePsychologist />
+                  </Container>
+                </RoleBasedComponent>
               }
             />
             <Route
               path="/register/psychologist"
               element={
                 <Container customClass="align">
-                  <Login
-                    registerPsychologist={true}
-                   />
+                  <Login registerPsychologist={true} />
                 </Container>
               }
             />

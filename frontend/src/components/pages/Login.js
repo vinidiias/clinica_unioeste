@@ -35,21 +35,21 @@ const Login = ({ registerPsychologist }) => {
       const userCreated = await api.post('/user', {
         email,
         name,
-        password
+        password,
+        role: 'paciente'
       })
 
       if(!userCreated) return alert('Erro ao criar conta. Tente novamente...')
 
       const user = userCreated.data
-      console.log(`dados do usuario: ${user}`)
+      console.log(`dados do usuario criado: ${user}`)
 
       //depois de validado então envia informações para o Context (session da aplicação)
-      setUserData(prevStat => ({
-        ...prevStat,
+      setUserData({
         email: user.email,
         name: user.name,
         user_id: user._id,
-      }))
+      })
 
       setShowLogin(!showLogin)
       setLoading(false)
@@ -66,17 +66,18 @@ const Login = ({ registerPsychologist }) => {
         password
       })
         const data = userCreated.data
+
+        console.log(data)
         
-        const user = {
-          isLogged: true,
-          isFirst: data.firstLogin,
+        setUserData(prevState => ({
+          ...prevState,
           email: data.email,
           name: data.user,
-          user_id: data.user_id,
-        }
-        
-        setUserData(user)
-        sessionStorage.setItem('user', JSON.stringify(user))
+          role: data.role,
+          isLogged: true,
+          isFirst: true,
+          user_id: data.user_id
+        }))
 
         if (data.firstLogin) {
           setOverlayVisible(true);
@@ -136,7 +137,6 @@ const Login = ({ registerPsychologist }) => {
             exit="exit"
             className={styles.login}
           >
-            <h1>Ativar Conta</h1>
             <LoginForm registerPsychologist={registerPsychologist} />
           </motion.div>
         ) : (
