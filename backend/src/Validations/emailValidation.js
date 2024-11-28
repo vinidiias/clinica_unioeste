@@ -21,4 +21,9 @@ async function verifyEmail (email) {
     }
 }
 
-module.exports = { isValidEmailFormat, verifyEmail }
+function emailUnioeste(email){
+    const regex = /^[a-z].[a-z]\d+@unioeste\.br$/;
+  return regex.test(email);
+}
+
+module.exports = { isValidEmailFormat, verifyEmail, emailUnioeste }

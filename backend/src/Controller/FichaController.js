@@ -9,7 +9,6 @@ module.exports = {
     async create(req, res) {
 
         const {  
-
             profission,
             education,
             preferredDay,
@@ -36,10 +35,8 @@ module.exports = {
 
             // Cria o documento usando o modelo Ficha
             const createFicha = await Ficha.create({
-
                 profission,
                 education,
-
                 preferredDay,
                 vinculo,
                 comunidade,
@@ -75,8 +72,6 @@ module.exports = {
                         pessoa
                     }
                 })
-
-
             )
             return res.status(200).send(result)
 

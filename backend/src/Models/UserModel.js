@@ -16,9 +16,10 @@ const userSchema = new mongoose.Schema({
     }, 
     role: {
         type: String,
-        enum: ['paciente', 'psicologo'],
-        require: true
+        default: "psicologo",
+        required: false
     },
+    
     isFirstLogin: {  // Campo para verificar o primeiro login
         type: Boolean, 
         default: true 

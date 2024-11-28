@@ -21,7 +21,8 @@ module.exports = {
         const flag = UserEmpty(email, name, password, role)
         if(flag) return res.status(400).send({ message: 'Campo vazio'})
 
-        //if(!['paciente', 'psicologo'].includes(role)) return res.status(400).send({ message: 'Tipo de usuario invalido'})
+        const validRole = ['paciente', 'psicologo']
+        if(!validRole.includes(role)) return res.status(400).send({ message: 'Papel invalido'})
 
         try{
             const emailIsValid = await verifyEmail(email)
