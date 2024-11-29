@@ -80,7 +80,7 @@ function App() {
               }
             />
             <Route
-              path="/invite/psychologist"
+              path="admin/invite/psychologist"
               element={
                 <RoleBasedComponent allowedRoles={["admin"]}>
                   <Container customClass="align">

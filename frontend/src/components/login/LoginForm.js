@@ -13,6 +13,7 @@ const LoginForm = ({ registerPsychologist, handleSubmit, handleRegisterPsy, hand
   const [message, setMessage] = useState('')
   const [isValid, setIsValid] = useState(false)
   const [email, setEmail] = useState('')
+  const [name, setName] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
 
@@ -23,19 +24,24 @@ const LoginForm = ({ registerPsychologist, handleSubmit, handleRegisterPsy, hand
   }, [userData.email]);
 
   useEffect(() => {
-    const email = searchParams.get('email')
-    const id = searchParams.get('id')
+    if(registerPsychologist) {
+      const getSearchUrl = async () => {
+        const email = searchParams.get("email");
+        const id = searchParams.get("id");
 
-    if(email && id) {
-      api.post(`/validate-invite`, {email, id})
-      .then((data) => setEmail(email))
-      .then(() => setIsValid(true))
-      .catch(() => setMessage('Convite inválido'))
+        if (email && id) {
+          api
+            .post(`/validate`, { email, id })
+            .then((data) => setEmail(email))
+            .then(() => setIsValid(true))
+            .catch(() => setMessage("Convite inválido"));
+        } else {
+          setMessage("Informações ausente de convite");
+        }
+      }
+      getSearchUrl()
     }
-    else {
-      setMessage('Informações ausente de convite')
-    }
-  }, [searchParams])
+  }, [searchParams, registerPsychologist])
 
   const registerPsychologistHandle = (e) => {
     e.preventDefault()
@@ -47,7 +53,7 @@ const LoginForm = ({ registerPsychologist, handleSubmit, handleRegisterPsy, hand
     const email = searchParams.get('email')
     const id = searchParams.get('id')
 
-    handleRegisterPsy(email, password, id)
+    handleRegisterPsy(email, name, password, id)
   }
 
   const submit = (e) =>{
@@ -95,7 +101,6 @@ const LoginForm = ({ registerPsychologist, handleSubmit, handleRegisterPsy, hand
         </>
       ) : isValid ? (
         <>
-          <h1>Ativar Conta</h1>
           <Input
             type="email"
             name="email-overlay"
@@ -105,6 +110,14 @@ const LoginForm = ({ registerPsychologist, handleSubmit, handleRegisterPsy, hand
             placeholder="Digite seu email"
             customClass="column padding_login"
             handleOnChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            type="name"
+            name="name-overlay"
+            text="Nome"
+            placeholder="Digite seu email"
+            customClass="column padding_login"
+            handleOnChange={(e) => setName(e.target.value)}
           />
           <Input
             type="password"

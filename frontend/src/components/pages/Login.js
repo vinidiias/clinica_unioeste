@@ -15,6 +15,7 @@ const Login = ({ registerPsychologist }) => {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [showLogin, setShowLogin] = useState(false)
+  const [showRegisterPsy, setShowRegisterPsy] = useState(registerPsychologist)
   const [isOverlayVisible, setOverlayVisible] = useState(false)
 
   useEffect(() => {
@@ -74,7 +75,6 @@ const Login = ({ registerPsychologist }) => {
           email: data.email,
           name: data.user,
           role: data.role,
-          isLogged: true,
           isFirst: true,
           user_id: data.user_id
         }))
@@ -82,8 +82,42 @@ const Login = ({ registerPsychologist }) => {
         if (data.firstLogin) {
           setOverlayVisible(true);
         } else {
+          setUserData(prevState => ({
+            isLogged: true,
+          }))
           navigate("/home");
         }
+      } 
+    catch(err) {
+      console.log(err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function registerPsyHandler(email, name, password, id) {
+    try{
+      setLoading(true)
+      const userCreated = await api.post("/register", {
+        email,
+        name,
+        password,
+        id,
+      })
+        const data = userCreated.data.psicologa
+
+        if(!userCreated) return alert('Erro ao criar conta. Tente novamente...')
+
+        console.log(data)
+        
+        setUserData({
+          email: data.email,
+          name: data.user,
+          role: data.role,
+          user_id: data._id
+        })
+
+        setShowRegisterPsy(false)
       } 
     catch(err) {
       console.log(err)
@@ -128,7 +162,7 @@ const Login = ({ registerPsychologist }) => {
               handleClick={toggleChange}
             />
           </motion.div>
-        ) : registerPsychologist ? (
+        ) : showRegisterPsy ? (
           <motion.div
             key="registerPsychologist"
             variants={cardVariants}
@@ -137,7 +171,8 @@ const Login = ({ registerPsychologist }) => {
             exit="exit"
             className={styles.login}
           >
-            <LoginForm registerPsychologist={registerPsychologist} />
+            <h1>Ativar Conta</h1>
+            <LoginForm registerPsychologist={showRegisterPsy} handleRegisterPsy={registerPsyHandler} />
           </motion.div>
         ) : (
           <motion.div
