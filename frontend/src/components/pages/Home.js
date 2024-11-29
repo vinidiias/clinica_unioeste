@@ -3,17 +3,18 @@ import System from '../system/System';
 import { useNavigate } from 'react-router-dom';
 import { FaPlusCircle } from "react-icons/fa";
 import { FaHistory } from "react-icons/fa";
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
+import { UserContext } from '../context/UserContext';
 
 const Home = () => {
-  const user = JSON.parse(sessionStorage.getItem('user'))
+  const { userData } = useContext(UserContext)
   const navigate = useNavigate()
 
   useEffect(() => {
-    if(!user.isLogged) {
-      navigate('/')
+    if (!userData.isLogged) {
+      navigate("/");
     }
-  })
+  });
 
   const navigateficha = () => {
     navigate('/ficha')

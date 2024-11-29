@@ -1,5 +1,4 @@
 import styles from './ScreeningQueue.module.css'
-import eu from '../../img/eu.jpeg'
 import api from '../../services/Api'
 import Loading from '../layout/Loading'
 import { FaRegSquare } from "react-icons/fa6";
@@ -17,7 +16,7 @@ const ScreeningQueue = () => {
         try{
           const allfichas = await api.get('/ficharios')
 
-          if(Array.isArray(fichas)) {
+          if(fichas) {
             console.log(allfichas.data)
             setFichas(allfichas.data)
           }
@@ -28,7 +27,7 @@ const ScreeningQueue = () => {
       }
 
       allFichas()
-    }, [fichas.length, fichas])
+    }, [fichas.length])
 
     function handleClick(index) {
         return isSelected === index ? setIsSelected(!isSelected) : setIsSelected(index)
@@ -51,7 +50,7 @@ const ScreeningQueue = () => {
           {fichas.map((ficha, index) => (
               <div
                 className={`${styles.patients} ${styles[isSelected === index ? "selected" : " "]} ${styles[over === index ? "over" : " "]}`}
-                key={ficha._id}
+                key={index}
                 tabIndex={0}
                 onClick={() => handleClick(index)}
                 onMouseOver={() => setOver(index)}
@@ -61,7 +60,7 @@ const ScreeningQueue = () => {
                 {isSelected === index ?  <FaCheckSquare /> : <FaRegSquare />}
                 {ficha.pessoa.img ? <img src={ficha.pessoa.img} alt="" /> : <h3>Sem foto</h3>}
                 <h3>{ficha.ficha.user.name}</h3>
-                <h3>{ficha.pessoa.vinculo}</h3>
+                <h3>{ficha.ficha.vinculo}</h3>
                 <h3>Não</h3>
                 <h3>23/11/2024</h3>
               </div>

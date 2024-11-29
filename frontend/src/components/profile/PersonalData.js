@@ -101,6 +101,11 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
           user.isFirst = false
           sessionStorage.setItem('user', JSON.stringify(user))
 
+          setUserData(prevState => ({
+            ...prevState,
+            isLogged: true,
+          }))
+          
           onClose()
           navigate("/home")
         } catch (err) {

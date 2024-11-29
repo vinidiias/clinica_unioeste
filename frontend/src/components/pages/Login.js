@@ -10,11 +10,12 @@ import RegisterForm from '../login/RegisterForm'
 import LoginForm from '../login/LoginForm'
 import api from '../../services/Api'
 
-const Login = () => {
+const Login = ({ registerPsychologist }) => {
   const { setUserData } = useContext(UserContext)
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [showLogin, setShowLogin] = useState(false)
+  const [showRegisterPsy, setShowRegisterPsy] = useState(registerPsychologist)
   const [isOverlayVisible, setOverlayVisible] = useState(false)
 
   useEffect(() => {
@@ -35,21 +36,21 @@ const Login = () => {
       const userCreated = await api.post('/user', {
         email,
         name,
-        password
+        password,
+        role: 'paciente'
       })
 
       if(!userCreated) return alert('Erro ao criar conta. Tente novamente...')
 
       const user = userCreated.data
-      console.log(`dados do usuario: ${user}`)
+      console.log(`dados do usuario criado: ${user}`)
 
       //depois de validado então envia informações para o Context (session da aplicação)
-      setUserData(prevStat => ({
-        ...prevStat,
+      setUserData({
         email: user.email,
         name: user.name,
         user_id: user._id,
-      }))
+      })
 
       setShowLogin(!showLogin)
       setLoading(false)
@@ -66,23 +67,57 @@ const Login = () => {
         password
       })
         const data = userCreated.data
+
+        console.log(data)
         
-        const user = {
-          isLogged: true,
-          isFirst: data.firstLogin,
+        setUserData(prevState => ({
+          ...prevState,
           email: data.email,
           name: data.user,
-          user_id: data.user_id,
-        }
-        
-        setUserData(user)
-        sessionStorage.setItem('user', JSON.stringify(user))
+          role: data.role,
+          isFirst: true,
+          user_id: data.user_id
+        }))
 
         if (data.firstLogin) {
           setOverlayVisible(true);
         } else {
+          setUserData(prevState => ({
+            isLogged: true,
+          }))
           navigate("/home");
         }
+      } 
+    catch(err) {
+      console.log(err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function registerPsyHandler(email, name, password, id) {
+    try{
+      setLoading(true)
+      const userCreated = await api.post("/register", {
+        email,
+        name,
+        password,
+        id,
+      })
+        const data = userCreated.data.psicologa
+
+        if(!userCreated) return alert('Erro ao criar conta. Tente novamente...')
+
+        console.log(data)
+        
+        setUserData({
+          email: data.email,
+          name: data.user,
+          role: data.role,
+          user_id: data._id
+        })
+
+        setShowRegisterPsy(false)
       } 
     catch(err) {
       console.log(err)
@@ -126,6 +161,18 @@ const Login = () => {
               handleSubmit={registerHandler}
               handleClick={toggleChange}
             />
+          </motion.div>
+        ) : showRegisterPsy ? (
+          <motion.div
+            key="registerPsychologist"
+            variants={cardVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className={styles.login}
+          >
+            <h1>Ativar Conta</h1>
+            <LoginForm registerPsychologist={showRegisterPsy} handleRegisterPsy={registerPsyHandler} />
           </motion.div>
         ) : (
           <motion.div
