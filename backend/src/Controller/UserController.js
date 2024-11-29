@@ -18,7 +18,7 @@ module.exports = {
         
         const { email, name, password, role } = req.body
 
-        const flag = UserEmpty(email, name, password, role)
+        const flag = UserEmpty(email, name, password)
         if(flag) return res.status(400).send({ message: 'Campo vazio'})
 
         const validRole = ['paciente', 'psicologo']

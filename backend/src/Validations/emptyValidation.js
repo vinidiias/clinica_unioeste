@@ -2,14 +2,12 @@ function isEmpty (value){
     return !value || (typeof value === 'string' && value.trim() === '')
 }
 
-function UserEmpty(email, name, password, role){
+function UserEmpty(email, name, password){
     if(isEmpty(email)) return true
 
     if(isEmpty(name)) return true
 
     if(isEmpty(password)) return true
-
-    if(isEmpty(role)) return true
 
     return false
 }

@@ -36,8 +36,13 @@ routes.delete('/ficharios/delete', FichaController.deleteAll)
 routes.post('/session', SessionController.create)
 
 //Psicologo
-routes.post('/convite', InvaitedController.invited)
-routes.post('/validate', InvaitedController.validated)
-routes.post('/register', InvaitedController.register)
+routes.post('/psicologo/convite', InvaitedController.invited)
+routes.post('/psicologo/validate', InvaitedController.validated)
+routes.post('/psicologo/register', InvaitedController.register)
+
+//Administrador
+routes.post('/admin/convite', InvaitedController.invited)
+routes.post('/admin/validate', InvaitedController.validated)
+routes.post('/admin/register', InvaitedController.registerAdmin)
 
 module.exports = routes
