@@ -31,7 +31,7 @@ const LoginForm = ({ registerPsychologist, handleSubmit, handleRegisterPsy, hand
 
         if (email && id) {
           api
-            .post(`/validate`, { email, id })
+            .post(`/admin/validate`, { email, id })
             .then((data) => setEmail(email))
             .then(() => setIsValid(true))
             .catch(() => setMessage("Convite inválido"));

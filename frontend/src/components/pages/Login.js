@@ -98,7 +98,7 @@ const Login = ({ registerPsychologist }) => {
   async function registerPsyHandler(email, name, password, id) {
     try{
       setLoading(true)
-      const userCreated = await api.post("/register", {
+      const userCreated = await api.post("/psicologo/register", {
         email,
         name,
         password,
