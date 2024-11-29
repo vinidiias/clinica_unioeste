@@ -22,7 +22,7 @@ async function verifyEmail (email) {
 }
 
 function emailUnioeste(email){
-    const regex = /^[a-z].[a-z]\d+@unioeste\.br$/;
+    const regex = /^[a-z]+\.[a-z]+\d*@unioeste\.br$/;
   return regex.test(email);
 }
 
