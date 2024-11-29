@@ -103,7 +103,7 @@ module.exports ={
                 user: user_id
             })
 
-            allPessoaOfUser[0].age = calcularIdade(allPessoaOfUser[0].birth) // calcula a idade da pessoa pela dada de nascimento
+           // allPessoaOfUser[0].age = calcularIdade(allPessoaOfUser[0].birth) // calcula a idade da pessoa pela dada de nascimento
 
             return res.status(200).send(allPessoaOfUser)
         } catch (err) {

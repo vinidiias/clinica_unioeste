@@ -6,17 +6,21 @@ const userSchema = new mongoose.Schema({
         required: true,  
         lowercase: true,
     },
+
     name: {
         type: String,
         required: true,  
     },
+
     password: {
         type: String,
         required: true,  
     }, 
+
     role: {
         type: String,
-        default: "psicologo",
+        enum: ['paciente', 'psicologo', 'admin'],
+        default: 'paciente',
         required: false
     },
     
