@@ -90,10 +90,30 @@ function App() {
               }
             />
             <Route
+              path="admin/invite/admin"
+              element={
+                <RoleBasedComponent allowedRoles={["admin"]}>
+                  <Container customClass="align">
+                    <InvitePsychologist
+                      inviteAdmin={true}
+                    />
+                  </Container>
+                </RoleBasedComponent>
+              }
+            />
+            <Route
               path="/register/psychologist"
               element={
                 <Container customClass="align">
                   <Login registerPsychologist={true} />
+                </Container>
+              }
+            />
+            <Route
+              path="/register/admin"
+              element={
+                <Container customClass="align">
+                  <Login registerAdmin={true} />
                 </Container>
               }
             />

@@ -10,12 +10,13 @@ import RegisterForm from '../login/RegisterForm'
 import LoginForm from '../login/LoginForm'
 import api from '../../services/Api'
 
-const Login = ({ registerPsychologist }) => {
+const Login = ({ registerPsychologist, registerAdmin }) => {
   const { setUserData } = useContext(UserContext)
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [showLogin, setShowLogin] = useState(false)
   const [showRegisterPsy, setShowRegisterPsy] = useState(registerPsychologist)
+  const [showRegisterAdmin, setShowRegisterAdmin] = useState(registerAdmin)
   const [isOverlayVisible, setOverlayVisible] = useState(false)
 
   useEffect(() => {
@@ -28,6 +29,68 @@ const Login = ({ registerPsychologist }) => {
 
   const toggleChange = () => {
     setShowLogin(!showLogin)
+  }
+
+  async function registerPsyHandler(email, name, password, id) {
+    try{
+      setLoading(true)
+      const userCreated = await api.post("/psicologo/register", {
+        email,
+        name,
+        password,
+        id,
+      })
+        const data = userCreated.data.psicologa
+
+        if(!userCreated) return alert('Erro ao criar conta. Tente novamente...')
+
+        console.log(data)
+        
+        setUserData({
+          email: data.email,
+          name: data.user,
+          role: data.role,
+          user_id: data._id
+        })
+
+        setShowRegisterPsy(false)
+      } 
+    catch(err) {
+      console.log(err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function registerAdminHandler(email, name, password, id) {
+    try{
+      setLoading(true)
+      const userCreated = await api.post("/admin/register", {
+        email,
+        name,
+        password,
+        id,
+      })
+        const data = userCreated.data.administrador
+
+        if(!userCreated) return alert('Erro ao criar conta. Tente novamente...')
+
+        console.log(data)
+        
+        setUserData({
+          email: data.email,
+          name: data.user,
+          role: data.role,
+          user_id: data._id
+        })
+
+        setShowRegisterAdmin(false)
+      } 
+    catch(err) {
+      console.log(err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   async function registerHandler(email, name, password) {
@@ -96,37 +159,6 @@ const Login = ({ registerPsychologist }) => {
     }
   }
 
-  async function registerPsyHandler(email, name, password, id) {
-    try{
-      setLoading(true)
-      const userCreated = await api.post("/psicologo/register", {
-        email,
-        name,
-        password,
-        id,
-      })
-        const data = userCreated.data.psicologa
-
-        if(!userCreated) return alert('Erro ao criar conta. Tente novamente...')
-
-        console.log(data)
-        
-        setUserData({
-          email: data.email,
-          name: data.user,
-          role: data.role,
-          user_id: data._id
-        })
-
-        setShowRegisterPsy(false)
-      } 
-    catch(err) {
-      console.log(err)
-    } finally {
-      setLoading(false)
-    }
-  }
-
   const cardVariants = {
     initial: { scale: 0.96, y: 30, opacity: 0 },
     animate: { scale: 1, y: 0, opacity: 1, transition: { duration: 1, ease: [0.48, 0.15, 0.25, 0.96] } },
@@ -172,8 +204,26 @@ const Login = ({ registerPsychologist }) => {
             exit="exit"
             className={styles.login}
           >
-            <h1>Ativar Conta</h1>
-            <LoginForm registerPsychologist={showRegisterPsy} handleRegisterPsy={registerPsyHandler} />
+            <h1>Ativar Conta de Psicóloga</h1>
+            <LoginForm
+              register={showRegisterPsy}
+              handleRegister={registerPsyHandler}
+            />
+          </motion.div>
+        ) : showRegisterAdmin ? (
+          <motion.div
+            key="registerAdmin"
+            variants={cardVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className={styles.login}
+          >
+            <h1>Ativar Conta de Administrador</h1>
+            <LoginForm
+              register={showRegisterAdmin}
+              handleRegister={registerAdminHandler}
+            />
           </motion.div>
         ) : (
           <motion.div
