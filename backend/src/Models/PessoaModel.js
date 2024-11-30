@@ -30,7 +30,8 @@ const pessoaSchema = new mongoose.Schema({
         adress: {
             type: String, 
             require: true,
-        }, 
+        },  
+        
         number:{
             type: String, 
             require: true,
