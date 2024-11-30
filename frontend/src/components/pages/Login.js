@@ -83,6 +83,7 @@ const Login = ({ registerPsychologist }) => {
           setOverlayVisible(true);
         } else {
           setUserData(prevState => ({
+            ...prevState,
             isLogged: true,
           }))
           navigate("/home");
