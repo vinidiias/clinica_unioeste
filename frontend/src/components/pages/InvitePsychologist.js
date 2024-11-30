@@ -26,7 +26,7 @@ const InvitePsychologist = () => {
 
         try{
           console.log(email)
-          const emailSent = await api.post('/convite', {email})
+          const emailSent = await api.post('/psicologo/convite', {email})
 
           console.log(emailSent.data)
 
