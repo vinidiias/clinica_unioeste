@@ -1,6 +1,5 @@
 import { useContext } from "react"
 import { UserContext } from "../context/UserContext"
-import Container from "../layout/Container"
 
 const RoleBasedComponent = ({ allowedRoles, children }) => {
     const { userData } = useContext(UserContext)
