@@ -9,7 +9,7 @@ const RoleBasedComponent = ({ allowedRoles, children }) => {
     if(allowedRoles.includes(userData.role)) 
         return <>{children}</>
     
-    return <Container customClass="auto"><p>Não autorizado</p></Container>
+    return null
 }
 
 export default RoleBasedComponent

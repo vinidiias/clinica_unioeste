@@ -48,6 +48,7 @@ const LoginForm = ({ register, handleSubmit, handleRegister, handleClick }) => {
 
     if(password !== confirmPassword) {
       setMessage('Senhas não coincidem')
+      return
     }
 
     const email = searchParams.get('email')
@@ -58,11 +59,6 @@ const LoginForm = ({ register, handleSubmit, handleRegister, handleClick }) => {
 
   const submit = (e) =>{
     e.preventDefault()
-
-    if(password !== confirmPassword) {
-      alert('Senhas não coincidem')
-      return
-    }
 
     handleSubmit(email, password)
   }
@@ -89,14 +85,6 @@ const LoginForm = ({ register, handleSubmit, handleRegister, handleClick }) => {
             placeholder="Digite sua senha"
             customClass="column padding_login"
             handleOnChange={(e) => setPassword(e.target.value)}
-          />
-          <Input
-            type="password"
-            name="confirmPassword"
-            text="Confirme sua senha"
-            placeholder="Digite sua senha"
-            customClass="column padding_login"
-            handleOnChange={(e) => setConfirmPassword(e.target.value)}
           />
         </>
       ) : isValid ? (
@@ -130,7 +118,7 @@ const LoginForm = ({ register, handleSubmit, handleRegister, handleClick }) => {
           <Input
             type="password"
             name="confirmPassword"
-            text="Confirme sua senha"
+            text="Confirmar Senha"
             placeholder="Digite sua senha"
             customClass="column padding_login"
             handleOnChange={(e) => setConfirmPassword(e.target.value)}

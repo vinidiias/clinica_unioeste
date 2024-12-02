@@ -70,9 +70,9 @@ function App() {
               }
             />
             <Route
-              path="/screening"
+              path="/psychologist/screening"
               element={
-                <RoleBasedComponent allowedRoles={["admin"]}>
+                <RoleBasedComponent allowedRoles={["admin", 'psicologo']}>
                   <Container customClass="height">
                     <ScreeningQueue />
                   </Container>

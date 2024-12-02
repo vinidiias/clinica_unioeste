@@ -47,7 +47,7 @@ const ScreeningQueue = () => {
             <h3>Indicado</h3>
             <h3>Data</h3>
           </div>
-          {fichas.map((ficha, index) => (
+          {fichas.filter((ficha) => ficha.pessoa.triagem === true).map((ficha, index) => (
               <div
                 className={`${styles.patients} ${styles[isSelected === index ? "selected" : " "]} ${styles[over === index ? "over" : " "]}`}
                 key={index}
