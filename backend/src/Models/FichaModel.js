@@ -73,6 +73,18 @@ const fichaSchema = new mongoose.Schema({
     observation: {
         type: String,
     },
+
+    triagem: {
+        type: Boolean,
+        default: null
+    },
+
+    prioridade: {
+        type: String,
+        enum: ['baixa', 'media', 'alta'],
+        default: 'media'
+    },
+
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
