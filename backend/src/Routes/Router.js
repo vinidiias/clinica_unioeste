@@ -28,7 +28,7 @@ routes.delete('/:user_id/pessoa/:pessoa_id', PessoaController.delete)
 //Fichas
 routes.post('/:user_id/ficha', FichaController.create)
 routes.get('/ficharios', FichaController.indexAll)
-routes.get('/:user_id/ficha/:ficha_id', FichaController.indexByUser)
+routes.get('/:user_id/fichario/:ficha_id', FichaController.indexByUser)
 routes.delete('/user_id/ficha/ficha_id', FichaController.delete)
 routes.delete('/ficharios/delete', FichaController.deleteAll)
 

@@ -1,22 +1,15 @@
 const mongoose = require('mongoose')
 const Ficha = require('../Models/FichaModel')
 const { FicharioEmpty } = require('../Validations/emptyValidation')
+const User = require('../Models/UserModel')
+const Pessoa = require('../Models/PessoaModel')
 
 
 module.exports = {
     async create(req, res) {
 
         const {  
-            profission,
-            education,
-            preferredDay,
-            vinculo,
-            comunidade,
-            work,
-            psicologa,
-            psiquiatra,
-            observation
-        } = req.body;
+            profission, education, preferredDay, vinculo, comunidade, work, psicologa, psiquiatra, observation } = req.body;
         
         const { user_id } = req.params
         const { auth } = req.headers
@@ -92,22 +85,20 @@ module.exports = {
         if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'})
 
         try {
-            const allFicharioUser = await Ficha.find({
-                user: user_id
-            })
-            return res.status(200).send(allFicharioUser)    
+            const allFicharioUser = await Ficha.find({ user: user_id })
+            
+            const user = await User.findById(user_id)
+            const pessoa = await Pessoa.findOne({ user: user_id})
+
+            return res.status(200).send({
+                ficha: allFicharioUser,
+                user: user,
+                pessoa: pessoa
+            })    
         }
         catch (err){
             return res.status(400).send(err)
         }
-    },
-
-    async indexByUserTriagem (req, res) {
-        const { user_id } = req.params
-        const { auth } = req.headers
-
-        if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado' })
-
     },
 
     async delete (req, res) {
