@@ -13,6 +13,7 @@ import Ficha from './components/pages/Ficha';
 import Profile from './components/pages/Profile'
 import ScreeningQueue from './components/pages/ScreeningQueue';
 import InvitePsychologist from './components/pages/InvitePsychologist';
+import PatientFicha from './components/ficha/PatientFicha';
 
 function App() {
   return (
@@ -75,6 +76,16 @@ function App() {
                 <RoleBasedComponent allowedRoles={["admin", 'psicologo']}>
                   <Container customClass="height">
                     <ScreeningQueue />
+                  </Container>
+                </RoleBasedComponent>
+              }
+            />
+            <Route
+              path="/psychologist/screening/:id"
+              element={
+                <RoleBasedComponent allowedRoles={["admin", 'psicologo']}>
+                  <Container customClass="height">
+                    <PatientFicha />
                   </Container>
                 </RoleBasedComponent>
               }

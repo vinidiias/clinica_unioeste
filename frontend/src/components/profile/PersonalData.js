@@ -1,6 +1,5 @@
 import styles from './PersonalData.module.css'
 import api from '../../services/Api';
-import { calcularIdade } from '../util/CalculaIdade'
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
@@ -19,7 +18,7 @@ const PersonalData =  ({ customClass, onClose, imgProfile='', nome='', idade='',
     const [phone, setPhone] = useState(tel)
     const [adress, setAdress] = useState('')
     const [number, setNumber] = useState('')
-    const {userData, setUserData, setPessoa} = useContext(UserContext)
+    const {userData, setUserData} = useContext(UserContext)
     const navigate = useNavigate()
 
     //console.log(userData)

@@ -6,12 +6,13 @@ import Patient from '../Queue/Patient'
 import { FaCaretSquareDown } from "react-icons/fa";
 import React, { useEffect, useState } from 'react';
 import { FixedSizeList as List } from 'react-window'
-import ReactDOM from 'react-dom'
+import { useNavigate } from 'react-router-dom'
 
 const ScreeningQueue = () => {
-    const [isSelected, setIsSelected] = useState(false)
+    const [isSelected, setIsSelected] = useState(null)
     const [over, setOver] = useState(false)
     const [fichas, setFichas] = useState([])
+    const navigate = useNavigate()
     
     useEffect(() => {
       const allFichas = async () => {
@@ -32,11 +33,12 @@ const ScreeningQueue = () => {
     }, [fichas.length])
 
     function handleClick(index) {
-        return isSelected === index ? setIsSelected(!isSelected) : setIsSelected(index)
+        return isSelected === index ? setIsSelected(null) : setIsSelected(index)
     }
 
       const renderizarPaciente = ({ index, style }) => {
         const ficha = fichas[index];
+        console.log(ficha)
 
         if (!ficha.pessoa.triagem) return null;
 
@@ -55,8 +57,13 @@ const ScreeningQueue = () => {
                     handleClick={handleClick}
                 />
             </div>
-        );
-    };
+        )
+    }
+
+    const navigateToFichaByUser = () => {
+      const id = fichas[isSelected].ficha.user._id
+      navigate(`/psychologist/screening/${id}`)
+    }
 
     return (
       <>
@@ -65,6 +72,9 @@ const ScreeningQueue = () => {
         ) : (
           <div className={styles.screening}>
             <div className={styles.headersBtn}>
+              {isSelected !== null && <Submit text="Ver fichário"
+              handleClick={navigateToFichaByUser}/>}
+              {console.log(isSelected)}
               <Submit text="Atender" />
               <Submit text="Remover" />
             </div>
@@ -79,7 +89,7 @@ const ScreeningQueue = () => {
                 <h3>Data</h3>
               </div>
               <List
-                height={window.innerHeight - 150} // Altura do container da lista (em pixels)
+                height={window.innerHeight - 280 } // Altura do container da lista (em pixels)
                 itemCount={fichas.length} // Total de itens na lista
                 itemSize={70} // Altura de cada item
                 width="100%" // Largura da lista
