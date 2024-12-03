@@ -1,8 +1,6 @@
 const mongoose = require('mongoose')
 const Ficha = require('../Models/FichaModel')
-const Pessoa = require('../Models/PessoaModel')
 const { FicharioEmpty } = require('../Validations/emptyValidation')
-
 
 
 module.exports = {
@@ -51,6 +49,11 @@ module.exports = {
             // Popula o campo 'user' com as informações do usuário associado (se houver relação no schema)
             const fichaComUser = await Ficha.findById(createFicha._id).populate('user') //tenta adicionar pessoas tmb sem ser o populate
 
+            const fichario = await Ficha.findById({ user: user_id})
+            fichario.triagem = true
+
+            await fichario.save()
+
             return res.status(200).send(fichaComUser)//tras outras informacoes sobre o usurario
             
         }
@@ -97,6 +100,14 @@ module.exports = {
         catch (err){
             return res.status(400).send(err)
         }
+    },
+
+    async indexByUserTriagem (req, res) {
+        const { user_id } = req.params
+        const { auth } = req.headers
+
+        if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado' })
+
     },
 
     async delete (req, res) {

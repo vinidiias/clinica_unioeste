@@ -43,17 +43,6 @@ const pessoaSchema = new mongoose.Schema({
         require: false // ou false, dependendo da sua necessidade
     },
 
-    triagem: {
-        type: Boolean,
-        default: false
-    },
-
-    prioridade: {
-        type: String,
-        enum: ['baixa', 'media', 'alta'],
-        default: 'media'
-    },
-
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
