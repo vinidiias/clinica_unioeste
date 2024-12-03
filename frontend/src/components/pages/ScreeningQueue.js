@@ -3,10 +3,10 @@ import api from '../../services/Api'
 import Loading from '../layout/Loading'
 import Submit from '../form/Submit'
 import Patient from '../Queue/Patient'
-import { FaRegSquare } from "react-icons/fa6";
-import { FaCheckSquare } from "react-icons/fa";
 import { FaCaretSquareDown } from "react-icons/fa";
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { FixedSizeList as List } from 'react-window'
+import ReactDOM from 'react-dom'
 
 const ScreeningQueue = () => {
     const [isSelected, setIsSelected] = useState(false)
@@ -35,6 +35,29 @@ const ScreeningQueue = () => {
         return isSelected === index ? setIsSelected(!isSelected) : setIsSelected(index)
     }
 
+      const renderizarPaciente = ({ index, style }) => {
+        const ficha = fichas[index];
+
+        if (!ficha.pessoa.triagem) return null;
+
+        return (
+            <div key={index} style={style}>
+                <Patient
+                    img={ficha.pessoa.img}
+                    name={ficha.ficha.user.name}
+                    vinculo={ficha.ficha.vinculo}
+                    indicado="Não"
+                    data="23/11/2024"
+                    isSelected={isSelected}
+                    index={index}
+                    setOver={setOver}
+                    over={over}
+                    handleClick={handleClick}
+                />
+            </div>
+        );
+    };
+
     return (
       <>
         {fichas.length === 0 ? (
@@ -55,25 +78,14 @@ const ScreeningQueue = () => {
                 <h3>Indicado</h3>
                 <h3>Data</h3>
               </div>
-              {fichas
-                .filter((ficha) => ficha.pessoa.triagem === true)
-                .map((ficha, index) => (
-                  <>
-                    <Patient
-                      img={ficha.pessoa.img}
-                      name={ficha.ficha.name}
-                      vinculo={ficha.ficha.vinculo}
-                      indicado="Não"
-                      data="23/11/2024"
-                      isSelected={isSelected}
-                      key={index}
-                      index={index}
-                      setOver={setOver}
-                      over={over}
-                      handleClick={handleClick}
-                    />
-                  </>
-                ))}
+              <List
+                height={window.innerHeight - 150} // Altura do container da lista (em pixels)
+                itemCount={fichas.length} // Total de itens na lista
+                itemSize={70} // Altura de cada item
+                width="100%" // Largura da lista
+              >
+                {renderizarPaciente}
+              </List>
             </div>
           </div>
         )}
