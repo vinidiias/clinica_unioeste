@@ -20,10 +20,10 @@ const FichaForm = ({ infoCompletPatient }) => {
     periodo: '',
     turno: '',
   })
-  const [typeEducation, setTypeEducation] = useState(infoCompletPatient.ficha.education.type || '')
-  const [curso, setCurso] = useState(infoCompletPatient.ficha.education.curso || '')
-  const [periodo, setPeriodo] = useState(infoCompletPatient.ficha.education.periodo || '')
-  const [turno, setTurno] = useState(infoCompletPatient.ficha.education.turno || '')
+  const [typeEducation, setTypeEducation] = useState(infoCompletPatient?.ficha?.education?.type ? infoCompletPatient.ficha.education.type : '')
+  const [curso, setCurso] = useState(infoCompletPatient?.ficha?.education?.curso ? infoCompletPatient.ficha.education.curso : '')
+  const [periodo, setPeriodo] = useState(infoCompletPatient?.ficha?.education?.periodo ? infoCompletPatient.ficha.education.periodo : '')
+  const [turno, setTurno] = useState(infoCompletPatient?.ficha?.education?.turno ? infoCompletPatient.ficha.education.turno : '')
   const [preferredDay, setPreferredDay] = useState('')
   const [vinculo, setVinculo] = useState({
     type: '',
@@ -152,99 +152,97 @@ useEffect(() => {
           <Loading />
         ) : (
           <form className={styles.ficha_form}>
-            <div className={styles.flex}>
-              <Input
-                disable={true}
-                type="text"
-                name="name"
-                text="Nome"
-                value={infoCompletPatient.user.name}
-                customClass="flex_1"
-                handleOnChange={handleChange}
-              />
-              <div className={styles.flex}>
-                <Input
-                  disable={true}
-                  type="date"
-                  name="birth"
-                  value={infoCompletPatient.pessoa.birth}
-                  text="Data de Nascimento"
-                  customClass="flex_1"
-                  handleOnChange={handleChange}
-                />
-              </div>
-            </div>
-            <div className={styles.flex}>
-              <Input
-                disable={true}
-                type="number"
-                name="age"
-                text="Idade"
-                value={calcularIdade(infoCompletPatient.pessoa.birth)}
-                customClass="flex_1"
-                handleOnChange={handleChange}
-              />
-              <div className={styles.flex}>
-                <Input
-                  disable={true}
-                  type="text"
-                  name="phone"
-                  text="Telefone"
-                  value={infoCompletPatient.pessoa.phone}
-                  customClass="flex_1"
-                  handleOnChange={handleChange}
-                />
-              </div>
-              {infoCompletPatient.pessoa.ra && (
+            {infoCompletPatient && (
+              <>
                 <div className={styles.flex}>
                   <Input
                     disable={true}
                     type="text"
-                    name="ra"
-                    text="RA"
-                    value={infoCompletPatient.pessoa.ra}
-                    customClass="flex_1"
-                    handleOnChange={handleChange}
+                    name="name"
+                    text="Nome"
+                    value={infoCompletPatient.user.name}
+                      handleOnChange={handleChange}
                   />
+                  <div className={styles.flex}>
+                    <Input
+                      disable={true}
+                      type="date"
+                      name="birth"
+                      value={infoCompletPatient.pessoa.birth}
+                      text="Data de Nascimento"
+                          handleOnChange={handleChange}
+                    />
+                  </div>
                 </div>
-              )}
-            </div>
+                <div className={styles.flex}>
+                  <Input
+                    disable={true}
+                    type="number"
+                    name="age"
+                    text="Idade"
+                    value={calcularIdade(infoCompletPatient.pessoa.birth)}
+                      handleOnChange={handleChange}
+                  />
+                  <div className={styles.flex}>
+                    <Input
+                      disable={true}
+                      type="text"
+                      name="phone"
+                      text="Telefone"
+                      value={infoCompletPatient.pessoa.phone}
+                          handleOnChange={handleChange}
+                    />
+                  </div>
+                  {infoCompletPatient.pessoa.ra && (
+                    <div className={styles.flex}>
+                      <Input
+                        disable={true}
+                        type="text"
+                        name="ra"
+                        text="RA"
+                        value={infoCompletPatient.pessoa.ra}
+                              handleOnChange={handleChange}
+                      />
+                    </div>
+                  )}
+                </div>
+                <div className={styles.flex}>
+                  <Input
+                    disable={true}
+                    type="text"
+                    name="adress"
+                    text="Endereço"
+                    value={infoCompletPatient.pessoa.adressComplet.adress}
+                      handleOnChange={handleChange}
+                  />
+                  <div className={styles.flex}>
+                    <Input
+                      disable={true}
+                      type="text"
+                      name="numberAdress"
+                      text="Número"
+                      value={infoCompletPatient.pessoa.adressComplet.number}
+                          handleOnChange={handleChange}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
             <div className={styles.flex}>
               <Input
-                disable={true}
                 type="text"
-                name="adress"
-                text="Endereço"
-                value={infoCompletPatient.pessoa.adressComplet.adress}
-                customClass="flex_1"
+                name="profission"
+                text="Profissão"
                 handleOnChange={handleChange}
               />
-              <div className={styles.flex}>
-                <Input
-                  disable={true}
-                  type="text"
-                  name="numberAdress"
-                  text="Número"
-                  value={infoCompletPatient.pessoa.adressComplet.number}
-                  customClass="flex_1"
-                  handleOnChange={handleChange}
-                />
-              </div>
             </div>
-            <Input
-              type="text"
-              name="profission"
-              text="Profissão"
-              customClass="flex_1"
-              handleOnChange={handleChange}
-            />
             <div className={styles.flex}>
               <label htmlFor="level-Fundamental I" className={styles.label}>
                 Escolaridade:
               </label>
               <div className={styles.student}>
                 <CheckBox
-                  disable={infoCompletPatient ? true : false}
+                  disable={!infoCompletPatient ? false : true}
                   isSelected={education.type === "Fundamental I"}
                   name="level"
                   side="right"
@@ -253,7 +251,7 @@ useEffect(() => {
                   handleOnChange={(e) => setTypeEducation(e.target.value)}
                 />
                 <CheckBox
-                  disable={infoCompletPatient ? true : false}
+                  disable={!infoCompletPatient ? false : true}
                   isSelected={education.type === "Fundamental II"}
                   side="right"
                   name="level"
@@ -262,7 +260,7 @@ useEffect(() => {
                   handleOnChange={(e) => setTypeEducation(e.target.value)}
                 />
                 <CheckBox
-                  disable={infoCompletPatient ? true : false}
+                  disable={!infoCompletPatient ? false : true}
                   isSelected={education.type === "Ensino Médio"}
                   side="right"
                   name="level"
@@ -271,7 +269,7 @@ useEffect(() => {
                   handleOnChange={(e) => setTypeEducation(e.target.value)}
                 />
                 <CheckBox
-                  disable={infoCompletPatient ? true : false}
+                  disable={!infoCompletPatient ? false : true}
                   isSelected={education.type === "Ensino Técnico"}
                   side="right"
                   name="level"
@@ -280,7 +278,7 @@ useEffect(() => {
                   handleOnChange={(e) => setTypeEducation(e.target.value)}
                 />
                 <CheckBox
-                  disable={infoCompletPatient ? true : false}
+                  disable={!infoCompletPatient ? false : true}
                   isSelected={education.type === "Graduação"}
                   side="right"
                   name="level"
@@ -289,7 +287,7 @@ useEffect(() => {
                   handleOnChange={(e) => setTypeEducation(e.target.value)}
                 />
                 <CheckBox
-                  disable={infoCompletPatient ? true : false}
+                  disable={!infoCompletPatient ? false : true}
                   isSelected={education.type === "Pós Graduação"}
                   side="right"
                   name="level"
@@ -408,7 +406,6 @@ useEffect(() => {
                   type="text"
                   name="setor"
                   text="Setor que trabalha"
-                  customClass="flex_1"
                   handleOnChange={(e) => setSetor(e.target.value)}
                 />
               </>
@@ -538,9 +535,11 @@ useEffect(() => {
                 onChange={(e) => setObservation(e.target.value)}
               ></textarea>
             </div>
-            <button className={styles.btnSubmit} onClick={submit}>
+            {!infoCompletPatient && (
+              <button className={styles.btnSubmit} onClick={submit}>
               Enviar
             </button>
+            )}
           </form>
         )}
       </>

@@ -1,6 +1,7 @@
 import FichaForm from "../ficha/FichaForm"
 import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"
+import ErrorBoundary from "../ErrorBoundary/ErrorBoundary"
 
 const Ficha = () => {
   const user = JSON.parse(sessionStorage.getItem("user"));
@@ -12,7 +13,11 @@ const Ficha = () => {
     }
   }, [user, navigate]);
 
-  return <FichaForm />
+  return (
+    <ErrorBoundary>
+      <FichaForm />
+    </ErrorBoundary>
+  );
 }
 
 export default Ficha

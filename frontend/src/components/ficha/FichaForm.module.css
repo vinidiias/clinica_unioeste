@@ -4,6 +4,8 @@
     width: 60%;
     padding: 1em;
     background-color: #dcdcdc;
+    height: auto;
+    margin: auto;
 }
 
 @media(max-width: 908px) {
