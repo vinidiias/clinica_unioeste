@@ -42,10 +42,9 @@ module.exports = {
             // Popula o campo 'user' com as informações do usuário associado (se houver relação no schema)
             const fichaComUser = await Ficha.findById(createFicha._id).populate('user') //tenta adicionar pessoas tmb sem ser o populate
 
-            const fichario = await Ficha.findById({ user: user_id})
-            fichario.triagem = true
+            fichaComUser.triagem = true
 
-            await fichario.save()
+            await fichaComUser.save()
 
             return res.status(200).send(fichaComUser)//tras outras informacoes sobre o usurario
             
@@ -85,7 +84,7 @@ module.exports = {
         if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'})
 
         try {
-            const allFicharioUser = await Ficha.find({ user: user_id })
+            const allFicharioUser = await Ficha.findOne({ user: user_id })
             
             const user = await User.findById(user_id)
             const pessoa = await Pessoa.findOne({ user: user_id})
