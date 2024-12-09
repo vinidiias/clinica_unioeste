@@ -20,7 +20,6 @@ const ScreeningQueue = () => {
           const allfichas = await api.get('/ficharios')
 
           if(allfichas) {
-            console.log(allfichas.data)
             setFichas(allfichas.data)
           }
          
@@ -38,16 +37,16 @@ const ScreeningQueue = () => {
 
       const renderizarPaciente = ({ index, style }) => {
         const ficha = fichas[index];
-        console.log(ficha)
+        console.log('aqui',ficha)
 
-        if (!ficha.pessoa.triagem) return null;
+        if (!ficha.ficha.triagem) return null;
 
         return (
             <div key={index} style={style}>
                 <Patient
                     img={ficha.pessoa.img}
                     name={ficha.ficha.user.name}
-                    vinculo={ficha.ficha.vinculo}
+                    vinculo={ficha.ficha.vinculo.type}
                     indicado="Não"
                     data="23/11/2024"
                     isSelected={isSelected}
@@ -74,7 +73,6 @@ const ScreeningQueue = () => {
             <div className={styles.headersBtn}>
               {isSelected !== null && <Submit text="Ver fichário"
               handleClick={navigateToFichaByUser}/>}
-              {console.log(isSelected)}
               <Submit text="Atender" />
               <Submit text="Remover" />
             </div>

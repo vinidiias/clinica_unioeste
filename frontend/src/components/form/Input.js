@@ -12,7 +12,7 @@ const Input = ({ type, name, text, handleOnChange, placeholder, value, autoCompl
             .join(" ")
         }`}
       >
-        <label htmlFor={name}>{text}:</label>
+        <label htmlFor={name}>{text} *</label>
         <input
           required={true}
           type={type}

@@ -7,11 +7,10 @@ const CheckBox = ({ name, text, side, handleOnChange, value, isSelected, customC
       <div className={`${styles.form_control} ${styles[customClass]}`}>
         {side === "left" && (
           <label htmlFor={value} className={styles.label_left}>
-            {text}
+            {text} *
           </label>
         )}
         <input
-          required={true}
           type="checkbox"
           checked={isSelected}
           name={name}

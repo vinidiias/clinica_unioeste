@@ -11,7 +11,7 @@ const PatientFicha = () => {
 
     useEffect(() => {
         const getFicha = async () => {
-          const fichaUser = await api.get(`${id}/ficha`, {headers: {auth: `${id}`}});
+          const fichaUser = await api.get(`${id}/fichario`, {headers: {auth: `${id}`}});
 
           if (fichaUser) {
             console.log(fichaUser.data);

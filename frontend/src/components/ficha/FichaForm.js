@@ -4,6 +4,7 @@ import Input from '../form/Input'
 import CheckBox from '../form/CheckBox'
 import Table from '../form/Table'
 import Loading from '../layout/Loading'
+import Submit from '../form/Submit'
 import api from '../../services/Api'
 import { calcularIdade } from '../util/CalculaIdade'
 import { UserContext } from '../context/UserContext'
@@ -13,7 +14,7 @@ const FichaForm = ({ infoCompletPatient }) => {
   const { userData } = useContext(UserContext)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
-  const [profission, setProfission] = useState('')
+  const [profission, setProfission] = useState(infoCompletPatient?.ficha?.profission ? infoCompletPatient.ficha.profission : '')
   const [education, setEducation] = useState({
     type:'',
     curso: '',
@@ -24,15 +25,15 @@ const FichaForm = ({ infoCompletPatient }) => {
   const [curso, setCurso] = useState(infoCompletPatient?.ficha?.education?.curso ? infoCompletPatient.ficha.education.curso : '')
   const [periodo, setPeriodo] = useState(infoCompletPatient?.ficha?.education?.periodo ? infoCompletPatient.ficha.education.periodo : '')
   const [turno, setTurno] = useState(infoCompletPatient?.ficha?.education?.turno ? infoCompletPatient.ficha.education.turno : '')
-  const [preferredDay, setPreferredDay] = useState('')
+  const [preferredDay, setPreferredDay] = useState(infoCompletPatient?.ficha?.preferredDay ? infoCompletPatient.ficha.preferredDay : '')
   const [vinculo, setVinculo] = useState({
     type: '',
     typeVinculo: '',
     setor: '',
   })
-  const [isVinculo, setIsVinculo] = useState(false)
-  const [typeVinculo, setTypeVinculo] = useState('')
-  const [setor, setSetor] = useState('')
+  const [isVinculo, setIsVinculo] = useState(infoCompletPatient?.ficha?.vinculo ? true : false)
+  const [typeVinculo, setTypeVinculo] = useState(infoCompletPatient?.ficha?.vinculo?.type ? infoCompletPatient.ficha.vinculo.type : 'Não')
+  const [setor, setSetor] = useState(infoCompletPatient?.ficha?.vinculo?.setor ? infoCompletPatient.ficha.vinculo.setor : '')
   const [comunidade, setComunidade] = useState('')
   const [work, setWork] = useState({
     type: '',
@@ -74,16 +75,16 @@ useEffect(() => {
   //vinculo unioeste object
   useEffect(() => {
     if(isVinculo){
-      if(typeVinculo !== 'Agente') setVinculo(typeVinculo)
+      if(typeVinculo !== 'Agente') setVinculo({type: typeVinculo})
       else setVinculo({type:typeVinculo, setor:setor})
     }
-    else setVinculo(isVinculo)
+    else setVinculo({type: 'Não'})
   }, [typeVinculo, setor, isVinculo])
 
   //work object
   useEffect(()=> {
     if(typeWork === 'Trabalha') setWork({type:typeWork, time:horarioWork})
-    else setWork(typeWork)
+    else setWork({type: typeWork})
   }, [typeWork, horarioWork])
 
   //psicologa object
@@ -151,7 +152,7 @@ useEffect(() => {
         {loading ? (
           <Loading />
         ) : (
-          <form className={styles.ficha_form}>
+          <form className={styles.ficha_form} onSubmit={submit}>
             {infoCompletPatient && (
               <>
                 <div className={styles.flex}>
@@ -161,7 +162,7 @@ useEffect(() => {
                     name="name"
                     text="Nome"
                     value={infoCompletPatient.user.name}
-                      handleOnChange={handleChange}
+                    handleOnChange={handleChange}
                   />
                   <div className={styles.flex}>
                     <Input
@@ -170,7 +171,7 @@ useEffect(() => {
                       name="birth"
                       value={infoCompletPatient.pessoa.birth}
                       text="Data de Nascimento"
-                          handleOnChange={handleChange}
+                      handleOnChange={handleChange}
                     />
                   </div>
                 </div>
@@ -181,7 +182,7 @@ useEffect(() => {
                     name="age"
                     text="Idade"
                     value={calcularIdade(infoCompletPatient.pessoa.birth)}
-                      handleOnChange={handleChange}
+                    handleOnChange={handleChange}
                   />
                   <div className={styles.flex}>
                     <Input
@@ -190,7 +191,7 @@ useEffect(() => {
                       name="phone"
                       text="Telefone"
                       value={infoCompletPatient.pessoa.phone}
-                          handleOnChange={handleChange}
+                      handleOnChange={handleChange}
                     />
                   </div>
                   {infoCompletPatient.pessoa.ra && (
@@ -201,7 +202,7 @@ useEffect(() => {
                         name="ra"
                         text="RA"
                         value={infoCompletPatient.pessoa.ra}
-                              handleOnChange={handleChange}
+                        handleOnChange={handleChange}
                       />
                     </div>
                   )}
@@ -213,7 +214,7 @@ useEffect(() => {
                     name="adress"
                     text="Endereço"
                     value={infoCompletPatient.pessoa.adressComplet.adress}
-                      handleOnChange={handleChange}
+                    handleOnChange={handleChange}
                   />
                   <div className={styles.flex}>
                     <Input
@@ -222,7 +223,7 @@ useEffect(() => {
                       name="numberAdress"
                       text="Número"
                       value={infoCompletPatient.pessoa.adressComplet.number}
-                          handleOnChange={handleChange}
+                      handleOnChange={handleChange}
                     />
                   </div>
                 </div>
@@ -233,12 +234,14 @@ useEffect(() => {
                 type="text"
                 name="profission"
                 text="Profissão"
+                disable={infoCompletPatient ? true : false}
+                value={profission}
                 handleOnChange={handleChange}
               />
             </div>
             <div className={styles.flex}>
               <label htmlFor="level-Fundamental I" className={styles.label}>
-                Escolaridade:
+                Escolaridade *
               </label>
               <div className={styles.student}>
                 <CheckBox
@@ -305,21 +308,26 @@ useEffect(() => {
                     type="text"
                     name="curso"
                     text="Curso"
+                    disable={infoCompletPatient ? true : false}
+                    value={curso}
                     handleOnChange={(e) => setCurso(e.target.value)}
                   />
                   <Input
                     type="text"
                     name="periodo"
                     text="Ano/período"
+                    disable={infoCompletPatient ? true : false}
+                    value={periodo}
                     handleOnChange={(e) => setPeriodo(e.target.value)}
                   />
                 </div>
                 <div className={styles.flex}>
                   <label htmlFor="curso" className={styles.label}>
-                    Turno do seu curso:
+                    Turno do seu curso *
                   </label>
                   <div className={styles.turnos}>
                     <CheckBox
+                      disable={infoCompletPatient ? true : false}
                       isSelected={turno === "Manhã"}
                       side="right"
                       value="Manhã"
@@ -328,6 +336,7 @@ useEffect(() => {
                       handleOnChange={(e) => setTurno(e.target.value)}
                     />
                     <CheckBox
+                      disable={infoCompletPatient ? true : false}
                       isSelected={turno === "Tarde"}
                       side="right"
                       value="Tarde"
@@ -336,6 +345,7 @@ useEffect(() => {
                       handleOnChange={(e) => setTurno(e.target.value)}
                     />
                     <CheckBox
+                      disable={infoCompletPatient ? true : false}
                       isSelected={turno === "Noite"}
                       side="right"
                       value="Noite"
@@ -347,20 +357,20 @@ useEffect(() => {
                 </div>
               </>
             )}
-            <>
+            <div className={styles.flex + " " + styles.table}>
               <Table
+                viewPatientFicha={infoCompletPatient ? true : false}
                 setPreferredDay={setPreferredDay}
                 preferredDay={preferredDay}
               />
-            </>
+            </div>
             <div className={styles.flex}>
               <CheckBox
                 isSelected={isVinculo}
-                customClass="bold"
-                side="right"
+                side="left"
                 value="Vínculo com Unioeste"
                 name="vinculo_com_unioeste"
-                text="Vínculo com Unioeste:"
+                text="Vínculo com Unioeste"
                 handleOnChange={(e) => setIsVinculo(!isVinculo)}
               />
               {isVinculo && (
@@ -406,18 +416,18 @@ useEffect(() => {
                   type="text"
                   name="setor"
                   text="Setor que trabalha"
+                  value={setor}
                   handleOnChange={(e) => setSetor(e.target.value)}
                 />
               </>
             )}
-            <div style={{ marginBottom: "1em" }}>
+            <div className={styles.flex}>
               <CheckBox
                 isSelected={comunidade === "Sim"}
-                side="right"
+                side="left"
                 name="community"
                 value="Comunidade Externa"
                 text="Comunidade Externa"
-                customClass="bold"
                 handleOnChange={(e) =>
                   setComunidade(e.target.checked ? "Sim" : "Não")
                 }
@@ -425,7 +435,7 @@ useEffect(() => {
             </div>
             <div className={styles.flex}>
               <label htmlFor="work-Trabalha" className={styles.label}>
-                Você trabalha?
+                Você trabalha? *
               </label>
               <div className={styles.acompanhamento}>
                 <CheckBox
@@ -447,18 +457,18 @@ useEffect(() => {
               </div>
             </div>
             {work.type === "Trabalha" && (
-              <>
+              <div className={styles.flex}>
                 <Input
                   type="time"
                   name="work_schedule"
                   text="Trabalha em qual horário?"
                   handleOnChange={(e) => setHorarioWork(e.target.value)}
                 />
-              </>
+              </div>
             )}
             <div className={styles.flex}>
               <label htmlFor="psycho-Acompanha" className={styles.label}>
-                Já realizou algum acompanhamento psicológico?
+                Já realizou algum acompanhamento psicológico? *
               </label>
               <div className={styles.acompanhamento}>
                 <CheckBox
@@ -480,19 +490,18 @@ useEffect(() => {
               </div>
             </div>
             {typePsicologa === "Acompanha" && (
-              <>
+              <div className={styles.flex}>
                 <Input
-                  customClass="responsive"
                   type="text"
                   name="psycho_schedule"
                   text="Por quanto tempo acompanhamento psicológico?"
                   handleOnChange={(e) => setTimePsicologa(e.target.value)}
                 />
-              </>
+              </div>
             )}
             <div className={styles.flex}>
               <label htmlFor="psychiatric-Acompanha" className={styles.label}>
-                Já realizou algum acompanhamento psiquiátrico?
+                Já realizou algum acompanhamento psiquiátrico? *
               </label>
               <div className={styles.acompanhamento}>
                 <CheckBox
@@ -514,7 +523,7 @@ useEffect(() => {
               </div>
             </div>
             {typePsiquiatra === "Acompanha" && (
-              <>
+              <div className={styles.flex}>
                 <Input
                   customClass="responsive"
                   type="text"
@@ -522,11 +531,11 @@ useEffect(() => {
                   text="Por quanto tempo fez acompanhamento psiquiátrico?"
                   handleOnChange={(e) => setTimePsiquiatra(e.target.value)}
                 />
-              </>
+              </div>
             )}
-            <div style={{ display: "flex", flexDirection: "column" }}>
+            <div className={styles.observation + " " + styles.flex}>
               <label htmlFor="observation" className={styles.label}>
-                Observações que considere importante:
+                Observações que considere importante *
               </label>
               <textarea
                 name="observation"
@@ -536,9 +545,7 @@ useEffect(() => {
               ></textarea>
             </div>
             {!infoCompletPatient && (
-              <button className={styles.btnSubmit} onClick={submit}>
-              Enviar
-            </button>
+              <Submit text="Enviar" customClass="align" />
             )}
           </form>
         )}

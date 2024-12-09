@@ -4,6 +4,7 @@ import { FaRegSquare } from 'react-icons/fa6';
 import styles from './Patient.module.css'
 
 const Patient = ({ img, name, vinculo, indicado, data, isSelected, index, setOver, over, handleClick }) => {
+    console.log('ta chegando')
     return (
       <div
         className={`${styles.patients} ${
@@ -27,7 +28,7 @@ const Patient = ({ img, name, vinculo, indicado, data, isSelected, index, setOve
         <h3>Não</h3>
         <h3>23/11/2024</h3>
       </div>
-    );
+    )
 }
 
 export default Patient
