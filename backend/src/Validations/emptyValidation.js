@@ -34,6 +34,11 @@ function FicharioEmpty(profession, education, vinculo, work, psicologa, psiquiat
         return true
     }
 
+    if(!education.type || education.type.trim() === ''){
+        console.log('education type: ', education.type)
+        return true
+    }
+
     // Verifica os campos obrigatórios de education
     if (!education || !education.curso || education.curso.trim() === '') {
         console.log('profissao curso:',education.curso)

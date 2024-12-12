@@ -26,18 +26,33 @@ const fichaSchema = new mongoose.Schema({
         },
     },
     preferredDay: {
-        morning_monday: { type: Boolean, default: false },
-        afternoon_tuesday: { type: Boolean, default: false },
-        morning_wednesday: { type: Boolean, default: false },
-        // Continue adicionando campos para cada dia/turno conforme necessário
+        preferredDay: {
+            morning_monday: { type: Boolean, default: false },
+            morning_tuesday: { type: Boolean, default: false },
+            morning_wednesday: { type: Boolean, default: false },
+            morning_thursday: { type: Boolean, default: false },
+            morning_friday: { type: Boolean, default: false },
+            afternoon_monday: { type: Boolean, default: false },
+            afternoon_tuesday: { type: Boolean, default: false },
+            afternoon_wednesday: { type: Boolean, default: false },
+            afternoon_thursday: { type: Boolean, default: false },
+            afternoon_friday: { type: Boolean, default: false },
+            night_monday: { type: Boolean, default: false },
+            night_tuesday: { type: Boolean, default: false },
+            night_wednesday: { type: Boolean, default: false },
+            night_thursday: { type: Boolean, default: false },
+            night_friday: { type: Boolean, default: false },
+        },
+        
     },
     vinculo: {
         type: String,
-        enum: ['Docente', 'Agente', 'Acadêmico', 'Estagiário'],
+        enum: ['Docente', 'Agente', 'Acadêmico', 'Estagiário', 'Sem Vinculo'],
         required: true,
+        default: 'Sem Vinculo'
     },
     comunidade: {
-        type: String,
+        type: Boolean,
         default: false,
     },
     work: {
@@ -81,7 +96,7 @@ const fichaSchema = new mongoose.Schema({
 
     prioridade: {
         type: String,
-        enum: ['baixa', 'media', 'alta'],
+        enum: ['baixa', 'media', 'alta', null],
         default: null
     },
 
