@@ -13,6 +13,7 @@ import Ficha from './components/pages/Ficha';
 import Profile from './components/pages/Profile'
 import ScreeningQueue from './components/pages/ScreeningQueue';
 import InvitePsychologist from './components/pages/InvitePsychologist';
+import PatientFicha from './components/ficha/PatientFicha';
 
 function App() {
   return (
@@ -70,11 +71,21 @@ function App() {
               }
             />
             <Route
-              path="/screening"
+              path="/psychologist/screening"
               element={
-                <RoleBasedComponent allowedRoles={["admin"]}>
+                <RoleBasedComponent allowedRoles={["admin", 'psicologo']}>
                   <Container customClass="height">
                     <ScreeningQueue />
+                  </Container>
+                </RoleBasedComponent>
+              }
+            />
+            <Route
+              path="/psychologist/screening/:id"
+              element={
+                <RoleBasedComponent allowedRoles={["admin", 'psicologo']}>
+                  <Container customClass="height">
+                    <PatientFicha />
                   </Container>
                 </RoleBasedComponent>
               }
@@ -90,10 +101,30 @@ function App() {
               }
             />
             <Route
+              path="admin/invite/admin"
+              element={
+                <RoleBasedComponent allowedRoles={["admin"]}>
+                  <Container customClass="align">
+                    <InvitePsychologist
+                      inviteAdmin={true}
+                    />
+                  </Container>
+                </RoleBasedComponent>
+              }
+            />
+            <Route
               path="/register/psychologist"
               element={
                 <Container customClass="align">
                   <Login registerPsychologist={true} />
+                </Container>
+              }
+            />
+            <Route
+              path="/register/admin"
+              element={
+                <Container customClass="align">
+                  <Login registerAdmin={true} />
                 </Container>
               }
             />

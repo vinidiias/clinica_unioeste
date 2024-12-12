@@ -10,7 +10,7 @@ import { calcularIdade } from '../util/CalculaIdade'
 import { UserContext } from '../context/UserContext'
 
 const Profile = () => {
-  const { setUserData, userData } = useContext(UserContext)
+  const { setUserData } = useContext(UserContext)
   const navigate = useNavigate()
   const [localUser, setLocalUser] = useState({})
   const [localPessoa, setLocalPessoa] = useState({})

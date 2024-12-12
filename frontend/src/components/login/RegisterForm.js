@@ -8,9 +8,17 @@ const RegisterForm = ({ handleSubmit, handleClick }) => {
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+
 
     const submit = (e) =>{
       e.preventDefault()
+
+      if(password !== confirmPassword) {
+        alert('Senhas não coincidem')
+        return 
+      }
+      
       handleSubmit(email, name, password)
     }
 
@@ -35,10 +43,18 @@ const RegisterForm = ({ handleSubmit, handleClick }) => {
         <Input
           type="password"
           name="password"
-          text="Senha"
+          text="Nova Senha"
           placeholder="Digite sua senha"
           customClass="column padding_login"
           handleOnChange={(e) => setPassword(e.target.value)}
+        />
+        <Input
+          type="confirmPassword"
+          name="password"
+          text="Confirmar Senha"
+          placeholder="Digite sua senha"
+          customClass="column padding_login"
+          handleOnChange={(e) => setConfirmPassword(e.target.value)}
         />
         <div className={styles.form_submit}>
           <Submit text="Criar Conta" />

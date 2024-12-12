@@ -7,7 +7,7 @@ import { UserContext } from '../context/UserContext'
 import { useSearchParams } from 'react-router-dom'
 import api from '../../services/Api'
 
-const LoginForm = ({ registerPsychologist, handleSubmit, handleRegisterPsy, handleClick }) => {
+const LoginForm = ({ register, handleSubmit, handleRegister, handleClick }) => {
   const {userData} = useContext(UserContext)
   const [searchParams] = useSearchParams()
   const [message, setMessage] = useState('')
@@ -24,7 +24,7 @@ const LoginForm = ({ registerPsychologist, handleSubmit, handleRegisterPsy, hand
   }, [userData.email]);
 
   useEffect(() => {
-    if(registerPsychologist) {
+    if(register) {
       const getSearchUrl = async () => {
         const email = searchParams.get("email");
         const id = searchParams.get("id");
@@ -32,7 +32,7 @@ const LoginForm = ({ registerPsychologist, handleSubmit, handleRegisterPsy, hand
         if (email && id) {
           api
             .post(`/admin/validate`, { email, id })
-            .then((data) => setEmail(email))
+            .then(() => setEmail(email))
             .then(() => setIsValid(true))
             .catch(() => setMessage("Convite inválido"));
         } else {
@@ -41,37 +41,33 @@ const LoginForm = ({ registerPsychologist, handleSubmit, handleRegisterPsy, hand
       }
       getSearchUrl()
     }
-  }, [searchParams, registerPsychologist])
+  }, [searchParams, register])
 
-  const registerPsychologistHandle = (e) => {
+  const registerSubmit = (e) => {
     e.preventDefault()
 
     if(password !== confirmPassword) {
       setMessage('Senhas não coincidem')
+      return
     }
 
     const email = searchParams.get('email')
     const id = searchParams.get('id')
 
-    handleRegisterPsy(email, name, password, id)
+    handleRegister(email, name, password, id)
   }
 
   const submit = (e) =>{
     e.preventDefault()
-
-    if(password !== confirmPassword) {
-      alert('Senhas não coincidem')
-      return
-    }
 
     handleSubmit(email, password)
   }
 
   return (
     <form
-      onSubmit={!registerPsychologist ? submit : registerPsychologistHandle}
+      onSubmit={!register ? submit : registerSubmit}
     >
-      {!registerPsychologist ? (
+      {!register ? (
         <>
           <Input
             type="email"
@@ -89,14 +85,6 @@ const LoginForm = ({ registerPsychologist, handleSubmit, handleRegisterPsy, hand
             placeholder="Digite sua senha"
             customClass="column padding_login"
             handleOnChange={(e) => setPassword(e.target.value)}
-          />
-          <Input
-            type="password"
-            name="confirmPassword"
-            text="Confirme sua senha"
-            placeholder="Digite sua senha"
-            customClass="column padding_login"
-            handleOnChange={(e) => setConfirmPassword(e.target.value)}
           />
         </>
       ) : isValid ? (
@@ -130,7 +118,7 @@ const LoginForm = ({ registerPsychologist, handleSubmit, handleRegisterPsy, hand
           <Input
             type="password"
             name="confirmPassword"
-            text="Confirme sua senha"
+            text="Confirmar Senha"
             placeholder="Digite sua senha"
             customClass="column padding_login"
             handleOnChange={(e) => setConfirmPassword(e.target.value)}
@@ -141,7 +129,7 @@ const LoginForm = ({ registerPsychologist, handleSubmit, handleRegisterPsy, hand
       )}
 
       <div className={styles.form_submit}>
-        {!registerPsychologist ? (
+        {!register ? (
           <>
             <Submit text="Entrar" />
             <button className={styles.btn} onClick={handleClick}>

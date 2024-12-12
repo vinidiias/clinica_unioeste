@@ -5,8 +5,9 @@ import Input from '../form/Input'
 import Submit from '../form/Submit'
 import api from '../../services/Api'
 
-const InvitePsychologist = () => {
+const InvitePsychologist = ({ inviteAdmin }) => {
     const [email, setEmail] = useState('')
+    const role = inviteAdmin ? 'admin' : 'psicologo'
 
     const cardVariants = {
         initial: { scale: 0.96, y: 30, opacity: 0 },
@@ -25,14 +26,11 @@ const InvitePsychologist = () => {
         if(!email || email === '') return alert('Email inválido')
 
         try{
-          console.log(email)
-          const emailSent = await api.post('/psicologo/convite', {email})
-
-          console.log(emailSent.data)
+          const emailSent = await api.post(`/${role}/convite`, {email, role})
 
           if(emailSent) {
             console.log(emailSent.data)
-            alert('Convite enviado com sucesso!')
+            alert(`Convite para ${inviteAdmin ? "o administrador" : "a psicóloga"} enviado com sucesso!`)
           }
           console.log(emailSent)
         }catch(err) {
@@ -52,17 +50,17 @@ const InvitePsychologist = () => {
             exit="exit"
             className={styles.login}
           >
-            <h1>Convidar psicologo</h1>
+            <h1>Convidar {inviteAdmin ? 'Administrador' : 'Psicólogo'}</h1>
             <form onSubmit={handleInvite}>
               <Input
                 type="email"
-                text="Email da psicóloga"
+                text={`Email ${inviteAdmin ? "do Administrador" : "da Psicóloga"}`}
                 name="email_psicologa"
                 placeholder="Digite o email"
                 customClass="column align"
                 handleOnChange={(e) => setEmail(e.target.value)}
               />
-                <Submit text="Enviar convite" />
+              <Submit text="Enviar convite" />
             </form>
           </motion.div>
         </div>
