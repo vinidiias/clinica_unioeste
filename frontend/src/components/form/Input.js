@@ -1,6 +1,6 @@
 import styles from './Input.module.css'
 
-const Input = ({ type, name, text, handleOnChange, placeholder, value, autoComplete, customClass, disabled}) => {
+const Input = ({ type, name, text, handleOnChange, placeholder, value, autoComplete, customClass, disable}) => {
   
     return (
       <div
@@ -18,7 +18,7 @@ const Input = ({ type, name, text, handleOnChange, placeholder, value, autoCompl
           type={type}
           name={name}
           id={name}
-          disabled={disabled}
+          disabled={disable}
           placeholder={placeholder}
           onChange={handleOnChange}
           value={value}

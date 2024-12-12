@@ -23,7 +23,6 @@
 
 .form_control input:disabled {
     cursor: no-drop;
-    background-color: white;
 }
 
 .column {
