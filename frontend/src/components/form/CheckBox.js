@@ -1,6 +1,6 @@
 import styles from './CheckBox.module.css'
 
-const CheckBox = ({ name, text, side, handleOnChange, value, isSelected, customClass, disable }) => {
+const CheckBox = ({ name, text, side, handleOnChange, value, isSelected, customClass, disabled }) => {
 
   const inputId = `${name}-${value}`;
     return (
@@ -15,7 +15,7 @@ const CheckBox = ({ name, text, side, handleOnChange, value, isSelected, customC
           checked={isSelected}
           name={name}
           id={inputId}
-          disabled={disable}
+          disabled={disabled}
           onChange={handleOnChange}
           value={value || ''}
         />

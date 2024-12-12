@@ -32,28 +32,28 @@ const FichaForm = ({ infoCompletPatient }) => {
     setor: '',
   })
   const [isVinculo, setIsVinculo] = useState(infoCompletPatient?.ficha?.vinculo ? true : false)
-  const [typeVinculo, setTypeVinculo] = useState(infoCompletPatient?.ficha?.vinculo?.type ? infoCompletPatient.ficha.vinculo.type : 'Não')
+  const [typeVinculo, setTypeVinculo] = useState(infoCompletPatient?.ficha?.vinculo?.type ? infoCompletPatient.ficha.vinculo.type : 'Sem Vínculo')
   const [setor, setSetor] = useState(infoCompletPatient?.ficha?.vinculo?.setor ? infoCompletPatient.ficha.vinculo.setor : '')
-  const [comunidade, setComunidade] = useState('')
+  const [comunidade, setComunidade] = useState(infoCompletPatient?.ficha?.comunidade ? infoCompletPatient?.ficha?.comunidade : false)
   const [work, setWork] = useState({
     type: '',
     hours: '',
   })
-  const [typeWork, setTypeWork] = useState('')
-  const [horarioWork, setHorarioWork] = useState('')
+  const [typeWork, setTypeWork] = useState(infoCompletPatient?.ficha?.work?.type ? infoCompletPatient.ficha.work.type : '')
+  const [horarioWork, setHorarioWork] = useState(infoCompletPatient?.ficha?.work?.time ? infoCompletPatient.ficha.work.time : '')
   const [psicologa, setPsicologa] = useState({
     type: '',
     time: '',
   })
-  const [typePsicologa, setTypePsicologa] = useState('')
-  const [timePsicologa, setTimePsicologa] = useState('')
+  const [typePsicologa, setTypePsicologa] = useState(infoCompletPatient?.ficha?.psicologa?.type ? infoCompletPatient.ficha.psicologa.type : '')
+  const [timePsicologa, setTimePsicologa] = useState(infoCompletPatient?.ficha?.psicologa?.time ? infoCompletPatient.ficha.psicologa.time : '')
   const [psiquiatra, setPsiquiatra] = useState({
     type: '',
     time: '',
   })
-  const [typePsiquiatra, setTypePsiquiatra] = useState('')
-  const [timePsiquiatra, setTimePsiquiatra] = useState('')
-  const [observation, setObservation] = useState('')
+  const [typePsiquiatra, setTypePsiquiatra] = useState(infoCompletPatient?.ficha?.psiquiatra?.type ? infoCompletPatient.ficha.psiquiatra.type : '')
+  const [timePsiquiatra, setTimePsiquiatra] = useState(infoCompletPatient?.ficha?.psiquiatra?.time ? infoCompletPatient.ficha.psiquiatra.time : '')
+  const [observation, setObservation] = useState(infoCompletPatient?.ficha?.observation ? infoCompletPatient.ficha.observation : '')
 
 //education object
 
@@ -157,7 +157,7 @@ useEffect(() => {
               <>
                 <div className={styles.flex}>
                   <Input
-                    disable={true}
+                    disabled={true}
                     type="text"
                     name="name"
                     text="Nome"
@@ -166,7 +166,7 @@ useEffect(() => {
                   />
                   <div className={styles.flex}>
                     <Input
-                      disable={true}
+                      disabled={true}
                       type="date"
                       name="birth"
                       value={infoCompletPatient.pessoa.birth}
@@ -177,7 +177,7 @@ useEffect(() => {
                 </div>
                 <div className={styles.flex}>
                   <Input
-                    disable={true}
+                    disabled={true}
                     type="number"
                     name="age"
                     text="Idade"
@@ -186,7 +186,7 @@ useEffect(() => {
                   />
                   <div className={styles.flex}>
                     <Input
-                      disable={true}
+                      disabled={true}
                       type="text"
                       name="phone"
                       text="Telefone"
@@ -197,7 +197,7 @@ useEffect(() => {
                   {infoCompletPatient.pessoa.ra && (
                     <div className={styles.flex}>
                       <Input
-                        disable={true}
+                        disabled={true}
                         type="text"
                         name="ra"
                         text="RA"
@@ -209,7 +209,7 @@ useEffect(() => {
                 </div>
                 <div className={styles.flex}>
                   <Input
-                    disable={true}
+                    disabled={true}
                     type="text"
                     name="adress"
                     text="Endereço"
@@ -218,7 +218,7 @@ useEffect(() => {
                   />
                   <div className={styles.flex}>
                     <Input
-                      disable={true}
+                      disabled={true}
                       type="text"
                       name="numberAdress"
                       text="Número"
@@ -234,7 +234,7 @@ useEffect(() => {
                 type="text"
                 name="profission"
                 text="Profissão"
-                disable={infoCompletPatient ? true : false}
+                disabled={infoCompletPatient ? true : false}
                 value={profission}
                 handleOnChange={handleChange}
               />
@@ -245,7 +245,7 @@ useEffect(() => {
               </label>
               <div className={styles.student}>
                 <CheckBox
-                  disable={!infoCompletPatient ? false : true}
+                  disabled={!infoCompletPatient ? false : true}
                   isSelected={education.type === "Fundamental I"}
                   name="level"
                   side="right"
@@ -254,7 +254,7 @@ useEffect(() => {
                   handleOnChange={(e) => setTypeEducation(e.target.value)}
                 />
                 <CheckBox
-                  disable={!infoCompletPatient ? false : true}
+                  disabled={!infoCompletPatient ? false : true}
                   isSelected={education.type === "Fundamental II"}
                   side="right"
                   name="level"
@@ -263,7 +263,7 @@ useEffect(() => {
                   handleOnChange={(e) => setTypeEducation(e.target.value)}
                 />
                 <CheckBox
-                  disable={!infoCompletPatient ? false : true}
+                  disabled={!infoCompletPatient ? false : true}
                   isSelected={education.type === "Ensino Médio"}
                   side="right"
                   name="level"
@@ -272,7 +272,7 @@ useEffect(() => {
                   handleOnChange={(e) => setTypeEducation(e.target.value)}
                 />
                 <CheckBox
-                  disable={!infoCompletPatient ? false : true}
+                  disabled={!infoCompletPatient ? false : true}
                   isSelected={education.type === "Ensino Técnico"}
                   side="right"
                   name="level"
@@ -281,7 +281,7 @@ useEffect(() => {
                   handleOnChange={(e) => setTypeEducation(e.target.value)}
                 />
                 <CheckBox
-                  disable={!infoCompletPatient ? false : true}
+                  disabled={!infoCompletPatient ? false : true}
                   isSelected={education.type === "Graduação"}
                   side="right"
                   name="level"
@@ -290,7 +290,7 @@ useEffect(() => {
                   handleOnChange={(e) => setTypeEducation(e.target.value)}
                 />
                 <CheckBox
-                  disable={!infoCompletPatient ? false : true}
+                  disabled={!infoCompletPatient ? false : true}
                   isSelected={education.type === "Pós Graduação"}
                   side="right"
                   name="level"
@@ -308,7 +308,7 @@ useEffect(() => {
                     type="text"
                     name="curso"
                     text="Curso"
-                    disable={infoCompletPatient ? true : false}
+                    disabled={infoCompletPatient ? true : false}
                     value={curso}
                     handleOnChange={(e) => setCurso(e.target.value)}
                   />
@@ -316,7 +316,7 @@ useEffect(() => {
                     type="text"
                     name="periodo"
                     text="Ano/período"
-                    disable={infoCompletPatient ? true : false}
+                    disabled={infoCompletPatient ? true : false}
                     value={periodo}
                     handleOnChange={(e) => setPeriodo(e.target.value)}
                   />
@@ -327,7 +327,7 @@ useEffect(() => {
                   </label>
                   <div className={styles.turnos}>
                     <CheckBox
-                      disable={infoCompletPatient ? true : false}
+                      disabled={infoCompletPatient ? true : false}
                       isSelected={turno === "Manhã"}
                       side="right"
                       value="Manhã"
@@ -336,7 +336,7 @@ useEffect(() => {
                       handleOnChange={(e) => setTurno(e.target.value)}
                     />
                     <CheckBox
-                      disable={infoCompletPatient ? true : false}
+                      disabled={infoCompletPatient ? true : false}
                       isSelected={turno === "Tarde"}
                       side="right"
                       value="Tarde"
@@ -345,7 +345,7 @@ useEffect(() => {
                       handleOnChange={(e) => setTurno(e.target.value)}
                     />
                     <CheckBox
-                      disable={infoCompletPatient ? true : false}
+                      disabled={infoCompletPatient ? true : false}
                       isSelected={turno === "Noite"}
                       side="right"
                       value="Noite"
@@ -371,6 +371,7 @@ useEffect(() => {
                 value="Vínculo com Unioeste"
                 name="vinculo_com_unioeste"
                 text="Vínculo com Unioeste"
+                disabled={infoCompletPatient ? true : false}
                 handleOnChange={(e) => setIsVinculo(!isVinculo)}
               />
               {isVinculo && (
@@ -381,6 +382,7 @@ useEffect(() => {
                     value="Docente"
                     name="vinculo_com_unioeste"
                     text="Docente"
+                    disabled={infoCompletPatient ? true : false}
                     handleOnChange={(e) => setTypeVinculo(e.target.value)}
                   />
                   <CheckBox
@@ -389,6 +391,7 @@ useEffect(() => {
                     value="Agente"
                     name="type"
                     text="Agente"
+                    disabled={infoCompletPatient ? true : false}
                     handleOnChange={(e) => setTypeVinculo(e.target.value)}
                   />
                   <CheckBox
@@ -397,6 +400,7 @@ useEffect(() => {
                     value="Acadêmico"
                     name="vinculo_com_unioeste"
                     text="Acadêmico"
+                    disabled={infoCompletPatient ? true : false}
                     handleOnChange={(e) => setTypeVinculo(e.target.value)}
                   />
                   <CheckBox
@@ -405,6 +409,7 @@ useEffect(() => {
                     value="Estagiário"
                     name="vinculo_com_unioeste"
                     text="Estagiário"
+                    disabled={infoCompletPatient ? true : false}
                     handleOnChange={(e) => setTypeVinculo(e.target.value)}
                   />
                 </>
@@ -428,6 +433,7 @@ useEffect(() => {
                 name="community"
                 value="Comunidade Externa"
                 text="Comunidade Externa"
+                disabled={infoCompletPatient ? true : false}
                 handleOnChange={(e) =>
                   setComunidade(e.target.checked ? "Sim" : "Não")
                 }
@@ -444,6 +450,7 @@ useEffect(() => {
                   value="Não trabalha"
                   name="work"
                   text="( ) Não"
+                  disabled={infoCompletPatient ? true : false}
                   handleOnChange={(e) => setTypeWork(e.target.value)}
                 />
                 <CheckBox
@@ -452,6 +459,7 @@ useEffect(() => {
                   handleOnChange={(e) => setTypeWork(e.target.value)}
                   value="Trabalha"
                   name="work"
+                  disabled={infoCompletPatient ? true : false}
                   text="( ) Sim"
                 />
               </div>
@@ -462,6 +470,8 @@ useEffect(() => {
                   type="time"
                   name="work_schedule"
                   text="Trabalha em qual horário?"
+                  disabled={infoCompletPatient ? true : false}
+                  value={horarioWork}
                   handleOnChange={(e) => setHorarioWork(e.target.value)}
                 />
               </div>
@@ -477,6 +487,7 @@ useEffect(() => {
                   value="Não Acompanha"
                   name="psycho"
                   text="( ) Não"
+                  disabled={infoCompletPatient ? true : false}
                   handleOnChange={(e) => setTypePsicologa(e.target.value)}
                 />
                 <CheckBox
@@ -485,6 +496,7 @@ useEffect(() => {
                   name="psycho"
                   value="Acompanha"
                   text="( ) Sim"
+                  disabled={infoCompletPatient ? true : false}
                   handleOnChange={(e) => setTypePsicologa(e.target.value)}
                 />
               </div>
@@ -495,6 +507,8 @@ useEffect(() => {
                   type="text"
                   name="psycho_schedule"
                   text="Por quanto tempo acompanhamento psicológico?"
+                  value={timePsicologa}
+                  disabled={infoCompletPatient ? true : false}
                   handleOnChange={(e) => setTimePsicologa(e.target.value)}
                 />
               </div>
@@ -510,6 +524,7 @@ useEffect(() => {
                   value="Não Acompanha"
                   name="psychiatric"
                   text="( ) Não"
+                  disabled={infoCompletPatient ? true : false}
                   handleOnChange={(e) => setTypePsiquiatra(e.target.value)}
                 />
                 <CheckBox
@@ -518,6 +533,7 @@ useEffect(() => {
                   value="Acompanha"
                   name="psychiatric"
                   text="( ) Sim"
+                  disabled={infoCompletPatient ? true : false}
                   handleOnChange={(e) => setTypePsiquiatra(e.target.value)}
                 />
               </div>
@@ -529,6 +545,8 @@ useEffect(() => {
                   type="text"
                   name="psychiatric_schedule"
                   text="Por quanto tempo fez acompanhamento psiquiátrico?"
+                  value={timePsiquiatra}
+                  disabled={infoCompletPatient ? true : false}
                   handleOnChange={(e) => setTimePsiquiatra(e.target.value)}
                 />
               </div>
@@ -541,6 +559,8 @@ useEffect(() => {
                 name="observation"
                 id="observation"
                 rows="7"
+                disabled={infoCompletPatient ? true : false}
+                value={observation}
                 onChange={(e) => setObservation(e.target.value)}
               ></textarea>
             </div>

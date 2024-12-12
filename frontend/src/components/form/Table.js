@@ -37,7 +37,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 <td>Manhã</td>
                 <td>
                   <CheckBox
-                    disable={viewPatientFicha}
+                    disabled={viewPatientFicha}
                     isSelected={preferredDay.morning_day}
                     handleOnChange={CheckBoxChange}
                     customClass="justify"
@@ -47,7 +47,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 </td>
                 <td>
                   <CheckBox
-                    disable={viewPatientFicha}
+                    disabled={viewPatientFicha}
                     isSelected={preferredDay.morning_tuesday}
                     handleOnChange={CheckBoxChange}
                     customClass="justify"
@@ -57,7 +57,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 </td>
                 <td>
                   <CheckBox
-                    disable={viewPatientFicha}
+                    disabled={viewPatientFicha}
                     isSelected={preferredDay.mornin_wednesday}
                     handleOnChange={CheckBoxChange}
                     customClass="justify"
@@ -67,7 +67,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 </td>
                 <td>
                   <CheckBox
-                    disable={viewPatientFicha}
+                    disabled={viewPatientFicha}
                     isSelected={preferredDay.morning_thursday}
                     handleOnChange={CheckBoxChange}
                     customClass="justify"
@@ -77,7 +77,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 </td>
                 <td>
                   <CheckBox
-                    disable={viewPatientFicha}
+                    disabled={viewPatientFicha}
                     isSelected={preferredDay.morning_friday}
                     handleOnChange={CheckBoxChange}
                     customClass="justify"
@@ -90,7 +90,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 <td>Tarde</td>
                 <td>
                   <CheckBox
-                    disable={viewPatientFicha}
+                    disabled={viewPatientFicha}
                     isSelected={preferredDay.afternoon_monday}
                     handleOnChange={CheckBoxChange}
                     customClass="justify"
@@ -100,7 +100,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 </td>
                 <td>
                   <CheckBox
-                    disable={viewPatientFicha}
+                    disabled={viewPatientFicha}
                     isSelected={preferredDay.afternoon_tuesday ? true : false}
                     handleOnChange={CheckBoxChange}
                     customClass="justify"
@@ -110,7 +110,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 </td>
                 <td>
                   <CheckBox
-                    disable={viewPatientFicha}
+                    disabled={viewPatientFicha}
                     isSelected={preferredDay.afternoon_wednesday}
                     handleOnChange={CheckBoxChange}
                     customClass="justify"
@@ -120,7 +120,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 </td>
                 <td>
                   <CheckBox
-                    disable={viewPatientFicha}
+                    disabled={viewPatientFicha}
                     isSelected={preferredDay.afternoon_thursday}
                     handleOnChange={CheckBoxChange}
                     customClass="justify"
@@ -130,7 +130,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 </td>
                 <td>
                   <CheckBox
-                    disable={viewPatientFicha}
+                    disabled={viewPatientFicha}
                     isSelected={preferredDay.afternoon_friday}
                     handleOnChange={CheckBoxChange}
                     customClass="justify"
@@ -143,7 +143,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 <td>Noite</td>
                 <td>
                   <CheckBox
-                    disable={viewPatientFicha}
+                    disabled={viewPatientFicha}
                     isSelected={preferredDay.night_monday}
                     handleOnChange={CheckBoxChange}
                     customClass="justify"
@@ -153,7 +153,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 </td>
                 <td>
                   <CheckBox
-                    disable={viewPatientFicha}
+                    disabled={viewPatientFicha}
                     isSelected={preferredDay.night_tuesday}
                     handleOnChange={CheckBoxChange}
                     customClass="justify"
@@ -163,7 +163,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 </td>
                 <td>
                   <CheckBox
-                    disable={viewPatientFicha}
+                    disabled={viewPatientFicha}
                     isSelected={preferredDay.night_wednesday}
                     handleOnChange={CheckBoxChange}
                     customClass="justify"
@@ -173,7 +173,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 </td>
                 <td>
                   <CheckBox
-                    disable={viewPatientFicha}
+                    disabled={viewPatientFicha}
                     isSelected={preferredDay.night_thursday}
                     handleOnChange={CheckBoxChange}
                     customClass="justify"
@@ -183,7 +183,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 </td>
                 <td>
                   <CheckBox
-                    disable={viewPatientFicha}
+                    disabled={viewPatientFicha}
                     isSelected={preferredDay.night_friday}
                     handleOnChange={CheckBoxChange}
                     customClass="justify"
