@@ -82,7 +82,13 @@ const fichaSchema = new mongoose.Schema({
     prioridade: {
         type: String,
         enum: ['baixa', 'media', 'alta'],
-        default: 'media'
+        default: null
+    },
+
+    status: {
+        type: String,
+        enum: ['Em avaliação', 'Avaliada'],
+        default: 'Em avaliação',
     },
 
     user: {
