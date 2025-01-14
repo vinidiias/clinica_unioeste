@@ -1,24 +1,15 @@
 const mongoose = require('mongoose')
 const Ficha = require('../Models/FichaModel')
-const Pessoa = require('../Models/PessoaModel')
 const { FicharioEmpty } = require('../Validations/emptyValidation')
-
+const User = require('../Models/UserModel')
+const Pessoa = require('../Models/PessoaModel')
 
 
 module.exports = {
     async create(req, res) {
 
         const {  
-            profission,
-            education,
-            preferredDay,
-            vinculo,
-            comunidade,
-            work,
-            psicologa,
-            psiquiatra,
-            observation
-        } = req.body;
+            profission, education, preferredDay, vinculo, comunidade, work, psicologa, psiquiatra, observation } = req.body;
         
         const { user_id } = req.params
         const { auth } = req.headers
@@ -50,6 +41,10 @@ module.exports = {
             
             // Popula o campo 'user' com as informações do usuário associado (se houver relação no schema)
             const fichaComUser = await Ficha.findById(createFicha._id).populate('user') //tenta adicionar pessoas tmb sem ser o populate
+
+            fichaComUser.triagem = true
+
+            await fichaComUser.save()
 
             return res.status(200).send(fichaComUser)//tras outras informacoes sobre o usurario
             
@@ -89,10 +84,16 @@ module.exports = {
         if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'})
 
         try {
-            const allFicharioUser = await Ficha.find({
-                user: user_id
-            })
-            return res.status(200).send(allFicharioUser)    
+            const allFicharioUser = await Ficha.findOne({ user: user_id })
+            
+            const user = await User.findById(user_id)
+            const pessoa = await Pessoa.findOne({ user: user_id})
+
+            return res.status(200).send({
+                ficha: allFicharioUser,
+                user: user,
+                pessoa: pessoa
+            })    
         }
         catch (err){
             return res.status(400).send(err)

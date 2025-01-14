@@ -1,11 +1,11 @@
 import { useParams } from 'react-router-dom'
-import styles from './PatientFicha.module.css'
+import styles from './ViewFicha.module.css'
 import { useEffect, useState } from 'react'
 import api from '../../services/Api'
-import FichaForm from '../ficha/FichaForm'
+import FichaForm from './FichaForm'
 import Loading from '../layout/Loading'
 
-const PatientFicha = () => { 
+const ViewFicha = () => { 
     const { id }= useParams()
     const [ficha, setFicha] = useState('')
 
@@ -25,4 +25,4 @@ const PatientFicha = () => {
     return <>{ficha.length === 0 ? <Loading /> : (<FichaForm infoCompletPatient={ficha} />)}</>
 }
 
-export default PatientFicha
+export default ViewFicha

@@ -1,108 +1,173 @@
-import { useContext, useEffect, useState } from 'react'
-import styles from './FichaForm.module.css'
-import Input from '../form/Input'
-import CheckBox from '../form/CheckBox'
-import Table from '../form/Table'
-import Loading from '../layout/Loading'
-import Submit from '../form/Submit'
-import api from '../../services/Api'
-import { calcularIdade } from '../util/CalculaIdade'
-import { UserContext } from '../context/UserContext'
-import { useNavigate } from 'react-router-dom'
+import { useContext, useEffect, useState } from "react";
+import styles from "./FichaForm.module.css";
+import Input from "../form/Input";
+import CheckBox from "../form/CheckBox";
+import Table from "../form/Table";
+import Loading from "../layout/Loading";
+import Submit from "../form/Button";
+import api from "../../services/Api";
+import { calcularIdade } from "../util/CalculaIdade";
+import { UserContext } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
+import TextArea from "../form/TextArea";
+import Button from "../form/Button";
 
 const FichaForm = ({ infoCompletPatient }) => {
-  const { userData } = useContext(UserContext)
-  const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
-  const [profission, setProfission] = useState(infoCompletPatient?.ficha?.profission ? infoCompletPatient.ficha.profission : '')
+  const { userData } = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+ /* const [profission, setProfission] = useState(
+    infoCompletPatient?.ficha?.profission
+      ? infoCompletPatient.ficha.profission
+      : ""
+  );
   const [education, setEducation] = useState({
-    type:'',
-    curso: '',
-    periodo: '',
-    turno: '',
-  })
-  const [typeEducation, setTypeEducation] = useState(infoCompletPatient?.ficha?.education?.type ? infoCompletPatient.ficha.education.type : '')
-  const [curso, setCurso] = useState(infoCompletPatient?.ficha?.education?.curso ? infoCompletPatient.ficha.education.curso : '')
-  const [periodo, setPeriodo] = useState(infoCompletPatient?.ficha?.education?.periodo ? infoCompletPatient.ficha.education.periodo : '')
-  const [turno, setTurno] = useState(infoCompletPatient?.ficha?.education?.turno ? infoCompletPatient.ficha.education.turno : '')
-  const [preferredDay, setPreferredDay] = useState(infoCompletPatient?.ficha?.preferredDay ? infoCompletPatient.ficha.preferredDay : '')
+    type: "",
+    curso: "",
+    periodo: "",
+    turno: "",
+  });
+  const [typeEducation, setTypeEducation] = useState(
+    infoCompletPatient?.ficha?.education?.type
+      ? infoCompletPatient.ficha.education.type
+      : ""
+  );
+  const [curso, setCurso] = useState(
+    infoCompletPatient?.ficha?.education?.curso
+      ? infoCompletPatient.ficha.education.curso
+      : ""
+  );
+  const [periodo, setPeriodo] = useState(
+    infoCompletPatient?.ficha?.education?.periodo
+      ? infoCompletPatient.ficha.education.periodo
+      : ""
+  );
+  const [turno, setTurno] = useState(
+    infoCompletPatient?.ficha?.education?.turno
+      ? infoCompletPatient.ficha.education.turno
+      : ""
+  );
+  const [preferredDay, setPreferredDay] = useState(
+    infoCompletPatient?.ficha?.preferredDay
+      ? infoCompletPatient.ficha.preferredDay
+      : ""
+  );
   const [vinculo, setVinculo] = useState({
-    type: '',
-    typeVinculo: '',
-    setor: '',
-  })
-  const [isVinculo, setIsVinculo] = useState(infoCompletPatient?.ficha?.vinculo ? true : false)
-  const [typeVinculo, setTypeVinculo] = useState(infoCompletPatient?.ficha?.vinculo?.type ? infoCompletPatient.ficha.vinculo.type : 'Sem Vínculo')
-  const [setor, setSetor] = useState(infoCompletPatient?.ficha?.vinculo?.setor ? infoCompletPatient.ficha.vinculo.setor : '')
-  const [comunidade, setComunidade] = useState(infoCompletPatient?.ficha?.comunidade ? infoCompletPatient?.ficha?.comunidade : false)
+    type: "",
+    typeVinculo: "",
+    setor: "",
+  });
+  const [isVinculo, setIsVinculo] = useState(
+    infoCompletPatient?.ficha?.vinculo ? true : false
+  );
+  const [typeVinculo, setTypeVinculo] = useState(
+    infoCompletPatient?.ficha?.vinculo?.type
+      ? infoCompletPatient.ficha.vinculo.type
+      : "Sem Vínculo"
+  );
+  const [setor, setSetor] = useState(
+    infoCompletPatient?.ficha?.vinculo?.setor
+      ? infoCompletPatient.ficha.vinculo.setor
+      : ""
+  );
+  const [comunidade, setComunidade] = useState(
+    infoCompletPatient?.ficha?.comunidade
+      ? infoCompletPatient?.ficha?.comunidade
+      : false
+  );
   const [work, setWork] = useState({
-    type: '',
-    hours: '',
-  })
-  const [typeWork, setTypeWork] = useState(infoCompletPatient?.ficha?.work?.type ? infoCompletPatient.ficha.work.type : '')
-  const [horarioWork, setHorarioWork] = useState(infoCompletPatient?.ficha?.work?.time ? infoCompletPatient.ficha.work.time : '')
+    type: "",
+    hours: "",
+  });
+  const [typeWork, setTypeWork] = useState(
+    infoCompletPatient?.ficha?.work?.type
+      ? infoCompletPatient.ficha.work.type
+      : ""
+  );
+  const [horarioWork, setHorarioWork] = useState(
+    infoCompletPatient?.ficha?.work?.time
+      ? infoCompletPatient.ficha.work.time
+      : ""
+  );
   const [psicologa, setPsicologa] = useState({
-    type: '',
-    time: '',
-  })
-  const [typePsicologa, setTypePsicologa] = useState(infoCompletPatient?.ficha?.psicologa?.type ? infoCompletPatient.ficha.psicologa.type : '')
-  const [timePsicologa, setTimePsicologa] = useState(infoCompletPatient?.ficha?.psicologa?.time ? infoCompletPatient.ficha.psicologa.time : '')
+    type: "",
+    time: "",
+  });
+  const [typePsicologa, setTypePsicologa] = useState(
+    infoCompletPatient?.ficha?.psicologa?.type
+      ? infoCompletPatient.ficha.psicologa.type
+      : ""
+  );
+  const [timePsicologa, setTimePsicologa] = useState(
+    infoCompletPatient?.ficha?.psicologa?.time
+      ? infoCompletPatient.ficha.psicologa.time
+      : ""
+  );
   const [psiquiatra, setPsiquiatra] = useState({
-    type: '',
-    time: '',
-  })
-  const [typePsiquiatra, setTypePsiquiatra] = useState(infoCompletPatient?.ficha?.psiquiatra?.type ? infoCompletPatient.ficha.psiquiatra.type : '')
-  const [timePsiquiatra, setTimePsiquiatra] = useState(infoCompletPatient?.ficha?.psiquiatra?.time ? infoCompletPatient.ficha.psiquiatra.time : '')
-  const [observation, setObservation] = useState(infoCompletPatient?.ficha?.observation ? infoCompletPatient.ficha.observation : '')
+    type: "",
+    time: "",
+  });
+  const [typePsiquiatra, setTypePsiquiatra] = useState(
+    infoCompletPatient?.ficha?.psiquiatra?.type
+      ? infoCompletPatient.ficha.psiquiatra.type
+      : ""
+  );
+  const [timePsiquiatra, setTimePsiquiatra] = useState(
+    infoCompletPatient?.ficha?.psiquiatra?.time
+      ? infoCompletPatient.ficha.psiquiatra.time
+      : ""
+  );
+  const [observation, setObservation] = useState(
+    infoCompletPatient?.ficha?.observation
+      ? infoCompletPatient.ficha.observation
+      : ""
+  );*/
 
-//education object
+  //education object
 
-useEffect(() => {
-  if (typeEducation !== 'Graduação' && typeEducation !== 'Pós Graduação') {
-    setEducation({
-      type: typeEducation, // Corrigido para 'type'
-    });
-  } else {
-    setEducation({
-      type:typeEducation, // Corrigido para 'type'
-      curso:curso,
-      periodo:periodo,
-      turno:turno,
-    });
-  }
-}, [typeEducation, curso, periodo, turno]);
+  /*useEffect(() => {
+    if (typeEducation !== "Graduação" && typeEducation !== "Pós Graduação") {
+      setEducation({
+        type: typeEducation, // Corrigido para 'type'
+      });
+    } else {
+      setEducation({
+        type: typeEducation, // Corrigido para 'type'
+        curso: curso,
+        periodo: periodo,
+        turno: turno,
+      });
+    }
+  }, [typeEducation, curso, periodo, turno]);
 
   //vinculo unioeste object
   useEffect(() => {
-    if(isVinculo){
-      if(typeVinculo !== 'Agente') setVinculo({type: typeVinculo})
-      else setVinculo({type:typeVinculo, setor:setor})
-    }
-    else setVinculo({type: 'Não'})
-  }, [typeVinculo, setor, isVinculo])
+    if (isVinculo) {
+      if (typeVinculo !== "Agente") setVinculo({ type: typeVinculo });
+      else setVinculo({ type: typeVinculo, setor: setor });
+    } else setVinculo({ type: "Não" });
+  }, [typeVinculo, setor, isVinculo]);
 
   //work object
-  useEffect(()=> {
-    if(typeWork === 'Trabalha') setWork({type:typeWork, time:horarioWork})
-    else setWork({type: typeWork})
-  }, [typeWork, horarioWork])
+  useEffect(() => {
+    if (typeWork === "Trabalha") setWork({ type: typeWork, time: horarioWork });
+    else setWork({ type: typeWork });
+  }, [typeWork, horarioWork]);
 
   //psicologa object
   useEffect(() => {
-    if(typePsicologa !== 'Acompanha')
-      setPsicologa({type: typePsicologa})
-    else setPsicologa({type:typePsicologa, time:timePsicologa})
-  }, [typePsicologa, timePsicologa])
+    if (typePsicologa !== "Acompanha") setPsicologa({ type: typePsicologa });
+    else setPsicologa({ type: typePsicologa, time: timePsicologa });
+  }, [typePsicologa, timePsicologa]);
 
   //psiquiatra object
   useEffect(() => {
-    if(typePsiquiatra !== 'Acompanha')
-      setPsiquiatra({type: typePsiquiatra})
-    else setPsiquiatra({type:typePsiquiatra, time:timePsiquiatra})
-  }, [typePsiquiatra, timePsiquiatra])
+    if (typePsiquiatra !== "Acompanha") setPsiquiatra({ type: typePsiquiatra });
+    else setPsiquiatra({ type: typePsiquiatra, time: timePsiquiatra });
+  }, [typePsiquiatra, timePsiquiatra]);*/
 
-  async function submit(e){
-    e.preventDefault()
+  /*async function submit(e) {
+    e.preventDefault();
     const fichaData = {
       profission,
       education,
@@ -112,465 +177,351 @@ useEffect(() => {
       work,
       psicologa,
       psiquiatra,
-      observation
-    }
-    
+      observation,
+    };
+
     try {
-      setLoading(true)
-      const fichaCreated = await api.post(`${userData.user_id}/ficha`, fichaData,
-        {headers: {auth: `${userData.user_id}`}}
-      )
+      setLoading(true);
+      const fichaCreated = await api.post(
+        `${userData.user_id}/ficha`,
+        fichaData,
+        { headers: { auth: `${userData.user_id}` } }
+      );
 
-      if(fichaCreated) {
-        console.log(fichaCreated)
-        alert('Ficha criada com sucesso, espere ser atendido.')
-        navigate('/home')
+      if (fichaCreated) {
+        console.log(fichaCreated);
+        alert("Ficha criada com sucesso, espere ser atendido.");
+        navigate("/home");
       }
-    } catch(err) {
-      console.log(err)
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
     }
-    finally {
-      setLoading(false)
-    }
-  }
+  }*/
 
-  function handleChange(e) {
-    const { name, value } = e.target
+  /*function handleChange(e) {
+    const { name, value } = e.target;
 
     const setters = {
       profission: setProfission,
-      observation: setObservation
-    }
+      observation: setObservation,
+    };
 
-    if(setters[name]) {
-      setters[name](value)
+    if (setters[name]) {
+      setters[name](value);
     }
-  }
+  }*/
 
-    return (
-      <>
-        {loading ? (
-          <Loading />
-        ) : (
-          <form className={styles.ficha_form} onSubmit={submit}>
-            {infoCompletPatient && (
-              <>
-                <div className={styles.flex}>
-                  <Input
-                    disabled={true}
-                    type="text"
-                    name="name"
-                    text="Nome"
-                    value={infoCompletPatient.user.name}
-                    handleOnChange={handleChange}
-                  />
-                  <div className={styles.flex}>
-                    <Input
-                      disabled={true}
-                      type="date"
-                      name="birth"
-                      value={infoCompletPatient.pessoa.birth}
-                      text="Data de Nascimento"
-                      handleOnChange={handleChange}
-                    />
-                  </div>
-                </div>
-                <div className={styles.flex}>
-                  <Input
-                    disabled={true}
-                    type="number"
-                    name="age"
-                    text="Idade"
-                    value={calcularIdade(infoCompletPatient.pessoa.birth)}
-                    handleOnChange={handleChange}
-                  />
-                  <div className={styles.flex}>
-                    <Input
-                      disabled={true}
-                      type="text"
-                      name="phone"
-                      text="Telefone"
-                      value={infoCompletPatient.pessoa.phone}
-                      handleOnChange={handleChange}
-                    />
-                  </div>
-                  {infoCompletPatient.pessoa.ra && (
-                    <div className={styles.flex}>
-                      <Input
-                        disabled={true}
-                        type="text"
-                        name="ra"
-                        text="RA"
-                        value={infoCompletPatient.pessoa.ra}
-                        handleOnChange={handleChange}
-                      />
-                    </div>
-                  )}
-                </div>
-                <div className={styles.flex}>
-                  <Input
-                    disabled={true}
-                    type="text"
-                    name="adress"
-                    text="Endereço"
-                    value={infoCompletPatient.pessoa.adressComplet.adress}
-                    handleOnChange={handleChange}
-                  />
-                  <div className={styles.flex}>
-                    <Input
-                      disabled={true}
-                      type="text"
-                      name="numberAdress"
-                      text="Número"
-                      value={infoCompletPatient.pessoa.adressComplet.number}
-                      handleOnChange={handleChange}
-                    />
-                  </div>
-                </div>
-              </>
-            )}
+  return (
+    <>
+      {infoCompletPatient && (
+        <>
+          <div className={styles.flex}>
+            <Input
+              disabled={true}
+              type="text"
+              name="name"
+              text="Nome"
+            />
             <div className={styles.flex}>
               <Input
+                disabled={true}
+                type="date"
+                name="birth"
+                text="Data de Nascimento"
+              />
+            </div>
+          </div>
+          <div className={styles.flex}>
+            <Input
+              disabled={true}
+              type="number"
+              name="age"
+              text="Idade"
+            />
+            <div className={styles.flex}>
+              <Input
+                disabled={true}
                 type="text"
-                name="profission"
-                text="Profissão"
-                disabled={infoCompletPatient ? true : false}
-                value={profission}
-                handleOnChange={handleChange}
+                name="phone"
+                text="Telefone"
               />
             </div>
-            <div className={styles.flex}>
-              <label htmlFor="level-Fundamental I" className={styles.label}>
-                Escolaridade *
-              </label>
-              <div className={styles.student}>
-                <CheckBox
-                  disabled={!infoCompletPatient ? false : true}
-                  isSelected={education.type === "Fundamental I"}
-                  name="level"
-                  side="right"
-                  text="Fundamental I"
-                  value="Fundamental I"
-                  handleOnChange={(e) => setTypeEducation(e.target.value)}
-                />
-                <CheckBox
-                  disabled={!infoCompletPatient ? false : true}
-                  isSelected={education.type === "Fundamental II"}
-                  side="right"
-                  name="level"
-                  text="Fundamental II"
-                  value="Fundamental II"
-                  handleOnChange={(e) => setTypeEducation(e.target.value)}
-                />
-                <CheckBox
-                  disabled={!infoCompletPatient ? false : true}
-                  isSelected={education.type === "Ensino Médio"}
-                  side="right"
-                  name="level"
-                  text="Ensino Médio"
-                  value="Ensino Médio"
-                  handleOnChange={(e) => setTypeEducation(e.target.value)}
-                />
-                <CheckBox
-                  disabled={!infoCompletPatient ? false : true}
-                  isSelected={education.type === "Ensino Técnico"}
-                  side="right"
-                  name="level"
-                  text="Ensino Técnico"
-                  value="Ensino Técnico"
-                  handleOnChange={(e) => setTypeEducation(e.target.value)}
-                />
-                <CheckBox
-                  disabled={!infoCompletPatient ? false : true}
-                  isSelected={education.type === "Graduação"}
-                  side="right"
-                  name="level"
-                  text="Graduação"
-                  value="Graduação"
-                  handleOnChange={(e) => setTypeEducation(e.target.value)}
-                />
-                <CheckBox
-                  disabled={!infoCompletPatient ? false : true}
-                  isSelected={education.type === "Pós Graduação"}
-                  side="right"
-                  name="level"
-                  text="Pós Graduação"
-                  value="Pós Graduação"
-                  handleOnChange={(e) => setTypeEducation(e.target.value)}
+            {infoCompletPatient.pessoa.ra && (
+              <div className={styles.flex}>
+                <Input
+                  disabled={true}
+                  type="text"
+                  name="ra"
+                  text="RA"
                 />
               </div>
-            </div>
-            {(typeEducation === "Pós Graduação" ||
-              typeEducation === "Graduação") && (
-              <>
-                <div className={styles.flex}>
-                  <Input
-                    type="text"
-                    name="curso"
-                    text="Curso"
-                    disabled={infoCompletPatient ? true : false}
-                    value={curso}
-                    handleOnChange={(e) => setCurso(e.target.value)}
-                  />
-                  <Input
-                    type="text"
-                    name="periodo"
-                    text="Ano/período"
-                    disabled={infoCompletPatient ? true : false}
-                    value={periodo}
-                    handleOnChange={(e) => setPeriodo(e.target.value)}
-                  />
-                </div>
-                <div className={styles.flex}>
-                  <label htmlFor="curso" className={styles.label}>
-                    Turno do seu curso *
-                  </label>
-                  <div className={styles.turnos}>
-                    <CheckBox
-                      disabled={infoCompletPatient ? true : false}
-                      isSelected={turno === "Manhã"}
-                      side="right"
-                      value="Manhã"
-                      name="course_schedule"
-                      text="Manhã"
-                      handleOnChange={(e) => setTurno(e.target.value)}
-                    />
-                    <CheckBox
-                      disabled={infoCompletPatient ? true : false}
-                      isSelected={turno === "Tarde"}
-                      side="right"
-                      value="Tarde"
-                      name="course_schedule"
-                      text="Tarde"
-                      handleOnChange={(e) => setTurno(e.target.value)}
-                    />
-                    <CheckBox
-                      disabled={infoCompletPatient ? true : false}
-                      isSelected={turno === "Noite"}
-                      side="right"
-                      value="Noite"
-                      name="course_schedule"
-                      text="Noite"
-                      handleOnChange={(e) => setTurno(e.target.value)}
-                    />
-                  </div>
-                </div>
-              </>
             )}
-            <div className={styles.flex + " " + styles.table}>
-              <Table
-                viewPatientFicha={infoCompletPatient ? true : false}
-                setPreferredDay={setPreferredDay}
-                preferredDay={preferredDay}
+          </div>
+          <div className={styles.flex}>
+            <Input
+              disabled={true}
+              type="text"
+              name="adress"
+              text="Endereço"
+            />
+            <div className={styles.flex}>
+              <Input
+                disabled={true}
+                type="text"
+                name="numberAdress"
+                text="Número"
               />
             </div>
-            <div className={styles.flex}>
+          </div>
+        </>
+      )}
+      <div className={styles.flex}>
+        <Input
+          type="text"
+          name="profission"
+          text="Profissão"
+          disabled={infoCompletPatient ? true : false}
+        />
+      </div>
+      <div className={styles.flex}>
+        <p className={styles.label}>Escolaridade *</p>
+        <div className={styles.student}>
+          <CheckBox
+            disabled={!infoCompletPatient ? false : true}
+            name="level"
+            side="right"
+            text="Fundamental I"
+          />
+          <CheckBox
+            disabled={!infoCompletPatient ? false : true}
+            side="right"
+            name="level"
+            text="Fundamental II"
+          />
+          <CheckBox
+            disabled={!infoCompletPatient ? false : true}
+            side="right"
+            name="level"
+            text="Ensino Médio"
+          />
+          <CheckBox
+            disabled={!infoCompletPatient ? false : true}
+            side="right"
+            name="level"
+            text="Ensino Técnico"
+          />
+          <CheckBox
+            disabled={!infoCompletPatient ? false : true}
+            side="right"
+            name="level"
+            text="Graduação"
+          />
+          <CheckBox
+            disabled={!infoCompletPatient ? false : true}
+            side="right"
+            name="level"
+            text="Pós Graduação"
+          />
+        </div>
+      </div>
+      {/*(typeEducation === "Pós Graduação" || typeEducation === "Graduação") &&*/ (
+        <>
+          <div className={styles.flex}>
+            <Input
+              type="text"
+              name="curso"
+              text="Curso"
+              disabled={infoCompletPatient ? true : false}
+            />
+            <Input
+              type="text"
+              name="periodo"
+              text="Ano/período"
+              disabled={infoCompletPatient ? true : false}
+            />
+          </div>
+          <div className={styles.flex}>
+            <p className={styles.label}>Turno do seu curso *</p>
+            <div className={styles.turnos}>
               <CheckBox
-                isSelected={isVinculo}
-                side="left"
-                value="Vínculo com Unioeste"
-                name="vinculo_com_unioeste"
-                text="Vínculo com Unioeste"
                 disabled={infoCompletPatient ? true : false}
-                handleOnChange={(e) => setIsVinculo(!isVinculo)}
+                side="right"
+                name="course_schedule"
+                text="Manhã"
               />
-              {isVinculo && (
-                <>
-                  <CheckBox
-                    isSelected={typeVinculo === "Docente"}
-                    side="right"
-                    value="Docente"
-                    name="vinculo_com_unioeste"
-                    text="Docente"
-                    disabled={infoCompletPatient ? true : false}
-                    handleOnChange={(e) => setTypeVinculo(e.target.value)}
-                  />
-                  <CheckBox
-                    isSelected={typeVinculo === "Agente"}
-                    side="right"
-                    value="Agente"
-                    name="type"
-                    text="Agente"
-                    disabled={infoCompletPatient ? true : false}
-                    handleOnChange={(e) => setTypeVinculo(e.target.value)}
-                  />
-                  <CheckBox
-                    isSelected={typeVinculo === "Acadêmico"}
-                    side="right"
-                    value="Acadêmico"
-                    name="vinculo_com_unioeste"
-                    text="Acadêmico"
-                    disabled={infoCompletPatient ? true : false}
-                    handleOnChange={(e) => setTypeVinculo(e.target.value)}
-                  />
-                  <CheckBox
-                    isSelected={typeVinculo === "Estagiário"}
-                    side="right"
-                    value="Estagiário"
-                    name="vinculo_com_unioeste"
-                    text="Estagiário"
-                    disabled={infoCompletPatient ? true : false}
-                    handleOnChange={(e) => setTypeVinculo(e.target.value)}
-                  />
-                </>
-              )}
-            </div>
-            {typeVinculo === "Agente" && isVinculo && (
-              <>
-                <Input
-                  type="text"
-                  name="setor"
-                  text="Setor que trabalha"
-                  value={setor}
-                  handleOnChange={(e) => setSetor(e.target.value)}
-                />
-              </>
-            )}
-            <div className={styles.flex}>
               <CheckBox
-                isSelected={comunidade === "Sim"}
-                side="left"
-                name="community"
-                value="Comunidade Externa"
-                text="Comunidade Externa"
                 disabled={infoCompletPatient ? true : false}
-                handleOnChange={(e) =>
-                  setComunidade(e.target.checked ? "Sim" : "Não")
-                }
+                side="right"
+                name="course_schedule"
+                text="Tarde"
+              />
+              <CheckBox
+                disabled={infoCompletPatient ? true : false}
+                side="right"
+                name="course_schedule"
+                text="Noite"
               />
             </div>
-            <div className={styles.flex}>
-              <label htmlFor="work-Trabalha" className={styles.label}>
-                Você trabalha? *
-              </label>
-              <div className={styles.acompanhamento}>
-                <CheckBox
-                  isSelected={typeWork === "Não trabalha"}
-                  side="right"
-                  value="Não trabalha"
-                  name="work"
-                  text="( ) Não"
-                  disabled={infoCompletPatient ? true : false}
-                  handleOnChange={(e) => setTypeWork(e.target.value)}
-                />
-                <CheckBox
-                  isSelected={typeWork === "Trabalha"}
-                  side="right"
-                  handleOnChange={(e) => setTypeWork(e.target.value)}
-                  value="Trabalha"
-                  name="work"
-                  disabled={infoCompletPatient ? true : false}
-                  text="( ) Sim"
-                />
-              </div>
-            </div>
-            {work.type === "Trabalha" && (
-              <div className={styles.flex}>
-                <Input
-                  type="time"
-                  name="work_schedule"
-                  text="Trabalha em qual horário?"
-                  disabled={infoCompletPatient ? true : false}
-                  value={horarioWork}
-                  handleOnChange={(e) => setHorarioWork(e.target.value)}
-                />
-              </div>
-            )}
-            <div className={styles.flex}>
-              <label htmlFor="psycho-Acompanha" className={styles.label}>
-                Já realizou algum acompanhamento psicológico? *
-              </label>
-              <div className={styles.acompanhamento}>
-                <CheckBox
-                  isSelected={typePsicologa === "Não Acompanha"}
-                  side="right"
-                  value="Não Acompanha"
-                  name="psycho"
-                  text="( ) Não"
-                  disabled={infoCompletPatient ? true : false}
-                  handleOnChange={(e) => setTypePsicologa(e.target.value)}
-                />
-                <CheckBox
-                  isSelected={typePsicologa === "Acompanha"}
-                  side="right"
-                  name="psycho"
-                  value="Acompanha"
-                  text="( ) Sim"
-                  disabled={infoCompletPatient ? true : false}
-                  handleOnChange={(e) => setTypePsicologa(e.target.value)}
-                />
-              </div>
-            </div>
-            {typePsicologa === "Acompanha" && (
-              <div className={styles.flex}>
-                <Input
-                  type="text"
-                  name="psycho_schedule"
-                  text="Por quanto tempo acompanhamento psicológico?"
-                  value={timePsicologa}
-                  disabled={infoCompletPatient ? true : false}
-                  handleOnChange={(e) => setTimePsicologa(e.target.value)}
-                />
-              </div>
-            )}
-            <div className={styles.flex}>
-              <label htmlFor="psychiatric-Acompanha" className={styles.label}>
-                Já realizou algum acompanhamento psiquiátrico? *
-              </label>
-              <div className={styles.acompanhamento}>
-                <CheckBox
-                  isSelected={typePsiquiatra === "Não Acompanha"}
-                  side="right"
-                  value="Não Acompanha"
-                  name="psychiatric"
-                  text="( ) Não"
-                  disabled={infoCompletPatient ? true : false}
-                  handleOnChange={(e) => setTypePsiquiatra(e.target.value)}
-                />
-                <CheckBox
-                  isSelected={typePsiquiatra === "Acompanha"}
-                  side="right"
-                  value="Acompanha"
-                  name="psychiatric"
-                  text="( ) Sim"
-                  disabled={infoCompletPatient ? true : false}
-                  handleOnChange={(e) => setTypePsiquiatra(e.target.value)}
-                />
-              </div>
-            </div>
-            {typePsiquiatra === "Acompanha" && (
-              <div className={styles.flex}>
-                <Input
-                  customClass="responsive"
-                  type="text"
-                  name="psychiatric_schedule"
-                  text="Por quanto tempo fez acompanhamento psiquiátrico?"
-                  value={timePsiquiatra}
-                  disabled={infoCompletPatient ? true : false}
-                  handleOnChange={(e) => setTimePsiquiatra(e.target.value)}
-                />
-              </div>
-            )}
-            <div className={styles.observation + " " + styles.flex}>
-              <label htmlFor="observation" className={styles.label}>
-                Observações que considere importante *
-              </label>
-              <textarea
-                name="observation"
-                id="observation"
-                rows="7"
-                disabled={infoCompletPatient ? true : false}
-                value={observation}
-                onChange={(e) => setObservation(e.target.value)}
-              ></textarea>
-            </div>
-            {!infoCompletPatient && (
-              <Submit text="Enviar" customClass="align" />
-            )}
-          </form>
+          </div>
+        </>
+      )}
+      <div className={styles.flex + " " + styles.table}>
+        <Table
+          viewPatientFicha={infoCompletPatient ? true : false}
+        />
+      </div>
+      <div className={styles.flex}>
+        <CheckBox
+          side="left"
+          name="vinculo_com_unioeste"
+          text="Vínculo com Unioeste"
+          disabled={infoCompletPatient ? true : false}
+        />
+        {/*isVinculo &&*/ (
+          <>
+            <CheckBox
+              side="right"
+              name="vinculo_com_unioeste"
+              text="Docente"
+              disabled={infoCompletPatient ? true : false}
+            />
+            <CheckBox
+              side="right"
+              name="type"
+              text="Agente"
+              disabled={infoCompletPatient ? true : false}
+            />
+            <CheckBox
+              side="right"
+              name="vinculo_com_unioeste"
+              text="Acadêmico"
+              disabled={infoCompletPatient ? true : false}
+            />
+            <CheckBox
+              side="right"
+              name="vinculo_com_unioeste"
+              text="Estagiário"
+              disabled={infoCompletPatient ? true : false}
+            />
+          </>
         )}
-      </>
-    );
-}
+      </div>
+      {/*typeVinculo === "Agente" && isVinculo &&*/ (
+        <>
+          <Input
+            type="text"
+            name="setor"
+            text="Setor que trabalha"
+          />
+        </>
+      )}
+      <div className={styles.flex}>
+        <CheckBox
+          side="left"
+          name="community"
+          text="Comunidade Externa"
+          disabled={infoCompletPatient ? true : false}
+        />
+      </div>
+      <div className={styles.flex}>
+        <p className={styles.label}>Você trabalha? *</p>
+        <div className={styles.acompanhamento}>
+          <CheckBox
+            side="right"
+            name="work"
+            text="Não"
+            disabled={infoCompletPatient ? true : false}
+          />
+          <CheckBox
+            side="right"
+            name="work"
+            disabled={infoCompletPatient ? true : false}
+            text="Sim"
+          />
+        </div>
+      </div>
+      {/*work.type === "Trabalha" &&*/ (
+        <div className={styles.flex}>
+          <Input
+            type="time"
+            name="work_schedule"
+            text="Trabalha em qual horário?"
+            disabled={infoCompletPatient ? true : false}
+          />
+        </div>
+      )}
+      <div className={styles.flex}>
+        <p className={styles.label}>
+          Já realizou algum acompanhamento psicológico? *
+        </p>
+        <div className={styles.acompanhamento}>
+          <CheckBox
+            side="right"
+            name="psycho"
+            text="Não"
+            disabled={infoCompletPatient ? true : false}
+          />
+          <CheckBox
+            side="right"
+            name="psycho"
+            text="Sim"
+            disabled={infoCompletPatient ? true : false}
+          />
+        </div>
+      </div>
+      {/*typePsicologa === "Acompanha" &&*/ (
+        <div className={styles.flex}>
+          <Input
+            type="text"
+            name="psycho_schedule"
+            text="Por quanto tempo acompanhamento psicológico?"
+            disabled={infoCompletPatient ? true : false}
+          />
+        </div>
+      )}
+      <div className={styles.flex}>
+        <p className={styles.label}>
+          Já realizou algum acompanhamento psiquiátrico? *
+        </p>
+        <div className={styles.acompanhamento}>
+          <CheckBox
+            side="right"
+            name="psychiatric"
+            text="Não"
+            disabled={infoCompletPatient ? true : false}
+          />
+          <CheckBox
+            side="right"
+            name="psychiatric"
+            text="Sim"
+            disabled={infoCompletPatient ? true : false}
+          />
+        </div>
+      </div>
+      {/*typePsiquiatra === "Acompanha" &&*/ (
+        <div className={styles.flex}>
+          <Input
+            customClass="responsive"
+            type="text"
+            name="psychiatric_schedule"
+            text="Por quanto tempo fez acompanhamento psiquiátrico?"
+            disabled={infoCompletPatient ? true : false}
+          />
+        </div>
+      )}
+      <div className={styles.flex}>
+        <TextArea
+          label="Observações que considere importante *"
+          name="observation"
+          disabled={infoCompletPatient ? true : false}
+          rows="7"
+        />
+      </div>
+      {!infoCompletPatient && <Button text="Enviar" type="submit" customClass="align" />}
+    </>
+  );
+};
 
-export default FichaForm
+export default FichaForm;

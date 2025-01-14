@@ -29,31 +29,35 @@ function PessoaEmpty(sexo, birth, cpf, ra, phone, adressComplet){
 }
 
 function FicharioEmpty(profession, education, vinculo, work, psicologa, psiquiatra){
+    console.log(vinculo)
     if (!profession || profession.trim() === '') {
         console.log('profession: ', profession)
         return true
     }
 
     // Verifica os campos obrigatórios de education
-    if (!education || !education.curso || education.curso.trim() === '') {
-        console.log('profissao curso:',education.curso)
-        return true
-    }
-    if (!education.periodo || education.periodo.trim() === '') {
-        console.log('education periodo:', education.periodo)
-        return true
-    }
-    if (!education.turno || education.turno.trim() === '') {
-        console.log('education turno: ', education.turno)
-        return true
-    }
     if (!education.type || education.type.trim() === '') {
-        console.log('education level: ', education.level)
+        console.log('education type: ', education.type)
         return true
     }
 
+    if(education.type === 'Graduação' || education.type === 'Pós Graduação') {
+        if (!education || !education.curso || education.curso.trim() === '') {
+            console.log('profissao curso:',education.curso)
+            return true
+        }
+        if (!education.periodo || education.periodo.trim() === '') {
+            console.log('education periodo:', education.periodo)
+            return true
+        }
+        if (!education.turno || education.turno.trim() === '') {
+            console.log('education turno: ', education.turno)
+            return true
+        }
+    }
+
     // Verifica o campo obrigatório vinculo
-    if (!vinculo || vinculo.trim() === '') {
+    if (!vinculo || vinculo.type.trim() === '') {
         console.log('vinculo: ', vinculo)
         return true
     }

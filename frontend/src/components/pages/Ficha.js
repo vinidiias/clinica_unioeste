@@ -14,9 +14,9 @@ const Ficha = () => {
   }, [user, navigate]);
 
   return (
-    <ErrorBoundary>
-      <FichaForm />
-    </ErrorBoundary>
+      <form>
+        <FichaForm />
+      </form>
   );
 }
 

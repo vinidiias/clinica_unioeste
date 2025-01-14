@@ -8,16 +8,16 @@ const fichaSchema = new mongoose.Schema({
     education: {
         curso: {
             type: String,
-            required: true,
+            required: false,
         },
         periodo: {
             type: String,
-            required: true,
+            required: false,
         },
         turno: {
             type: String,
             enum: ['Manhã', 'Tarde', 'Noite'],
-            required: true,
+            required: false,
         },
         type: {
             type: String,
@@ -27,17 +27,35 @@ const fichaSchema = new mongoose.Schema({
     },
     preferredDay: {
         morning_monday: { type: Boolean, default: false },
-        afternoon_tuesday: { type: Boolean, default: false },
+        morning_tuesday: { type: Boolean, default: false },
         morning_wednesday: { type: Boolean, default: false },
-        // Continue adicionando campos para cada dia/turno conforme necessário
+        morning_thursday: { type: Boolean, default: false },
+        morning_friday: { type: Boolean, default: false },
+        afternoon_monday: { type: Boolean, default: false },
+        afternoon_tuesday: { type: Boolean, default: false },
+        afternoon_wednesday: { type: Boolean, default: false },
+        afternoon_thursday: { type: Boolean, default: false },
+        afternoon_friday: { type: Boolean, default: false }, 
+        night_monday: { type: Boolean, default: false },
+        night_tuesday: { type: Boolean, default: false },
+        night_wednesday: { type: Boolean, default: false },
+        night_thursday: { type: Boolean, default: false },
+        night_friday: { type: Boolean, default: false },      // Continue adicionando campos para cada dia/turno conforme necessário
     },
     vinculo: {
-        type: String,
-        enum: ['Docente', 'Agente', 'Acadêmico', 'Estagiário'],
-        required: true,
+        type : {
+            type: String,
+            enum: ['Docente', 'Agente', 'Acadêmico', 'Estagiário', 'Sem Vínculo'],
+            required: true,
+            default: 'Sem Vínculo'
+        },
+        setor : {
+            type: String,
+            required: false,
+        }
     },
     comunidade: {
-        type: String,
+        type: Boolean,
         default: false,
     },
     work: {
@@ -73,6 +91,18 @@ const fichaSchema = new mongoose.Schema({
     observation: {
         type: String,
     },
+
+    triagem: {
+        type: Boolean,
+        default: null
+    },
+
+    prioridade: {
+        type: String,
+        enum: ['baixa', 'media', 'alta', null],
+        default: null
+    },
+
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

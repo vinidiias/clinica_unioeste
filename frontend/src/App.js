@@ -5,7 +5,6 @@ import RoleBasedComponent from './components/util/RoleBasedComponent';
 import NavBar from './components/layout/NavBar';
 import Footer from './components/layout/Footer';
 import Container from './components/layout/Container';
-import Login from './components/pages/Login'
 import Home from './components/pages/Home';
 import About from './components/pages/About';
 import Contato from './components/pages/Contato';
@@ -13,7 +12,11 @@ import Ficha from './components/pages/Ficha';
 import Profile from './components/pages/Profile'
 import ScreeningQueue from './components/pages/ScreeningQueue';
 import InvitePsychologist from './components/pages/InvitePsychologist';
-import PatientFicha from './components/ficha/PatientFicha';
+import ViewFicha from './components/ficha/ViewFicha';
+import CreateFicha from './components/ficha/CreateFicha';
+import Auth from './components/pages/Auth';
+import UserLogin from './components/pages/UserLogin';
+import UserRegister from './components/pages/UserRegister';
 
 function App() {
   return (
@@ -23,10 +26,18 @@ function App() {
           <NavBar />
           <Routes>
             <Route
-              path="/"
+              path="/login"
               element={
                 <Container customClass="align">
-                  <Login />
+                  <UserLogin />
+                </Container>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <Container customClass="align">
+                  <UserRegister />
                 </Container>
               }
             />
@@ -63,17 +74,17 @@ function App() {
               }
             />
             <Route
-              path="/ficha"
+              path="/ficha/createFicha"
               element={
                 <Container customClass="auto">
-                  <Ficha />
+                  <CreateFicha />
                 </Container>
               }
             />
             <Route
               path="/psychologist/screening"
               element={
-                <RoleBasedComponent allowedRoles={["admin", 'psicologo']}>
+                <RoleBasedComponent allowedRoles={["admin", "psicologo"]}>
                   <Container customClass="height">
                     <ScreeningQueue />
                   </Container>
@@ -83,9 +94,9 @@ function App() {
             <Route
               path="/psychologist/screening/:id"
               element={
-                <RoleBasedComponent allowedRoles={["admin", 'psicologo']}>
+                <RoleBasedComponent allowedRoles={["admin", "psicologo"]}>
                   <Container customClass="height">
-                    <PatientFicha />
+                    <ViewFicha />
                   </Container>
                 </RoleBasedComponent>
               }
@@ -105,9 +116,7 @@ function App() {
               element={
                 <RoleBasedComponent allowedRoles={["admin"]}>
                   <Container customClass="align">
-                    <InvitePsychologist
-                      inviteAdmin={true}
-                    />
+                    <InvitePsychologist inviteAdmin={true} />
                   </Container>
                 </RoleBasedComponent>
               }
@@ -116,7 +125,7 @@ function App() {
               path="/register/psychologist"
               element={
                 <Container customClass="align">
-                  <Login registerPsychologist={true} />
+                  <Auth registerPsychologist={true} />
                 </Container>
               }
             />
@@ -124,7 +133,7 @@ function App() {
               path="/register/admin"
               element={
                 <Container customClass="align">
-                  <Login registerAdmin={true} />
+                  <Auth registerAdmin={true} />
                 </Container>
               }
             />

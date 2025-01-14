@@ -1,6 +1,9 @@
+import { useFormContext } from 'react-hook-form';
 import styles from './CheckBox.module.css'
 
 const CheckBox = ({ name, text, side, handleOnChange, value, isSelected, customClass, disabled }) => {
+
+  const { register } = useFormContext()
 
   const inputId = `${name}-${value}`;
     return (
@@ -16,8 +19,7 @@ const CheckBox = ({ name, text, side, handleOnChange, value, isSelected, customC
           name={name}
           id={inputId}
           disabled={disabled}
-          onChange={handleOnChange}
-          value={value || ''}
+          {...register(name)}
         />
         {side === "right" && (
           <label htmlFor={inputId} className={styles.label_right}>

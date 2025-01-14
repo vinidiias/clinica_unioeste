@@ -1,27 +1,38 @@
-import styles from './LoginForm.module.css'
-import Input from '../form/Input'
-import Submit from '../form/Submit'
+import styles from './index.module.css'
+import Input from '../../form/Input'
+import Button from '../../form/Button'
+import api from '../../../services/Api'
 
 import { useContext, useEffect, useState } from 'react'
-import { UserContext } from '../context/UserContext'
-import { useSearchParams } from 'react-router-dom'
-import api from '../../services/Api'
+import { UserContext } from '../../context/UserContext'
+import { useLocation, useSearchParams } from 'react-router-dom'
 
-const LoginForm = ({ register, handleSubmit, handleRegister, handleClick }) => {
+const AuthForm = ({ title, fields, btns, handleSubmit, handleRegister, handleClick }) => {
   const {userData} = useContext(UserContext)
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [searchParams] = useSearchParams()
+  const [register, setRegister] = useState(false)
   const [message, setMessage] = useState('')
   const [isValid, setIsValid] = useState(false)
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
+
+  const location = useLocation()
 
   useEffect(() => {
     if (userData.email) {
       setEmail(userData.email);
     }
   }, [userData.email]);
+
+  useEffect(() => {
+
+    if(location.pathname === '/register') {
+      setRegister(true)
+    }
+    else setRegister(false)
+  }, [location])
 
   useEffect(() => {
     if(register) {
@@ -64,7 +75,42 @@ const LoginForm = ({ register, handleSubmit, handleRegister, handleClick }) => {
   }
 
   return (
-    <form
+    <>
+    <h1 style={{marginBottom: '.5em'}}>{title}</h1>
+    {fields.length > 0  && (
+      fields.map((field, index) => (
+        <Input
+          key={index}
+          type={field.type}
+          name={field.name}
+          text={field.label}
+          placeholder={field.placeholder}
+          customClass="column padding_login"
+        />
+      ))
+    )}
+
+    <div className={styles.form_submit}>
+      {btns.length > 0 && (
+        btns.map((btn, index) => (
+          <Button 
+            key={index}
+            text={btn.label}
+            type={btn.type}
+            customClass={btn.class}
+            handleClick={btn.handleClick}
+          />
+        )
+      ))}
+    </div>
+    </>
+  )
+}
+
+export default AuthForm
+
+/**
+ <form
       onSubmit={!register ? submit : registerSubmit}
     >
       {!register ? (
@@ -103,7 +149,7 @@ const LoginForm = ({ register, handleSubmit, handleRegister, handleClick }) => {
             type="name"
             name="name-overlay"
             text="Nome"
-            placeholder="Digite seu email"
+            placeholder="Digite seu nome"
             customClass="column padding_login"
             handleOnChange={(e) => setName(e.target.value)}
           />
@@ -143,7 +189,4 @@ const LoginForm = ({ register, handleSubmit, handleRegister, handleClick }) => {
         )}
       </div>
     </form>
-  );
-}
-
-export default LoginForm
+ */

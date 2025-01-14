@@ -1,4 +1,4 @@
-import styles from './Login.module.css'
+import styles from './Auth.module.css'
 import PersonalDataScreenOverlay from '../profile/PersonalDataScreenOverlay'
 
 import { useNavigate } from 'react-router-dom'
@@ -6,11 +6,11 @@ import { useContext, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { UserContext } from '../context/UserContext'
 import Loading from '../layout/Loading'
-import RegisterForm from '../login/RegisterForm'
-import LoginForm from '../login/LoginForm'
+import RegisterForm from '../auth/RegisterForm'
+import UserLogin from './UserLogin'
 import api from '../../services/Api'
 
-const Login = ({ registerPsychologist, registerAdmin }) => {
+const Auth = ({ registerPsychologist, registerAdmin }) => {
   const { setUserData } = useContext(UserContext)
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
@@ -159,16 +159,17 @@ const Login = ({ registerPsychologist, registerAdmin }) => {
     }
   }
 
-  const cardVariants = {
-    initial: { scale: 0.96, y: 30, opacity: 0 },
-    animate: { scale: 1, y: 0, opacity: 1, transition: { duration: 1, ease: [0.48, 0.15, 0.25, 0.96] } },
-    exit: {
-      scale: 0.6,
-      y: 100,
-      opacity: 0,
-      transition: { duration: 0.2, ease: [0.48, 0.15, 0.25, 0.96] },
-    },
-  }
+  const style = {
+      color: '#fff',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2.5em',
+      backgroundColor: '#483768',
+      borderRadius: '10px',
+      fontSize: '.9em',
+  }  
 
     return (
       <>
@@ -205,7 +206,7 @@ const Login = ({ registerPsychologist, registerAdmin }) => {
             className={styles.login}
           >
             <h1>Ativar Conta de Psicóloga</h1>
-            <LoginForm
+            <UserLogin
               register={showRegisterPsy}
               handleRegister={registerPsyHandler}
             />
@@ -220,26 +221,16 @@ const Login = ({ registerPsychologist, registerAdmin }) => {
             className={styles.login}
           >
             <h1>Ativar Conta de Administrador</h1>
-            <LoginForm
+            <UserLogin
               register={showRegisterAdmin}
               handleRegister={registerAdminHandler}
             />
           </motion.div>
         ) : (
-          <motion.div
-            key="login"
-            variants={cardVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            className={styles.login}
-          >
-            <h1>Entrar</h1>
-            <LoginForm handleSubmit={loginHandler} handleClick={toggleChange} />
-          </motion.div>
+          <LoginAnimated style={style} />
         )}
       </>
     );
 }
 
-export default Login
+export default Auth

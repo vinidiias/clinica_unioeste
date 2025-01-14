@@ -1,7 +1,7 @@
 import styles from './ScreeningQueue.module.css'
 import api from '../../services/Api'
 import Loading from '../layout/Loading'
-import Submit from '../form/Submit'
+import Submit from '../form/Button'
 import Patient from '../Queue/Patient'
 import { FaCaretSquareDown } from "react-icons/fa";
 import React, { useEffect, useState } from 'react';

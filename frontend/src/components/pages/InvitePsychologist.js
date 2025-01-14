@@ -2,7 +2,7 @@ import styles from './InvitePsychologist.module.css'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Input from '../form/Input'
-import Submit from '../form/Submit'
+import Submit from '../form/Button'
 import api from '../../services/Api'
 
 const InvitePsychologist = ({ inviteAdmin }) => {
