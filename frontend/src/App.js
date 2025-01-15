@@ -125,7 +125,7 @@ function App() {
               path="/register/psychologist"
               element={
                 <Container customClass="align">
-                  <Auth registerPsychologist={true} />
+                  {/*<Auth registerPsychologist={true} />*/}
                 </Container>
               }
             />
@@ -133,7 +133,7 @@ function App() {
               path="/register/admin"
               element={
                 <Container customClass="align">
-                  <Auth registerAdmin={true} />
+                  {/*<Auth registerAdmin={true} />*/}
                 </Container>
               }
             />

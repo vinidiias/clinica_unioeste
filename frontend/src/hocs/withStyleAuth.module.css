@@ -11,6 +11,10 @@
     width: 300px;
 }
 
+form {
+    width: 100%;
+}
+
 @media(max-width: 350px) {
     .container {
         width: 250px;

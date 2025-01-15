@@ -1,3 +1,5 @@
+import AuthForm from './AuthForm'
+
 const UserRegister = ({ handleClick }) => {
 
     const submit = (e) =>{
@@ -20,7 +22,7 @@ const UserRegister = ({ handleClick }) => {
 
   return (
     <>
-      <h1 style={styleTitle}>Criar</h1>
+      <h1>Criar</h1>
       <AuthForm fields={fields} btns={btns} />
     </>
     );

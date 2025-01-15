@@ -76,7 +76,7 @@ const AuthForm = ({ title, fields, btns, handleSubmit, handleRegister, handleCli
 
   return (
     <>
-    <h1 style={{marginBottom: '.5em'}}>{title}</h1>
+    <h1>{title}</h1>
     {fields.length > 0  && (
       fields.map((field, index) => (
         <Input

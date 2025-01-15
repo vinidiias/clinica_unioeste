@@ -1,9 +1,17 @@
 import withStyleAuth from "../../../hocs/withStyleAuth";
 import AuthForm from "../../auth/AuthForm"
+import api from "../../../services/Api";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import { UserContext } from "../../context/UserContext";
+import withAuth from "../../../hocs/withAuth";
 
-const UserLogin = () => {
+const UserLogin = ({ loading, onAction }) => {
+
+    const { setUserData } = useContext(UserContext)
+
+    const [isOverlayVisible, setOverlayVisible] = useState(false)
 
     const navigate = useNavigate()
 
@@ -11,8 +19,42 @@ const UserLogin = () => {
 
     const formMethods = useForm()
 
-    const handleLogin = (data) => {
-      console.log(data.email)
+    const handleLogin = async (d) => {
+
+      const email = d.email
+      const password = d.password
+
+      try{
+        const userCreated = await api.post('/session', {
+          email,
+          password
+        })
+          const data = userCreated.data
+  
+          console.log(data)
+          
+          setUserData(prevState => ({
+            ...prevState,
+            email: data.email,
+            name: data.user,
+            role: data.role,
+            isFirst: true,
+            user_id: data.user_id
+          }))
+  
+          if (data.firstLogin) {
+            setOverlayVisible(true);
+          } else {
+            setUserData(prevState => ({
+              ...prevState,
+              isLogged: true,
+            }))
+            navigate("/home");
+          }
+        } 
+      catch(err) {
+        console.log(err)
+      }
     }
 
     const fields = [
@@ -29,7 +71,11 @@ const UserLogin = () => {
     return (
       <>
         <FormProvider {...formMethods}>
-          <form onSubmit={formMethods.handleSubmit(handleLogin)}>
+          <form
+            onSubmit={formMethods.handleSubmit((data) => {
+              onAction(() => handleLogin(data)); // Usando onAction para gerenciar o estado de loading
+            })}
+          >
             <AuthForm title="Entrar" fields={fields} btns={btns} />
           </form>
         </FormProvider>
@@ -37,4 +83,4 @@ const UserLogin = () => {
     );
 }
 
-export default withStyleAuth(UserLogin)
+export default withAuth(withStyleAuth(UserLogin))

@@ -184,7 +184,6 @@ const Auth = ({ registerPsychologist, registerAdmin }) => {
         ) : showLogin ? (
           <motion.div
             key="signup"
-            variants={cardVariants}
             initial="initial"
             animate="animate"
             exit="exit"
@@ -199,7 +198,6 @@ const Auth = ({ registerPsychologist, registerAdmin }) => {
         ) : showRegisterPsy ? (
           <motion.div
             key="registerPsychologist"
-            variants={cardVariants}
             initial="initial"
             animate="animate"
             exit="exit"
@@ -214,7 +212,6 @@ const Auth = ({ registerPsychologist, registerAdmin }) => {
         ) : showRegisterAdmin ? (
           <motion.div
             key="registerAdmin"
-            variants={cardVariants}
             initial="initial"
             animate="animate"
             exit="exit"
@@ -227,7 +224,7 @@ const Auth = ({ registerPsychologist, registerAdmin }) => {
             />
           </motion.div>
         ) : (
-          <LoginAnimated style={style} />
+          <UserLogin style={style} />
         )}
       </>
     );
