@@ -1,4 +1,4 @@
-import FichaForm from "../ficha/FichaForm"
+import FichaForm from "../FichaForm/FichaForm"
 import styles from './ViewFicha.module.css'
 import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"

@@ -1,4 +1,4 @@
-import FichaForm from "../ficha/FichaForm"
+import FichaForm from "../FichaForm/FichaForm"
 import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"
 import ErrorBoundary from "../ErrorBoundary/ErrorBoundary"

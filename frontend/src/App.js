@@ -12,11 +12,12 @@ import Ficha from './components/pages/Ficha';
 import Profile from './components/pages/Profile'
 import ScreeningQueue from './components/pages/ScreeningQueue';
 import InvitePsychologist from './components/pages/InvitePsychologist';
-import ViewFicha from './components/ficha/ViewFicha';
-import CreateFicha from './components/ficha/CreateFicha';
+import ViewFicha from './components/FichaForm/ViewFicha';
+import CreateFicha from './components/FichaForm/CreateFicha';
 import Auth from './components/pages/Auth';
 import UserLogin from './components/pages/UserLogin';
 import UserRegister from './components/pages/UserRegister';
+import FirstAcessRegister from './components/pages/FirstAcessRegister';
 
 function App() {
   return (
@@ -30,6 +31,14 @@ function App() {
               element={
                 <Container customClass="align">
                   <UserLogin />
+                </Container>
+              }
+            />
+            <Route
+              path="/login/first-acess"
+              element={
+                <Container customClass="align">
+                  <FirstAcessRegister />
                 </Container>
               }
             />

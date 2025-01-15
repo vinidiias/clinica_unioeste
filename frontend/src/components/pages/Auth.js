@@ -1,12 +1,11 @@
 import styles from './Auth.module.css'
-import PersonalDataScreenOverlay from '../profile/PersonalDataScreenOverlay'
+import FirstAcessRegister from './FirstAcessRegister'
 
 import { useNavigate } from 'react-router-dom'
 import { useContext, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { UserContext } from '../context/UserContext'
 import Loading from '../layout/Loading'
-import RegisterForm from '../auth/RegisterForm'
 import UserLogin from './UserLogin'
 import api from '../../services/Api'
 

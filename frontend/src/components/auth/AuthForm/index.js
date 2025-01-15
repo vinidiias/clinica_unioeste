@@ -6,6 +6,7 @@ import api from '../../../services/Api'
 import { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../../context/UserContext'
 import { useLocation, useSearchParams } from 'react-router-dom'
+import Select from '../../form/Select'
 
 const AuthForm = ({ title, fields, btns, handleSubmit, handleRegister, handleClick }) => {
   const {userData} = useContext(UserContext)
@@ -76,35 +77,37 @@ const AuthForm = ({ title, fields, btns, handleSubmit, handleRegister, handleCli
 
   return (
     <>
-    <h1>{title}</h1>
-    {fields.length > 0  && (
-      fields.map((field, index) => (
-        <Input
-          key={index}
-          type={field.type}
-          name={field.name}
-          text={field.label}
-          placeholder={field.placeholder}
-          customClass="column padding_login"
-        />
-      ))
-    )}
+      <h1>{title}</h1>
+      {fields.length > 0 &&
+        fields.map((field, index) => {
+          if (field.type === "select")
+            return <Select key={index} text={field.label} name={field.name} options={field.options} />;
+          else return (
+            <Input
+              key={index}
+              type={field.type}
+              name={field.name}
+              text={field.label}
+              placeholder={field.placeholder}
+              customClass="column padding_login"
+            />
+          );
+        })}
 
-    <div className={styles.form_submit}>
-      {btns.length > 0 && (
-        btns.map((btn, index) => (
-          <Button 
-            key={index}
-            text={btn.label}
-            type={btn.type}
-            customClass={btn.class}
-            handleClick={btn.handleClick}
-          />
-        )
-      ))}
-    </div>
+      <div className={styles.form_submit}>
+        {btns.length > 0 &&
+          btns.map((btn, index) => (
+            <Button
+              key={index}
+              text={btn.label}
+              type={btn.type}
+              customClass={btn.class}
+              handleClick={btn.handleClick}
+            />
+          ))}
+      </div>
     </>
-  )
+  );
 }
 
 export default AuthForm

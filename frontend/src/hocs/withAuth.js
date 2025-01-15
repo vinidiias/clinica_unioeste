@@ -8,7 +8,7 @@ const withAuth = (WrappedComponent) => {
     const handleAction = async (action) => {
       setLoading(true);
       try {
-        await action();
+        action();
       } catch (error) {
         console.error("An error occurred:", error);
       } finally {
