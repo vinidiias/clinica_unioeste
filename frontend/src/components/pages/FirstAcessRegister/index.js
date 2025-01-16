@@ -4,28 +4,35 @@ import AuthForm from '../../auth/AuthForm'
 import withAuth from '../../../hocs/withAuth'
 import { UserContext } from '../../context/UserContext'
 import { FormProvider, useForm } from 'react-hook-form'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { convertToBase64 } from '../../util/ConvertToBase64'
+import { useNavigate } from 'react-router-dom'
 
 const FirstAcessRegister = ({ onAction }) => {
 
     const { userData, setUserData }= useContext(UserContext)
 
+    const navigate = useNavigate()
+
+    useEffect(() => {
+      if(userData.isFirst) navigate('/home')
+    }, [])
+
     const formMethods = useForm()
 
     const fields = [
       {
-        name: "photo",
+        name: "img",
         label: "Foto",
         type: "file",
       },
       {
-        name: "sex",
+        name: "sexo",
         label: "Sexo",
         type: "select",
         options: ["Masculino", "Feminino"],
       },
-      { name: "date", label: "Data de Nascimento", type: "date" },
+      { name: "birth", label: "Data de Nascimento", type: "date" },
       {
         name: "cpf",
         label: "CPF",
@@ -40,13 +47,13 @@ const FirstAcessRegister = ({ onAction }) => {
         placeholder: "Digite seu Telefone",
       },
       {
-        name: "adress",
+        name: "addressComplet.address",
         label: "Endereço",
         type: "text",
         placeholder: "Digite seu Endereço",
       },
       {
-        name: "number",
+        name: "addressComplet.number",
         label: "Número",
         type: "text",
         placeholder: "Digite seu Número de Endereço",
@@ -59,7 +66,7 @@ const FirstAcessRegister = ({ onAction }) => {
 
     const handleRegister = async (data) => {
         try {
-          data.photo = await convertToBase64(data.photo[0])
+          data.img = await convertToBase64(data.img[0])
           console.log(data)
           const personCreated = await api.post(
             `/${userData.user_id}/pessoa`,
@@ -69,18 +76,13 @@ const FirstAcessRegister = ({ onAction }) => {
             }
           );
           const newPessoa = personCreated.data.pessoa;
-          console.log(newPessoa);
-
-          let user = JSON.parse(sessionStorage.getItem("user"));
-          user.isFirst = false;
-          sessionStorage.setItem("user", JSON.stringify(user));
 
           setUserData((prevState) => ({
             ...prevState,
+            isFirst: false,
             isLogged: true,
           }));
 
-          onClose();
           navigate("/home");
         } catch (err) {
           console.log(err);
@@ -99,5 +101,3 @@ const FirstAcessRegister = ({ onAction }) => {
 }
 
 export default withAuth(FirstAcessRegister)
-
-//<PersonalData customClass={customClass} onClose={onClose} />

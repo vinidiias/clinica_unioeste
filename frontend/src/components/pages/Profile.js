@@ -38,10 +38,11 @@ const Profile = () => {
         const getPessoa = await api.get(`/${user.user_id}/pessoa`, {
           headers: { auth: `${user.user_id}` },
         })
+        
+        if(!getPessoa) navigate('/')
 
         console.log('chegou')
         
-        if(!getPessoa) navigate('/')
   
         const data = getPessoa.data[0]
 
@@ -53,7 +54,7 @@ const Profile = () => {
       }
     }
     fetchData()
-  }, [navigate, localPessoa, localUser, setUserData])
+  }, [navigate, setUserData])
 
 
 

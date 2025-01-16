@@ -83,7 +83,7 @@ function App() {
               }
             />
             <Route
-              path="/ficha/createFicha"
+              path="/ficha/create-ficha"
               element={
                 <Container customClass="auto">
                   <CreateFicha />

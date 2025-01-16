@@ -19,7 +19,7 @@ const Home = () => {
   });
 
   const navigateficha = () => {
-    navigate('/ficha')
+    navigate('/ficha/create-ficha')
   }
   const navigateprofile = () => {
     navigate('/profile')
@@ -40,7 +40,7 @@ const Home = () => {
             handleClick={navigateprofile}
           />
           <System
-            text="Consultas"
+            text="Solicitar consulta"
             icon={<FaPlusCircle style={{ color: "#fff" }} />}
             handleClick={navigateficha}
           />

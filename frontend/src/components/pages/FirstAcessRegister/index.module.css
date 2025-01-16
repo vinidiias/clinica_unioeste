@@ -1,6 +1,7 @@
 
 
 .overlay {
+    border-radius: 5px;
     width: 600px;
     background-color: rgb(221, 221, 221);
     border: 1px solid #483768;
@@ -13,18 +14,12 @@
 
 @media(max-width: 900px) {
     .overlay {
-        width: 700px;
-    }
-}
-
-@media(max-width: 771px) {
-    .overlay {
-        width: 600px;
+        width: 500px;
     }
 }
 
 @media(max-width: 680px) {
     .overlay {
-        width: 70%;
+        flex: 1 1;
     }
 }

@@ -22,7 +22,18 @@ const ViewFicha = () => {
         getFicha()
     }, [])
 
-    return <>{ficha.length === 0 ? <Loading /> : (<FichaForm infoCompletPatient={ficha} />)}</>
+    return (
+      <>
+        {ficha.length === 0 ? (
+          <Loading />
+        ) : (
+          <>
+            <h1> Ver ficha</h1>
+            <FichaForm infoCompletPatient={ficha} />
+          </>
+        )}
+      </>
+    );
 }
 
 export default ViewFicha

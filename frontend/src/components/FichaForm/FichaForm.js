@@ -11,161 +11,19 @@ import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import TextArea from "../form/TextArea";
 import Button from "../form/Button";
+import Select from "../form/Select";
+import { useFormContext } from "react-hook-form";
 
-const FichaForm = ({ infoCompletPatient }) => {
+const FichaForm = ({
+  infoCompletPatient,
+  fieldsContainers,
+  buttons,
+  title,
+}) => {
   const { userData } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
- /* const [profission, setProfission] = useState(
-    infoCompletPatient?.ficha?.profission
-      ? infoCompletPatient.ficha.profission
-      : ""
-  );
-  const [education, setEducation] = useState({
-    type: "",
-    curso: "",
-    periodo: "",
-    turno: "",
-  });
-  const [typeEducation, setTypeEducation] = useState(
-    infoCompletPatient?.ficha?.education?.type
-      ? infoCompletPatient.ficha.education.type
-      : ""
-  );
-  const [curso, setCurso] = useState(
-    infoCompletPatient?.ficha?.education?.curso
-      ? infoCompletPatient.ficha.education.curso
-      : ""
-  );
-  const [periodo, setPeriodo] = useState(
-    infoCompletPatient?.ficha?.education?.periodo
-      ? infoCompletPatient.ficha.education.periodo
-      : ""
-  );
-  const [turno, setTurno] = useState(
-    infoCompletPatient?.ficha?.education?.turno
-      ? infoCompletPatient.ficha.education.turno
-      : ""
-  );
-  const [preferredDay, setPreferredDay] = useState(
-    infoCompletPatient?.ficha?.preferredDay
-      ? infoCompletPatient.ficha.preferredDay
-      : ""
-  );
-  const [vinculo, setVinculo] = useState({
-    type: "",
-    typeVinculo: "",
-    setor: "",
-  });
-  const [isVinculo, setIsVinculo] = useState(
-    infoCompletPatient?.ficha?.vinculo ? true : false
-  );
-  const [typeVinculo, setTypeVinculo] = useState(
-    infoCompletPatient?.ficha?.vinculo?.type
-      ? infoCompletPatient.ficha.vinculo.type
-      : "Sem Vínculo"
-  );
-  const [setor, setSetor] = useState(
-    infoCompletPatient?.ficha?.vinculo?.setor
-      ? infoCompletPatient.ficha.vinculo.setor
-      : ""
-  );
-  const [comunidade, setComunidade] = useState(
-    infoCompletPatient?.ficha?.comunidade
-      ? infoCompletPatient?.ficha?.comunidade
-      : false
-  );
-  const [work, setWork] = useState({
-    type: "",
-    hours: "",
-  });
-  const [typeWork, setTypeWork] = useState(
-    infoCompletPatient?.ficha?.work?.type
-      ? infoCompletPatient.ficha.work.type
-      : ""
-  );
-  const [horarioWork, setHorarioWork] = useState(
-    infoCompletPatient?.ficha?.work?.time
-      ? infoCompletPatient.ficha.work.time
-      : ""
-  );
-  const [psicologa, setPsicologa] = useState({
-    type: "",
-    time: "",
-  });
-  const [typePsicologa, setTypePsicologa] = useState(
-    infoCompletPatient?.ficha?.psicologa?.type
-      ? infoCompletPatient.ficha.psicologa.type
-      : ""
-  );
-  const [timePsicologa, setTimePsicologa] = useState(
-    infoCompletPatient?.ficha?.psicologa?.time
-      ? infoCompletPatient.ficha.psicologa.time
-      : ""
-  );
-  const [psiquiatra, setPsiquiatra] = useState({
-    type: "",
-    time: "",
-  });
-  const [typePsiquiatra, setTypePsiquiatra] = useState(
-    infoCompletPatient?.ficha?.psiquiatra?.type
-      ? infoCompletPatient.ficha.psiquiatra.type
-      : ""
-  );
-  const [timePsiquiatra, setTimePsiquiatra] = useState(
-    infoCompletPatient?.ficha?.psiquiatra?.time
-      ? infoCompletPatient.ficha.psiquiatra.time
-      : ""
-  );
-  const [observation, setObservation] = useState(
-    infoCompletPatient?.ficha?.observation
-      ? infoCompletPatient.ficha.observation
-      : ""
-  );*/
-
-  //education object
-
-  /*useEffect(() => {
-    if (typeEducation !== "Graduação" && typeEducation !== "Pós Graduação") {
-      setEducation({
-        type: typeEducation, // Corrigido para 'type'
-      });
-    } else {
-      setEducation({
-        type: typeEducation, // Corrigido para 'type'
-        curso: curso,
-        periodo: periodo,
-        turno: turno,
-      });
-    }
-  }, [typeEducation, curso, periodo, turno]);
-
-  //vinculo unioeste object
-  useEffect(() => {
-    if (isVinculo) {
-      if (typeVinculo !== "Agente") setVinculo({ type: typeVinculo });
-      else setVinculo({ type: typeVinculo, setor: setor });
-    } else setVinculo({ type: "Não" });
-  }, [typeVinculo, setor, isVinculo]);
-
-  //work object
-  useEffect(() => {
-    if (typeWork === "Trabalha") setWork({ type: typeWork, time: horarioWork });
-    else setWork({ type: typeWork });
-  }, [typeWork, horarioWork]);
-
-  //psicologa object
-  useEffect(() => {
-    if (typePsicologa !== "Acompanha") setPsicologa({ type: typePsicologa });
-    else setPsicologa({ type: typePsicologa, time: timePsicologa });
-  }, [typePsicologa, timePsicologa]);
-
-  //psiquiatra object
-  useEffect(() => {
-    if (typePsiquiatra !== "Acompanha") setPsiquiatra({ type: typePsiquiatra });
-    else setPsiquiatra({ type: typePsiquiatra, time: timePsiquiatra });
-  }, [typePsiquiatra, timePsiquiatra]);*/
-
+  const { watch } = useFormContext()
   /*async function submit(e) {
     e.preventDefault();
     const fichaData = {
@@ -200,21 +58,84 @@ const FichaForm = ({ infoCompletPatient }) => {
     }
   }*/
 
-  /*function handleChange(e) {
-    const { name, value } = e.target;
-
-    const setters = {
-      profission: setProfission,
-      observation: setObservation,
-    };
-
-    if (setters[name]) {
-      setters[name](value);
-    }
-  }*/
 
   return (
     <>
+      <h1>{title}</h1>
+      {fieldsContainers.map((container) => {
+        return container.fields.map((field, index) => {
+          switch (field.type) {
+            case "text":
+              return (
+                <div className={styles.flex}>
+                  <Input
+                    key={index}
+                    name={field.name}
+                    text={field.label}
+                    type={field.type}
+                  />
+                </div>
+              );
+            case "select":
+              return (
+                <>
+                  <div className={styles.flex}>
+                    <Select
+                      key={index}
+                      name={field.name}
+                      text={field.label}
+                      options={field.options}
+                    />
+                  </div>
+                  {container.child[0].dep.map(dep => {
+                    return dep === watch(field.name) (
+                      container.child[0].fields.map((childField, index) => {
+                        console.log(childField)
+                        switch (childField.type) {
+                          case "text":
+                            return (
+                              <div className={styles.flex}>
+                                <Input
+                                  key={index}
+                                  name={childField.name}
+                                  text={childField.label}
+                                  type={childField.type}
+                                />
+                              </div>
+                            );
+                            case 'select':
+                              return (
+                                <div className={styles.flex}>
+                                  <Select
+                                    key={index}
+                                    name={childField.name}
+                                    text={childField.label}
+                                    options={childField.options}
+                                  />
+                                </div>
+                              )
+                              default:
+                                return null
+                        }
+                      })
+                    )
+                  })}
+                </>
+                
+              );
+            default:
+              return null
+          }
+        });
+      })}
+    </>
+  );
+};
+
+export default FichaForm;
+
+/*  <>
+      <h1>{title}</h1>
       {infoCompletPatient && (
         <>
           <div className={styles.flex}>
@@ -326,7 +247,7 @@ const FichaForm = ({ infoCompletPatient }) => {
           />
         </div>
       </div>
-      {/*(typeEducation === "Pós Graduação" || typeEducation === "Graduação") &&*/ (
+      {(typeEducation === "Pós Graduação" || typeEducation === "Graduação") &&(
         <>
           <div className={styles.flex}>
             <Input
@@ -379,7 +300,7 @@ const FichaForm = ({ infoCompletPatient }) => {
           text="Vínculo com Unioeste"
           disabled={infoCompletPatient ? true : false}
         />
-        {/*isVinculo &&*/ (
+        {isVinculo &&(
           <>
             <CheckBox
               side="right"
@@ -408,7 +329,7 @@ const FichaForm = ({ infoCompletPatient }) => {
           </>
         )}
       </div>
-      {/*typeVinculo === "Agente" && isVinculo &&*/ (
+      {typeVinculo === "Agente" && isVinculo && (
         <>
           <Input
             type="text"
@@ -442,7 +363,7 @@ const FichaForm = ({ infoCompletPatient }) => {
           />
         </div>
       </div>
-      {/*work.type === "Trabalha" &&*/ (
+      {work.type === "Trabalha" && (
         <div className={styles.flex}>
           <Input
             type="time"
@@ -471,7 +392,7 @@ const FichaForm = ({ infoCompletPatient }) => {
           />
         </div>
       </div>
-      {/*typePsicologa === "Acompanha" &&*/ (
+      {typePsicologa === "Acompanha" & (
         <div className={styles.flex}>
           <Input
             type="text"
@@ -500,7 +421,7 @@ const FichaForm = ({ infoCompletPatient }) => {
           />
         </div>
       </div>
-      {/*typePsiquiatra === "Acompanha" &&*/ (
+      {typePsiquiatra === "Acompanha" && (
         <div className={styles.flex}>
           <Input
             customClass="responsive"
@@ -520,8 +441,4 @@ const FichaForm = ({ infoCompletPatient }) => {
         />
       </div>
       {!infoCompletPatient && <Button text="Enviar" type="submit" customClass="align" />}
-    </>
-  );
-};
-
-export default FichaForm;
+    </>*/

@@ -1,10 +1,6 @@
-.ficha_form {
-    border: 2px solid rgb(180, 180, 180);
-    width: 60%;
-    padding: 1em;
-    background-color: #dcdcdc;
-    height: auto;
-    margin: auto;
+h1 {
+    font-weight: 300;
+    font-size: 1.6em;
 }
 
 @media(max-width: 908px) {
