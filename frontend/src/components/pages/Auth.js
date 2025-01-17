@@ -1,4 +1,4 @@
-import styles from './Auth.module.css'
+/*import styles from './Auth.module.css'
 import FirstAcessRegister from './FirstAcessRegister'
 
 import { useNavigate } from 'react-router-dom'
@@ -229,4 +229,4 @@ const Auth = ({ registerPsychologist, registerAdmin }) => {
     );
 }
 
-export default Auth
+export default Auth*/

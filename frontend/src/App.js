@@ -8,13 +8,11 @@ import Container from './components/layout/Container';
 import Home from './components/pages/Home';
 import About from './components/pages/About';
 import Contato from './components/pages/Contato';
-import Ficha from './components/pages/Ficha';
 import Profile from './components/pages/Profile'
 import ScreeningQueue from './components/pages/ScreeningQueue';
 import InvitePsychologist from './components/pages/InvitePsychologist';
-import ViewFicha from './components/FichaForm/ViewFicha';
-import CreateFicha from './components/FichaForm/CreateFicha';
-import Auth from './components/pages/Auth';
+import ViewFicha from './components/ficha/ViewFicha';
+import CreateFicha from './components/ficha/CreateFicha';
 import UserLogin from './components/pages/UserLogin';
 import UserRegister from './components/pages/UserRegister';
 import FirstAcessRegister from './components/pages/FirstAcessRegister';

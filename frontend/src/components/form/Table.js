@@ -1,7 +1,7 @@
 import styles from './Table.module.css'
 import CheckBox from './CheckBox'
 
-const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
+const Table = ({ title, viewPatientFicha, setPreferredDay, preferredDay }) => {
   function CheckBoxChange(e) {
       const {name, checked} = e.target
 
@@ -19,7 +19,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
 
     return (
       <div className={styles.table_container}>
-        <p>Dia de preferência *</p>
+        <h3>{title} *</h3>
         <div className={styles.table}>
           <table>
             <thead>
@@ -38,7 +38,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 <td>
                   <CheckBox
                     disabled={viewPatientFicha}
-                    customClass="justify"
+                    customClass="table"
                     name="morning_monday"
                     text=""
                   />
@@ -46,7 +46,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 <td>
                   <CheckBox
                     disabled={viewPatientFicha}
-                    customClass="justify"
+                    customClass="table"
                     name="morning_tuesday"
                     text=""
                   />
@@ -54,7 +54,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 <td>
                   <CheckBox
                     disabled={viewPatientFicha}
-                    customClass="justify"
+                    customClass="table"
                     name="morning_wednesday"
                     text=""
                   />
@@ -62,7 +62,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 <td>
                   <CheckBox
                     disabled={viewPatientFicha}
-                    customClass="justify"
+                    customClass="table"
                     name="morning_thursday"
                     text=""
                   />
@@ -70,7 +70,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 <td>
                   <CheckBox
                     disabled={viewPatientFicha}
-                    customClass="justify"
+                    customClass="table"
                     name="morning_friday"
                     text=""
                   />
@@ -81,7 +81,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 <td>
                   <CheckBox
                     disabled={viewPatientFicha}
-                    customClass="justify"
+                    customClass="table"
                     name="afternoon_monday"
                     text=""
                   />
@@ -89,7 +89,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 <td>
                   <CheckBox
                     disabled={viewPatientFicha}
-                    customClass="justify"
+                    customClass="table"
                     name="afternoon_tuesday"
                     text=""
                   />
@@ -97,7 +97,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 <td>
                   <CheckBox
                     disabled={viewPatientFicha}
-                    customClass="justify"
+                    customClass="table"
                     name="afternoon_wednesday"
                     text=""
                   />
@@ -105,7 +105,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 <td>
                   <CheckBox
                     disabled={viewPatientFicha}
-                    customClass="justify"
+                    customClass="table"
                     name="afternoon_thursday"
                     text=""
                   />
@@ -113,7 +113,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 <td>
                   <CheckBox
                     disabled={viewPatientFicha}
-                    customClass="justify"
+                    customClass="table"
                     name="afternoon_friday"
                     text=""
                   />
@@ -124,7 +124,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 <td>
                   <CheckBox
                     disabled={viewPatientFicha}
-                    customClass="justify"
+                    customClass="table"
                     name="night_monday"
                     text=""
                   />
@@ -132,7 +132,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 <td>
                   <CheckBox
                     disabled={viewPatientFicha}
-                    customClass="justify"
+                    customClass="table"
                     name="night_tuesday"
                     text=""
                   />
@@ -140,7 +140,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 <td>
                   <CheckBox
                     disabled={viewPatientFicha}
-                    customClass="justify"
+                    customClass="table"
                     name="night_wednesday"
                     text=""
                   />
@@ -148,7 +148,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 <td>
                   <CheckBox
                     disabled={viewPatientFicha}
-                    customClass="justify"
+                    customClass="table"
                     name="night_thursday"
                     text=""
                   />
@@ -156,7 +156,7 @@ const Table = ({ viewPatientFicha, setPreferredDay, preferredDay }) => {
                 <td>
                   <CheckBox
                     disabled={viewPatientFicha}
-                    customClass="justify"
+                    customClass="table"
                     name="night_friday"
                     text=""
                   />

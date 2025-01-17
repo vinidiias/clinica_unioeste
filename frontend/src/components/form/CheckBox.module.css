@@ -31,7 +31,8 @@
     align-items: start;
 }
 
-.justify {
+.table {
+    margin: 0;
     justify-content: center;
 }
 
