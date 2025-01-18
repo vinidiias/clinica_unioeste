@@ -1,39 +1,39 @@
-import { useParams } from 'react-router-dom'
+import { useParams } from "react-router-dom";
+import { FormProvider, useForm } from "react-hook-form";
 import styles from './ViewFicha.module.css'
-import { useEffect, useState } from 'react'
-import api from '../../services/Api'
-import FichaForm from './FichaForm'
-import Loading from '../layout/Loading'
+import withLoading from "../../hocs/withLoading";
+import FichaForm from "./FichaForm";
+import { fieldsFicha, personal_data_fields } from "../util/fields_config";
 
-const ViewFicha = () => { 
-    const { id }= useParams()
-    const [ficha, setFicha] = useState('')
+const ViewFicha = ({ data }) => {
+  const formMethods = useForm({defaultValues: data ? data.ficha : {}});
 
-    useEffect(() => {
-        const getFicha = async () => {
-          const fichaUser = await api.get(`${id}/fichario`, {headers: {auth: `${id}`}});
+  const buttonsFicha = [
+    { label: 'Enviar', type: 'submit', customClass: 'align' },
+  ]
 
-          if (fichaUser) {
-            console.log(fichaUser.data);
-            setFicha(fichaUser.data)
-          }
-        }
+  const fields = personal_data_fields.concat(fieldsFicha)
 
-        getFicha()
-    }, [])
+  return (
+    <>
+      <FormProvider {...formMethods}>
+        <form className={styles.ficha_form}>
+          <FichaForm fieldsContainers={fields} buttons={buttonsFicha} disabled={true}
+          />
+        </form>
+      </FormProvider>
+    </>
+  );
+};
 
-    return (
-      <>
-        {ficha.length === 0 ? (
-          <Loading />
-        ) : (
-          <>
-            <h1> Ver ficha</h1>
-            <FichaForm infoCompletPatient={ficha} />
-          </>
-        )}
-      </>
-    );
-}
+// Pegando o ID da URL e passando para o HOC
+const WrappedViewFicha = () => {
+  const { id } = useParams();
+  const url = `${id}/fichario`;
 
-export default ViewFicha
+  const EnhancedViewFicha = withLoading(ViewFicha);
+
+  return <EnhancedViewFicha url={url} id={id} />;
+};
+
+export default WrappedViewFicha;

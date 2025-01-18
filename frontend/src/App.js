@@ -9,14 +9,13 @@ import Home from './components/pages/Home';
 import About from './components/pages/About';
 import Contato from './components/pages/Contato';
 import Profile from './components/pages/Profile'
-import ScreeningQueue from './components/pages/ScreeningQueue';
 import InvitePsychologist from './components/pages/InvitePsychologist';
-import ViewFicha from './components/ficha/ViewFicha';
 import CreateFicha from './components/ficha/CreateFicha';
 import UserLogin from './components/pages/UserLogin';
 import UserRegister from './components/pages/UserRegister';
 import FirstAcessRegister from './components/pages/FirstAcessRegister';
-import Table from './components/form/Table';
+import WrappedViewFicha from './components/ficha/ViewFicha';
+import WrappedScreeningQueue from './components/pages/ScreeningQueue';
 
 function App() {
   return (
@@ -94,7 +93,7 @@ function App() {
               element={
                 <RoleBasedComponent allowedRoles={["admin", "psicologo"]}>
                   <Container customClass="height">
-                    <ScreeningQueue />
+                    <WrappedScreeningQueue />
                   </Container>
                 </RoleBasedComponent>
               }
@@ -104,7 +103,7 @@ function App() {
               element={
                 <RoleBasedComponent allowedRoles={["admin", "psicologo"]}>
                   <Container customClass="height">
-                    <ViewFicha />
+                    <WrappedViewFicha />
                   </Container>
                 </RoleBasedComponent>
               }

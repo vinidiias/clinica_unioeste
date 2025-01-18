@@ -14,8 +14,10 @@ const ScreeningQueue = ({ data }) => {
     const [over, setOver] = useState(false)
     const [fichas, setFichas] = useState([])
     const navigate = useNavigate()
+
     
     useEffect(() => {
+      console.log(data)
       setFichas(data)
     }, [data])
 
@@ -85,5 +87,10 @@ const ScreeningQueue = ({ data }) => {
     );
 }
 
+const WrappedScreeningQueue = () => {
+  const ScreeningWithLoading = withLoading(ScreeningQueue)
 
-export default withLoading(ScreeningQueue, '/ficharios')
+  return <ScreeningWithLoading url='/ficharios' />
+}
+
+export default WrappedScreeningQueue

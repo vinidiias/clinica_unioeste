@@ -1,7 +1,7 @@
 import { useForm, useFormContext } from 'react-hook-form';
 import styles from './TextArea.module.css'
 
-const TextArea = ({ label, name, rows, handleOnChange, value, disabled, placeholder }) => {
+const TextArea = ({ label, name, rows, disabled, placeholder }) => {
 
     const { register } = useForm()
 
@@ -15,6 +15,7 @@ const TextArea = ({ label, name, rows, handleOnChange, value, disabled, placehol
           name={name}
           id={name}
           rows={rows}
+          disabled={disabled}
           {...register(name)}
         ></textarea>
       </div>

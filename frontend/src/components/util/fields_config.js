@@ -1,7 +1,7 @@
-const fieldsFicha = [
+export const fieldsFicha = [
     {
      fields: [
-       { name: 'profission', label: 'Profissão', type: 'text', placeholder: 'Digite sua profissão' }
+       { name: 'profission', label: 'Profissão', type: 'text', placeholder: 'Digite sua profissão' },
      ]
     },
     {
@@ -88,4 +88,24 @@ const fieldsFicha = [
     }
    ]
 
-   export default fieldsFicha
+export const personal_data_fields = [
+  {
+    fields: [
+      { name: 'name', label: 'Nome', type: 'text', placeholder: 'Digite seu nome' },
+      { name: 'birth', label: 'Data de Nascimento', type: 'date'},
+      { name: 'sexo', label: 'Sexo', type: 'select', options: ['Masculino', 'Feminino'] },
+    ]
+   },
+   {
+    fields: [
+      { name: 'phone', label: 'Telefone', type: 'text', placeholder: 'Digite seu Telefone' },
+      { name: 'cpf', label: 'CPF', type: 'text', placeholder: 'Digite seu CPF'},
+      { name: 'ra', label: 'RA', type: 'text',  placeholder: 'Digite seu RA' },
+    ]
+   },
+   {
+    fields: [
+      { name: 'email', label: 'Email', type: 'email', placeholder: 'Digite seu Email' },
+    ]
+   },
+]
