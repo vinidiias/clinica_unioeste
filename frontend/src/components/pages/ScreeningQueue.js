@@ -7,29 +7,17 @@ import { FaCaretSquareDown } from "react-icons/fa";
 import React, { useEffect, useState } from 'react';
 import { FixedSizeList as List } from 'react-window'
 import { useNavigate } from 'react-router-dom'
+import withLoading from '../../hocs/withLoading'
 
-const ScreeningQueue = () => {
+const ScreeningQueue = ({ data }) => {
     const [isSelected, setIsSelected] = useState(null)
     const [over, setOver] = useState(false)
     const [fichas, setFichas] = useState([])
     const navigate = useNavigate()
     
     useEffect(() => {
-      const allFichas = async () => {
-        try{
-          const allfichas = await api.get('/ficharios')
-
-          if(allfichas) {
-            setFichas(allfichas.data)
-          }
-         
-        } catch(err) {
-          console.log(err)
-        }
-      }
-
-      allFichas()
-    }, [fichas.length])
+      setFichas(data)
+    }, [data])
 
     function handleClick(index) {
         return isSelected === index ? setIsSelected(null) : setIsSelected(index)
@@ -46,7 +34,7 @@ const ScreeningQueue = () => {
                 <Patient
                     img={ficha.pessoa.img}
                     name={ficha.ficha.user.name}
-                    vinculo={ficha.ficha.vinculo.type}
+                    vinculo={ficha.ficha.vinculo_unioeste.type}
                     indicado="Não"
                     data="23/11/2024"
                     isSelected={isSelected}
@@ -66,9 +54,6 @@ const ScreeningQueue = () => {
 
     return (
       <>
-        {fichas.length === 0 ? (
-          <Loading />
-        ) : (
           <div className={styles.screening}>
             <div className={styles.headersBtn}>
               {isSelected !== null && <Submit text="Ver fichário"
@@ -96,10 +81,9 @@ const ScreeningQueue = () => {
               </List>
             </div>
           </div>
-        )}
       </>
     );
 }
 
 
-export default ScreeningQueue
+export default withLoading(ScreeningQueue, '/ficharios')

@@ -1,14 +1,7 @@
-import { Fragment, useContext, useEffect, useState } from "react";
+import { Fragment } from "react";
 import styles from "./FichaForm.module.css";
 import Input from "../form/Input";
-import CheckBox from "../form/CheckBox";
 import Table from "../form/Table";
-import Loading from "../layout/Loading";
-import Submit from "../form/Button";
-import api from "../../services/Api";
-import { calcularIdade } from "../util/CalculaIdade";
-import { UserContext } from "../context/UserContext";
-import { useNavigate } from "react-router-dom";
 import TextArea from "../form/TextArea";
 import Button from "../form/Button";
 import Select from "../form/Select";
@@ -20,43 +13,8 @@ const FichaForm = ({
   buttons,
   title,
 }) => {
-  const { userData } = useContext(UserContext);
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const { watch } = useFormContext();
-  /*async function submit(e) {
-    e.preventDefault();
-    const fichaData = {
-      profission,
-      education,
-      preferredDay,
-      vinculo,
-      comunidade,
-      work,
-      psicologa,
-      psiquiatra,
-      observation,
-    };
 
-    try {
-      setLoading(true);
-      const fichaCreated = await api.post(
-        `${userData.user_id}/ficha`,
-        fichaData,
-        { headers: { auth: `${userData.user_id}` } }
-      );
-
-      if (fichaCreated) {
-        console.log(fichaCreated);
-        alert("Ficha criada com sucesso, espere ser atendido.");
-        navigate("/home");
-      }
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setLoading(false);
-    }
-  }*/
+  const { watch } = useFormContext()
 
   return (
     <>
@@ -133,6 +91,17 @@ const FichaForm = ({
                 </Fragment>
               );
             case "time":
+              return (
+                <div className={styles.flex} key={uniqueFieldKey}>
+                  <Input
+                    name={field.name}
+                    text={field.label}
+                    type={field.type}
+                    placeholder={field.placeholder}
+                  />
+                </div>
+              );
+            case 'date':
               return (
                 <div className={styles.flex} key={uniqueFieldKey}>
                   <Input

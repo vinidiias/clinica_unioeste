@@ -1,18 +1,14 @@
 import withStyleAuth from "../../../hocs/withStyleAuth";
 import AuthForm from "../../auth/AuthForm";
 import api from "../../../services/Api";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { UserContext } from "../../context/UserContext";
 import withAuth from "../../../hocs/withAuth";
-import FirstAcessRegister from "../FirstAcessRegister";
 
 const UserLogin = ({ loading, onAction }) => {
   const { userData, setUserData } = useContext(UserContext);
-
-  const [overlay, setOverlay] = useState(false);
-  console.log("Componente UserLogin renderizado. Estado overlay:", overlay);
 
   const navigate = useNavigate();
 
@@ -23,10 +19,6 @@ const UserLogin = ({ loading, onAction }) => {
       name: userData.name ? userData.name : "",
     },
   });
-
-  useEffect(() => {
-    console.log(overlay);
-  }, [overlay]);
 
   const handleLogin = async (d) => {
     const email = d.email;
@@ -83,10 +75,6 @@ const UserLogin = ({ loading, onAction }) => {
     { label: "Entrar", type: "submit" },
     { label: "Criar conta", type: "button", handleClick: handleNavigate },
   ];
-
-  const toggle = () => {
-    setOverlay(!overlay);
-  };
 
   return (
     <>

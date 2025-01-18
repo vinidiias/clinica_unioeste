@@ -1,6 +1,5 @@
-import { useForm, useFormContext } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import styles from './Select.module.css'
-import { useEffect, useState } from "react"
 
 const Select = ({ name, text, options}) => {
     

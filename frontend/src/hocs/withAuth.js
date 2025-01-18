@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Loading from '../components/layout/Loading';
 
 const withAuth = (WrappedComponent) => {
   return function WithAuthComponent(props) {
     const [loading, setLoading] = useState(false);
 
+    useEffect(() => console.log(loading), [loading])
     const handleAction = async (action) => {
       setLoading(true);
       try {
-        action();
+        console.log(loading)
+        action()
       } catch (error) {
         console.error("An error occurred:", error);
       } finally {

@@ -16,6 +16,7 @@ import CreateFicha from './components/ficha/CreateFicha';
 import UserLogin from './components/pages/UserLogin';
 import UserRegister from './components/pages/UserRegister';
 import FirstAcessRegister from './components/pages/FirstAcessRegister';
+import Table from './components/form/Table';
 
 function App() {
   return (

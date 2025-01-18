@@ -2,20 +2,6 @@ import styles from './Table.module.css'
 import CheckBox from './CheckBox'
 
 const Table = ({ title, viewPatientFicha, setPreferredDay, preferredDay }) => {
-  function CheckBoxChange(e) {
-      const {name, checked} = e.target
-
-      setPreferredDay(prevState =>{
-        if(checked){
-          return {...prevState, [name]: checked}
-        }
-        else {
-          const aux = {...prevState}
-          delete aux[name]
-          return aux
-        }
-      })
-    }
 
     return (
       <div className={styles.table_container}>
@@ -39,7 +25,7 @@ const Table = ({ title, viewPatientFicha, setPreferredDay, preferredDay }) => {
                   <CheckBox
                     disabled={viewPatientFicha}
                     customClass="table"
-                    name="morning_monday"
+                    name="preferred_day.morning_monday"
                     text=""
                   />
                 </td>
@@ -47,7 +33,7 @@ const Table = ({ title, viewPatientFicha, setPreferredDay, preferredDay }) => {
                   <CheckBox
                     disabled={viewPatientFicha}
                     customClass="table"
-                    name="morning_tuesday"
+                    name="preferred_day.morning_tuesday"
                     text=""
                   />
                 </td>
@@ -55,7 +41,7 @@ const Table = ({ title, viewPatientFicha, setPreferredDay, preferredDay }) => {
                   <CheckBox
                     disabled={viewPatientFicha}
                     customClass="table"
-                    name="morning_wednesday"
+                    name="preferred_day.morning_wednesday"
                     text=""
                   />
                 </td>
@@ -63,7 +49,7 @@ const Table = ({ title, viewPatientFicha, setPreferredDay, preferredDay }) => {
                   <CheckBox
                     disabled={viewPatientFicha}
                     customClass="table"
-                    name="morning_thursday"
+                    name="preferred_day.morning_thursday"
                     text=""
                   />
                 </td>
@@ -71,7 +57,7 @@ const Table = ({ title, viewPatientFicha, setPreferredDay, preferredDay }) => {
                   <CheckBox
                     disabled={viewPatientFicha}
                     customClass="table"
-                    name="morning_friday"
+                    name="preferred_day.morning_friday"
                     text=""
                   />
                 </td>
@@ -82,7 +68,7 @@ const Table = ({ title, viewPatientFicha, setPreferredDay, preferredDay }) => {
                   <CheckBox
                     disabled={viewPatientFicha}
                     customClass="table"
-                    name="afternoon_monday"
+                    name="preferred_day.afternoon_monday"
                     text=""
                   />
                 </td>
@@ -90,7 +76,7 @@ const Table = ({ title, viewPatientFicha, setPreferredDay, preferredDay }) => {
                   <CheckBox
                     disabled={viewPatientFicha}
                     customClass="table"
-                    name="afternoon_tuesday"
+                    name="preferred_day.afternoon_tuesday"
                     text=""
                   />
                 </td>
@@ -98,7 +84,7 @@ const Table = ({ title, viewPatientFicha, setPreferredDay, preferredDay }) => {
                   <CheckBox
                     disabled={viewPatientFicha}
                     customClass="table"
-                    name="afternoon_wednesday"
+                    name="preferred_day.afternoon_wednesday"
                     text=""
                   />
                 </td>
@@ -106,7 +92,7 @@ const Table = ({ title, viewPatientFicha, setPreferredDay, preferredDay }) => {
                   <CheckBox
                     disabled={viewPatientFicha}
                     customClass="table"
-                    name="afternoon_thursday"
+                    name="preferred_day.afternoon_thursday"
                     text=""
                   />
                 </td>
@@ -114,7 +100,7 @@ const Table = ({ title, viewPatientFicha, setPreferredDay, preferredDay }) => {
                   <CheckBox
                     disabled={viewPatientFicha}
                     customClass="table"
-                    name="afternoon_friday"
+                    name="preferred_day.afternoon_friday"
                     text=""
                   />
                 </td>
@@ -125,7 +111,7 @@ const Table = ({ title, viewPatientFicha, setPreferredDay, preferredDay }) => {
                   <CheckBox
                     disabled={viewPatientFicha}
                     customClass="table"
-                    name="night_monday"
+                    name="preferred_day.night_monday"
                     text=""
                   />
                 </td>
@@ -133,7 +119,7 @@ const Table = ({ title, viewPatientFicha, setPreferredDay, preferredDay }) => {
                   <CheckBox
                     disabled={viewPatientFicha}
                     customClass="table"
-                    name="night_tuesday"
+                    name="preferred_day.night_tuesday"
                     text=""
                   />
                 </td>
@@ -141,7 +127,7 @@ const Table = ({ title, viewPatientFicha, setPreferredDay, preferredDay }) => {
                   <CheckBox
                     disabled={viewPatientFicha}
                     customClass="table"
-                    name="night_wednesday"
+                    name="preferred_day.night_wednesday"
                     text=""
                   />
                 </td>
@@ -149,7 +135,7 @@ const Table = ({ title, viewPatientFicha, setPreferredDay, preferredDay }) => {
                   <CheckBox
                     disabled={viewPatientFicha}
                     customClass="table"
-                    name="night_thursday"
+                    name="preferred_day.night_thursday"
                     text=""
                   />
                 </td>
@@ -157,7 +143,7 @@ const Table = ({ title, viewPatientFicha, setPreferredDay, preferredDay }) => {
                   <CheckBox
                     disabled={viewPatientFicha}
                     customClass="table"
-                    name="night_friday"
+                    name="preferred_day.night_friday"
                     text=""
                   />
                 </td>
