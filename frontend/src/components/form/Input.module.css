@@ -41,7 +41,7 @@
 
 .form_control input:disabled {
     cursor: no-drop;
-    background-color: white;
+    background-color: rgb(255, 255, 255);
 }
 
 .column {

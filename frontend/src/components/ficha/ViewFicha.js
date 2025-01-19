@@ -6,10 +6,10 @@ import FichaForm from "./FichaForm";
 import { fieldsFicha, personal_data_fields } from "../util/fields_config";
 
 const ViewFicha = ({ data }) => {
-  const formMethods = useForm({defaultValues: data ? data.ficha : {}});
+  const formMethods = useForm({defaultValues: data ? Object.assign(data.ficha, data.pessoa, data.user) : {}});
 
   const buttonsFicha = [
-    { label: 'Enviar', type: 'submit', customClass: 'align' },
+    { label: 'Atender', type: 'submit', customClass: 'align' },
   ]
 
   const fields = personal_data_fields.concat(fieldsFicha)

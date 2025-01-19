@@ -22,8 +22,7 @@
 }
 
 .form_control input:disabled {
-    cursor: no-drop;
-    background-color: white;
+    cursor: not-allowed;
 }
 
 .column {

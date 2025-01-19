@@ -1,9 +1,9 @@
-import { useForm, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import styles from './TextArea.module.css'
 
 const TextArea = ({ label, name, rows, disabled, placeholder }) => {
 
-    const { register } = useForm()
+    const { register } = useFormContext()
 
     return (
       <div className={styles.observation}>
