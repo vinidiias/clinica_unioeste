@@ -1,9 +1,9 @@
 import styles from './Input.module.css'
-import { useForm, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 const Input = ({ type, name, text, handleOnChange, placeholder, autoComplete, customClass, disabled}) => {
 
-  const { register, watch } = useFormContext()
+  const { register } = useFormContext()
 
   
     return (

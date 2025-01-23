@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
-import styles from './PersonalData.module.css'
-import api from '../../services/Api'
-import { UserContext } from '../context/UserContext';
+import styles from '../PersonalData/index.module.css'
+import api from '../../../../services/Api'
+import { UserContext } from '../../../context/UserContext';
 
 const Adress = ({ adress_completo='' }) => {
     const {userData, setPessoa, pessoa} = useContext(UserContext)

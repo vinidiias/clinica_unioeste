@@ -1,4 +1,5 @@
 export const calcularIdade = (dataNascimento) => {
+    console.log(dataNascimento)
     const [ano, mes, dia] = dataNascimento.split('-').map(Number)
     const nascimento = new Date(ano, mes-1, dia)
     const atual = new Date()

@@ -1,24 +1,32 @@
-import styles from './index.module.css'
-import Input from '../../form/Input'
-import Button from '../../form/Button'
-import api from '../../../services/Api'
+import styles from "./index.module.css";
+import Input from "../../form/Input";
+import Button from "../../form/Button";
+import Select from "../../form/Select";
+import api from "../../../services/Api";
 
-import { useContext, useEffect, useState } from 'react'
-import { UserContext } from '../../context/UserContext'
-import { useLocation, useSearchParams } from 'react-router-dom'
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../../context/UserContext";
+import { useLocation, useSearchParams } from "react-router-dom";
 
-const AuthForm = ({ title, fields, btns, handleSubmit, handleRegister, handleClick }) => {
-  const {userData} = useContext(UserContext)
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [searchParams] = useSearchParams()
-  const [register, setRegister] = useState(false)
-  const [message, setMessage] = useState('')
-  const [isValid, setIsValid] = useState(false)
-  const [email, setEmail] = useState('')
-  const [name, setName] = useState('')
-  const [password, setPassword] = useState('')
+const AuthForm = ({
+  title,
+  fields,
+  btns,
+  handleSubmit,
+  handleRegister,
+  handleClick,
+}) => {
+  const { userData } = useContext(UserContext);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [searchParams] = useSearchParams();
+  const [register, setRegister] = useState(false);
+  const [message, setMessage] = useState("");
+  const [isValid, setIsValid] = useState(false);
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
 
-  const location = useLocation()
+  const location = useLocation();
 
   useEffect(() => {
     if (userData.email) {
@@ -27,15 +35,13 @@ const AuthForm = ({ title, fields, btns, handleSubmit, handleRegister, handleCli
   }, [userData.email]);
 
   useEffect(() => {
-
-    if(location.pathname === '/register') {
-      setRegister(true)
-    }
-    else setRegister(false)
-  }, [location])
+    if (location.pathname === "/register") {
+      setRegister(true);
+    } else setRegister(false);
+  }, [location]);
 
   useEffect(() => {
-    if(register) {
+    if (register) {
       const getSearchUrl = async () => {
         const email = searchParams.get("email");
         const id = searchParams.get("id");
@@ -49,65 +55,127 @@ const AuthForm = ({ title, fields, btns, handleSubmit, handleRegister, handleCli
         } else {
           setMessage("Informações ausente de convite");
         }
-      }
-      getSearchUrl()
+      };
+      getSearchUrl();
     }
-  }, [searchParams, register])
+  }, [searchParams, register]);
 
   const registerSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    if(password !== confirmPassword) {
-      setMessage('Senhas não coincidem')
-      return
+    if (password !== confirmPassword) {
+      setMessage("Senhas não coincidem");
+      return;
     }
 
-    const email = searchParams.get('email')
-    const id = searchParams.get('id')
+    const email = searchParams.get("email");
+    const id = searchParams.get("id");
 
-    handleRegister(email, name, password, id)
-  }
+    handleRegister(email, name, password, id);
+  };
 
-  const submit = (e) =>{
-    e.preventDefault()
+  const submit = (e) => {
+    e.preventDefault();
 
-    handleSubmit(email, password)
-  }
+    handleSubmit(email, password);
+  };
 
   return (
     <>
-    <h1>{title}</h1>
-    {fields.length > 0  && (
-      fields.map((field, index) => (
-        <Input
-          key={index}
-          type={field.type}
-          name={field.name}
-          text={field.label}
-          placeholder={field.placeholder}
-          customClass="column padding_login"
-        />
-      ))
-    )}
+      <h1>{title}</h1>
+      {fields.length > 0 &&
+        fields.map((field, index) => {
+          switch (field.type) {
+            case "email":
+              return (
+                <Input
+                  key={index}
+                  type={field.type}
+                  name={field.name}
+                  text={field.label}
+                  placeholder={field.placeholder}
+                  customClass="column padding_login"
+                />
+              );
+              break;
+            case "password":
+              return (
+                <Input
+                  key={index}
+                  type={field.type}
+                  name={field.name}
+                  text={field.label}
+                  placeholder={field.placeholder}
+                  customClass="column padding_login"
+                />
+              );
+              break;
+            case "text":
+              return (
+                <Input
+                  key={index}
+                  type={field.type}
+                  name={field.name}
+                  text={field.label}
+                  placeholder={field.placeholder}
+                  customClass="column padding_login"
+                />
+              );
+              break;
+            case "file":
+              return (
+                <Input
+                  key={index}
+                  type={field.type}
+                  name={field.name}
+                  text={field.label}
+                  customClass="padding_login"
+                />
+              );
+              break;
+            case "select":
+              return (
+                <Select
+                  key={index}
+                  name={field.name}
+                  text={field.label}
+                  options={field.options}
+                />
+              );
+              break;
+            case "date":
+              return (
+                <Input
+                  key={index}
+                  type={field.type}
+                  name={field.name}
+                  text={field.label}
+                  customClass="column padding_login"
+                />
+              );
+              break;
+            default:
+              return null;
+          }
+        })}
 
-    <div className={styles.form_submit}>
-      {btns.length > 0 && (
-        btns.map((btn, index) => (
-          <Button 
-            key={index}
-            text={btn.label}
-            type={btn.type}
-            customClass={btn.class}
-            handleClick={btn.handleClick}
-          />
-        )
-      ))}
-    </div>
+      <div className={styles.form_submit}>
+        {btns.length > 0 &&
+          btns.map((btn, index) => (
+            <Button
+              key={index}
+              text={btn.label}
+              type={btn.type}
+              customClass={btn.class}
+              handleClick={btn.handleClick}
+            />
+          ))}
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default AuthForm
+export default AuthForm;
 
 /**
  <form

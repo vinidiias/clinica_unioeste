@@ -1,6 +1,6 @@
 import styles from './NavBar.module.css'
-import { Link } from 'react-router-dom';
 
+import { Link } from 'react-router-dom';
 import logoUnioeste from '../../img/logoUnioeste.png'
 import { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
@@ -14,7 +14,6 @@ const NavBar = () => {
           <img
             src={logoUnioeste}
             alt="logo Unioeste"
-            style={{ width: "60px" }}
           />
           <h1>Clínica</h1>
         </Link>

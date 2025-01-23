@@ -8,14 +8,14 @@ import Container from './components/layout/Container';
 import Home from './components/pages/Home';
 import About from './components/pages/About';
 import Contato from './components/pages/Contato';
-import Profile from './components/pages/Profile'
+import Profile from './components/pages/Profile';
 import InvitePsychologist from './components/pages/InvitePsychologist';
 import CreateFicha from './components/ficha/CreateFicha';
 import UserLogin from './components/pages/UserLogin';
 import UserRegister from './components/pages/UserRegister';
 import FirstAcessRegister from './components/pages/FirstAcessRegister';
 import WrappedViewFicha from './components/ficha/ViewFicha';
-import WrappedScreeningQueue from './components/pages/ScreeningQueue';
+import WrappedWaitQueue from './components/pages/WaitQueue';
 
 function App() {
   return (
@@ -93,7 +93,7 @@ function App() {
               element={
                 <RoleBasedComponent allowedRoles={["admin", "psicologo"]}>
                   <Container customClass="height">
-                    <WrappedScreeningQueue />
+                    <WrappedWaitQueue />
                   </Container>
                 </RoleBasedComponent>
               }

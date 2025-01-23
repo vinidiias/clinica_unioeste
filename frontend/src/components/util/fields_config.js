@@ -109,3 +109,43 @@ export const personal_data_fields = [
     ]
    },
 ]
+
+export const first_acess_fields = [
+  {
+    name: "img",
+    label: "Foto",
+    type: "file",
+  },
+  {
+    name: "sexo",
+    label: "Sexo",
+    type: "select",
+    options: ["Masculino", "Feminino"],
+  },
+  { name: "birth", label: "Data de Nascimento", type: "date" },
+  {
+    name: "cpf",
+    label: "CPF",
+    type: "text",
+    placeholder: "Digite seu CPF",
+  },
+  { name: "ra", label: "RA", type: "text", placeholder: "Digite seu RA" },
+  {
+    name: "phone",
+    label: "Telefone",
+    type: "text",
+    placeholder: "Digite seu Telefone",
+  },
+  {
+    name: "addressComplet.address",
+    label: "Endereço",
+    type: "text",
+    placeholder: "Digite seu Endereço",
+  },
+  {
+    name: "addressComplet.number",
+    label: "Número",
+    type: "text",
+    placeholder: "Digite seu Número de Endereço",
+  },
+]

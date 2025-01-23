@@ -1,10 +1,9 @@
 import { FaCheckSquare } from 'react-icons/fa';
 import { FaRegSquare } from 'react-icons/fa6';
 
-import styles from './Patient.module.css'
+import styles from './index.module.css'
 
-const Patient = ({ img, name, vinculo, indicado, data, isSelected, index, setOver, over, handleClick }) => {
-    console.log('ta chegando')
+const Patient = ({ img, name, vinculo, indicated='Não', date, priority, isSelected, index, setOver, over, handleClick }) => {
     return (
       <div
         className={`${styles.patients} ${
@@ -25,7 +24,7 @@ const Patient = ({ img, name, vinculo, indicado, data, isSelected, index, setOve
         )}
         <h3>{name}</h3>
         <h3>{vinculo}</h3>
-        <h3>Não</h3>
+        <h3>{indicated}</h3>
         <h3>23/11/2024</h3>
       </div>
     )

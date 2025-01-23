@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import styles from './PersonalData.module.css'
+import styles from '../PersonalData/index.module.css'
 
-const Escolaridade = ({ education='' }) => {
+const Education = ({ education='' }) => {
     const [edit, setEdit] = useState(true)
 
     const [level, setLevel] = useState(education.level)
@@ -128,4 +128,4 @@ const Escolaridade = ({ education='' }) => {
     );
 }
 
-export default Escolaridade
+export default Education
