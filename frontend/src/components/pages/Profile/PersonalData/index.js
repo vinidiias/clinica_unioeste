@@ -8,35 +8,15 @@ import { useNavigate } from "react-router-dom";
 import React, { useContext, useState } from "react";
 import Button from "../../../form/Button";
 import ImageInput from "../../../form/ImageInput";
-import ProfileSubmit from "../ProfileSubmit";
+import ProfileSubmit from '../ProfileSubmit'
 
 const PersonalData = ({
-  onClose,
+  handleEdit,
   imgProfile = "",
-  nome = "",
-  idade = "",
-  sex = "M",
-  nascimento = "",
-  CPF = "",
-  RA = "",
-  mail = "",
-  tel = "",
 }) => {
   const [edit, setEdit] = useState(true);
   const [img, setImg] = useState(imgProfile);
-  const [name, setName] = useState(nome);
-  const [password, setPassword] = useState("");
-  const [sexo, setSexo] = useState(sex);
-  const [birth, setBirth] = useState(nascimento);
-  const [cpf, setCpf] = useState(CPF);
-  const [ra, setRa] = useState(RA);
-  const [email, setEmail] = useState(mail);
-  const [phone, setPhone] = useState(tel);
-  const [adress, setAdress] = useState("");
-  const [number, setNumber] = useState("");
-  const { userData, setUserData } = useContext(UserContext);
-  const navigate = useNavigate();
-
+  
   const fields = [
     {
       field: [
@@ -94,64 +74,8 @@ const editToggle = () => {
     setEdit(!edit);
   }
 
-  async function submitHandle() {
-    const personal_data = {
-      img,
-      sexo,
-      birth,
-      cpf,
-      ra,
-      phone,
-      adressComplet: {
-        adress,
-        number,
-      },
-    };
-
-    try {
-      const personCreated = await api.post(
-        `/${userData.user_id}/pessoa`,
-        personal_data,
-        {
-          headers: { auth: `${userData.user_id}` },
-        }
-      );
-      const newPessoa = personCreated.data.pessoa;
-      console.log(newPessoa);
-
-      let user = JSON.parse(sessionStorage.getItem("user"));
-      user.isFirst = false;
-      sessionStorage.setItem("user", JSON.stringify(user));
-
-      setUserData((prevState) => ({
-        ...prevState,
-        isLogged: true,
-      }));
-
-      onClose();
-      navigate("/home");
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
   async function editHandle() {
-    const user = {
-      name,
-      email,
-      password,
-    };
-
-    const personal_data = {
-      img,
-      sexo,
-      birth,
-      cpf,
-      ra,
-      phone,
-    };
-
-    try {
+    /*try {
       const pessoaUpdated = await api.patch(
         `/pessoa/${userData.user_id}`,
         personal_data,
@@ -188,7 +112,7 @@ const editToggle = () => {
       console.log(err);
     } finally {
       editToggle();
-    }
+    }*/
   }
 
   return (
@@ -218,7 +142,7 @@ const editToggle = () => {
         )
       })}
       </div>
-      <ProfileSubmit txtEdit="Editar Dados" txtSubmit="Confirmar" handleSubmit={editHandle} handleToggle={editToggle} editState={edit} />
+      <ProfileSubmit txtEdit="Editar Dados" txtSubmit="Confirmar" handleToggle={editToggle} editState={edit} />
     </div>
   );
 };
@@ -248,7 +172,7 @@ PersonalData.Imagem = function ({ img, handleFileChange, edit }) {
             handleFileChange={handleFileChange}
           />
           <img
-            id="file-img"
+            id="mg"
             className={styles.img}
             src={img}
             alt="foto perfil"

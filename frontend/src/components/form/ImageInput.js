@@ -9,7 +9,6 @@ const ImageInput = ({ text, name, customClass, handleFileChange }) => {
             className={styles.file}
             type="file"
             accept="image/png, image/jpeg"
-            required
             onChange={handleFileChange}
           />
           <span>{text}</span>
