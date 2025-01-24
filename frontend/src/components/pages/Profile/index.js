@@ -8,12 +8,17 @@ import Adress from './Adress'
 import api from '../../../services/Api'
 import { calcularIdade } from '../../util/CalculaIdade'
 import { UserContext } from '../../context/UserContext'
+import { first_acess_fields } from '../../util/fields_config'
+
 import withAuthenticated from '../../../hocs/withAuthenticated'
+import { FormProvider, useForm } from 'react-hook-form'
 
 const Profile = () => {
   const { userData, setUserData } = useContext(UserContext)
   const navigate = useNavigate()
   const [pessoa, setPessoa] = useState({})
+
+  const methodsForm = useForm()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,11 +32,10 @@ const Profile = () => {
       }))*/
 
       try{
-        const getPessoa = await api.get(`/${userData.user_id}/pessoa`, {
+        await api.get(`/${userData.user_id}/pessoa`, {
           headers: { auth: `${userData.user_id}` },
         })
         .then((data) => {
-          console.log(data.data)
           setPessoa(data.data)})
         .catch((error) => {
           console.log(error)
@@ -43,7 +47,7 @@ const Profile = () => {
       }
     }
     fetchData()
-  }, [navigate, setUserData])
+  }, [navigate, setUserData, userData])
 
 
 
@@ -60,23 +64,28 @@ const Profile = () => {
         <Loading />
       ) : (
         <div className={styles.profile}>
-          <PersonalData
-            imgProfile={pessoa.img}
-            nome={userData.name}
-            idade={calcularIdade(pessoa.birth)}
-            sex={pessoa.sexo}
-            nascimento={pessoa.birth}
-            CPF={pessoa.cpf}
-            RA={pessoa.ra}
-            mail={userData.email}
-            tel={pessoa.phone}
-          />
-          <Adress
-            adress_complet={pessoa.adressComplet} // Usando estado local
-          />
-          <Escolaridade
-            education={education} // Presumindo que a educação não muda
-          />
+          <FormProvider {...methodsForm}>
+            <form >
+              <PersonalData
+                imgProfile={pessoa.img}
+                nome={userData.name}
+                idade={calcularIdade(pessoa.birth)}
+                sex={pessoa.sexo}
+                nascimento={pessoa.birth}
+                CPF={pessoa.cpf}
+                RA={pessoa.ra}
+                mail={userData.email}
+                tel={pessoa.phone}
+                tag='oi'
+              />
+              <Adress
+                adress_complet={pessoa.adressComplet} // Usando estado local
+              />
+              <Escolaridade
+                education={education} // Presumindo que a educação não muda
+              />
+            </form>
+          </FormProvider>
         </div>
       )}
     </>

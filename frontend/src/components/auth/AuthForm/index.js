@@ -82,7 +82,6 @@ const AuthForm = ({
 
   return (
     <>
-      <h1>{title}</h1>
       {fields.length > 0 &&
         fields.map((field, index) => {
           switch (field.type) {
@@ -158,19 +157,6 @@ const AuthForm = ({
               return null;
           }
         })}
-
-      <div className={styles.form_submit}>
-        {btns.length > 0 &&
-          btns.map((btn, index) => (
-            <Button
-              key={index}
-              text={btn.label}
-              type={btn.type}
-              customClass={btn.class}
-              handleClick={btn.handleClick}
-            />
-          ))}
-      </div>
     </>
   );
 };

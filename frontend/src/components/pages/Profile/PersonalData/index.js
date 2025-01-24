@@ -1,9 +1,12 @@
 import styles from "./index.module.css";
 import api from "../../../../services/Api";
+import Input from "../../../form/Input";
+import Select from "../../../form/Select";
 import { convertToBase64 } from "../../../util/ConvertToBase64";
 import { UserContext } from "../../../context/UserContext";
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
+import Button from "../../../form/Button";
 
 const PersonalData = ({
   onClose,
@@ -31,6 +34,50 @@ const PersonalData = ({
   const [number, setNumber] = useState("");
   const { userData, setUserData } = useContext(UserContext);
   const navigate = useNavigate();
+
+  const fields = [
+    {
+      field: [
+        <Input name={"name"} text={"Nome"} type={"text"} disabled={edit} />,
+        <Input name={"age"} text={"Idade"} type={"text"} disabled={true} />,
+        <Select
+          name={"sexo"}
+          text={"Sexo"}
+          options={["Masculino", "Feminino"]}
+          disabled={edit}
+        />,
+      ],
+    },
+    {
+      field: [
+        <Input
+          name={"birth"}
+          text={"Data de Nascimento"}
+          type={"date"}
+          disabled={edit}
+        />,
+        <Input name={"cpf"} text={"CPF"} type={"text"} disabled={edit} />,
+        <Input name={"ra"} text={"RA"} type={"text"} disabled={edit} />,
+      ],
+    },
+    {
+      field: [
+        <Input
+          name={"phone"}
+          text={"Telefone"}
+          type={"text"}
+          disabled={edit}
+        />,
+        <Input name={"email"} text={"Email"} type={"email"} disabled={edit} />,
+        <Input
+          name={"password"}
+          text={"Alterar Senha"}
+          type={"password"}
+          disabled={edit}
+        />,
+      ],
+    },
+  ];
 
   async function handleFileChange(e) {
     const file = e.target.files[0];
@@ -143,7 +190,7 @@ const editToggle = () => {
   }
 
   return (
-    <div className={styles.containers + " " + styles.margin}>
+    <div className={`${styles.containers} ${styles.margin}`}>
       <div className={styles.header}>
         <h3>Dados pessoais</h3>
       </div>
@@ -153,119 +200,23 @@ const editToggle = () => {
           handleFileChange={handleFileChange}
           edit={edit}
         />
-        <div className={styles.item}>
-          <div className={styles.input}>
-            <label htmlFor="name">Nome</label>
-            <input
-              onChange={(e) => setName(e.target.value)}
-              value={name}
-              disabled={edit}
-              type="text"
-              name="name"
-              id="name"
-              autoComplete="additional-name"
-            />
+      {fields.map((field, index) => {
+        return (
+          <div className={styles.item} key={index}>
+            {field.field.map((subField, subIndex) => {
+              return (
+              <React.Fragment key={subIndex}>
+              {subField}
+              </React.Fragment>
+              )
+            })}
           </div>
-          <div className={styles.input}>
-            <label htmlFor="age">Idade</label>
-            <input
-              value={idade}
-              disabled={edit}
-              type="text"
-              name="age"
-              id="age"
-            />
+        )
+      })}
+        <div className={styles.submitEdit}>
+            <Button type={'button'} text='Editar Dados' handleClick={editToggle} />
+            {!edit && <Button text='Confirmar' handleClick={editHandle} />}
           </div>
-          <div className={styles.input}>
-            <label htmlFor="sexuality">Sexo</label>
-            <select
-              onChange={(e) => setSexo(e.target.value)}
-              value={sexo}
-              disabled={edit}
-              name="sexuality"
-              id="sexuality"
-            >
-              <option value="M">Masculino</option>
-              <option value="F">Feminino</option>
-            </select>
-          </div>
-        </div>
-        <div className={styles.item}>
-          <div className={styles.input}>
-            <label htmlFor="birth">Data de nascimento</label>
-            <input
-              onChange={(e) => setBirth(e.target.value)}
-              value={birth}
-              disabled={edit}
-              type="date"
-              name="birth"
-              id="birth"
-            />
-          </div>
-          <div className={styles.input}>
-            <label htmlFor="cpf">CPF</label>
-            <input
-              onChange={(e) => setCpf(e.target.value)}
-              value={cpf}
-              disabled={edit}
-              type="text"
-              name="cpf"
-              id="cpf"
-            />
-          </div>
-          <div className={styles.input}>
-            <label htmlFor="ra">RA</label>
-            <input
-              onChange={(e) => setRa(e.target.value)}
-              value={ra}
-              disabled={edit}
-              type="text"
-              name="ra"
-              id="ra"
-            />
-          </div>
-        </div>
-        <div className={styles.item}>
-          <div className={styles.input}>
-            <label htmlFor="phone">Telefone</label>
-            <input
-              onChange={(e) => setPhone(e.target.value)}
-              value={phone}
-              disabled={edit}
-              type="text"
-              name="phone"
-              id="phone"
-              autoComplete="home tel"
-            />
-          </div>
-          <div className={styles.input}>
-            <label htmlFor="email">Email</label>
-            <input
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-              disabled={edit}
-              type="email"
-              name="email"
-              id="email"
-              autoComplete="home email"
-            />
-          </div>
-          <div className={styles.input}>
-            <label htmlFor="password">Alterar senha</label>
-            <input
-              onChange={(e) => setPassword(e.target.value)}
-              disabled={edit}
-              type="password"
-              name="password"
-              id="password"
-              autoComplete="new-password"
-            />
-          </div>
-          <div className={styles.submitEdit}>
-            <button onClick={editToggle}>Editar dados</button>
-            {!edit && <button onClick={editHandle}>Confirmar</button>}
-          </div>
-        </div>
       </div>
     </div>
   );
