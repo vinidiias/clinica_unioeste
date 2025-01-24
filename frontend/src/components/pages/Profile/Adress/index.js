@@ -1,13 +1,26 @@
-import { useContext, useState } from 'react';
 import styles from '../PersonalData/index.module.css'
+import Input from '../../../form/Input';
+import Select from '../../../form/Select';
 import api from '../../../../services/Api'
 import { UserContext } from '../../../context/UserContext';
+import { useContext, useState } from 'react';
+import Button from '../../../form/Button';
+import ProfileSubmit from '../ProfileSubmit';
 
 const Adress = ({ adress_completo='' }) => {
     const {userData, setPessoa, pessoa} = useContext(UserContext)
     const [edit, setEdit] = useState(true)
     const [adress, setAdress] = useState(adress_completo.adress)
     const [number, setNumber] = useState(adress_completo.number)
+
+    const fields = [
+      {
+        field: <Input name={"addressComplete.address"} text={"Endereço"} type={"text"} disabled={edit} />,
+      },
+     {
+      field: <Input name={"addressComplet.number"} text={"Número"} type={"text"} disabled={true} />,
+     }
+    ];
 
     function editToggle() {
         setEdit(!edit)
@@ -57,25 +70,15 @@ const Adress = ({ adress_completo='' }) => {
           <h3>Endereço</h3>
         </div>
         <div className={styles.infos}>
-          <div className={styles.item}>
-            <div className={styles.input}>
-              <label htmlFor="adress">Endereço</label>
-              <input disabled={edit} value={adress} type="text" name="adress" id="adress" onChange={(e) => setAdress(e.target.value)} />
+        {fields.map((field, index) => {
+          return (
+            <div className={styles.item} key={index}>
+              {field.field}
             </div>
-          </div>
-          <div className={styles.item}>
-            <div className={styles.input}>
-              <label htmlFor="number">Número</label>
-              <input disabled={edit} value={number} type="text" name="number" id="number" onChange={(e) => setNumber(e.target.value)} />
-            </div>
-          </div>
-          <div className={styles.item}>
-            <div className={styles.submitEdit}>
-              <button onClick={editToggle}>Editar dados</button>
-              {!edit && <button onClick={editHandle}>Confirmar</button>}
-            </div>
-          </div>
+          )
+        })}
         </div>
+        <ProfileSubmit txtEdit="Editar Dados" txtSubmit="Confirmar" handleSubmit={editHandle} handleToggle={editToggle} editState={edit} />
       </div>
     );
 }

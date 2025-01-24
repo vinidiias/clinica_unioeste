@@ -1,8 +1,12 @@
 .profile {
+    height: auto;
+    margin: auto;
+    width: 100%;
+    padding: 1em;
+}
+
+form {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-    background-color: rgb(236, 236, 236);
-    width: 100%;
+    row-gap: 1em;
 }

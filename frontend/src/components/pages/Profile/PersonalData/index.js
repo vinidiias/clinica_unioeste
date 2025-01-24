@@ -7,6 +7,8 @@ import { UserContext } from "../../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import React, { useContext, useState } from "react";
 import Button from "../../../form/Button";
+import ImageInput from "../../../form/ImageInput";
+import ProfileSubmit from "../ProfileSubmit";
 
 const PersonalData = ({
   onClose,
@@ -190,16 +192,18 @@ const editToggle = () => {
   }
 
   return (
-    <div className={`${styles.containers} ${styles.margin}`}>
+    <div className={`${styles.containers}`}>
       <div className={styles.header}>
         <h3>Dados pessoais</h3>
       </div>
       <div className={styles.infos}>
-        <PersonalData.Imagem
-          img={img}
-          handleFileChange={handleFileChange}
-          edit={edit}
-        />
+        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'auto'}}>
+          <PersonalData.Imagem
+            img={img}
+            handleFileChange={handleFileChange}
+            edit={edit}
+          />
+        </div>
       {fields.map((field, index) => {
         return (
           <div className={styles.item} key={index}>
@@ -213,33 +217,22 @@ const editToggle = () => {
           </div>
         )
       })}
-        <div className={styles.submitEdit}>
-            <Button type={'button'} text='Editar Dados' handleClick={editToggle} />
-            {!edit && <Button text='Confirmar' handleClick={editHandle} />}
-          </div>
       </div>
+      <ProfileSubmit txtEdit="Editar Dados" txtSubmit="Confirmar" handleSubmit={editHandle} handleToggle={editToggle} editState={edit} />
     </div>
   );
 };
 
-PersonalData.Imagem = function ({ customClass, img, handleFileChange, edit }) {
+PersonalData.Imagem = function ({ img, handleFileChange, edit }) {
   return (
     <div className={styles.divImg}>
-      <label htmlFor="file-img">Foto</label>
+      <label htmlFor="file-img">Foto *</label>
       {!img ? (
-        <label htmlFor="file-img">
-          <input
-            id="file-img"
-            name="file-img"
-            className={styles.file}
-            placeholder="teste"
-            type="file"
-            accept="image/png, image/jpeg"
-            required
-            onChange={handleFileChange}
-          />
-          <span>Selecionar</span>
-        </label>
+        <ImageInput 
+          text='Selecionar'
+          name='file-img'
+          handleFileChange={handleFileChange}
+        />
       ) : !edit ? (
         <div
           style={{
@@ -248,19 +241,12 @@ PersonalData.Imagem = function ({ customClass, img, handleFileChange, edit }) {
             justifyContent: "center",
           }}
         >
-          <label className={styles.editButtonImg} htmlFor="file-img">
-            <input
-              id="file-img"
-              name="file-img"
-              className={styles.file}
-              placeholder="teste"
-              type="file"
-              accept="image/png, image/jpeg"
-              required
-              onChange={handleFileChange}
-            />
-            <span>Editar</span>
-          </label>
+          <ImageInput 
+            text='Editar'
+            customClass="edit"
+            name="file-img"
+            handleFileChange={handleFileChange}
+          />
           <img
             id="file-img"
             className={styles.img}

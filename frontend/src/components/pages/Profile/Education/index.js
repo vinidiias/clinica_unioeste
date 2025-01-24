@@ -1,45 +1,47 @@
-import { useState } from 'react';
 import styles from '../PersonalData/index.module.css'
+import Button from '../../../form/Button';
+import Input from '../../../form/Input';
+import Select from '../../../form/Select';
+import { useState } from 'react';
+import { useFormContext } from 'react-hook-form';
+import ProfileSubmit from '../ProfileSubmit';
 
 const Education = ({ education='' }) => {
     const [edit, setEdit] = useState(true)
+    const { watch } = useFormContext()
 
-    const [level, setLevel] = useState(education.level)
-    const [curso, setCurso] = useState(education.curso)
-    const [turno, setTurno] = useState(education.turno)
-    const [periodo, setPeriodo] = useState(education.periodo)
-
-    function imcomplete_info() {
-      if((curso === undefined | curso === '') |
-      (turno === undefined | turno === '') |
-      (periodo === undefined | periodo === '')) {
-        return 1
-      }
-      return 0
-    }
+    const fields = [
+      {
+        field:<Select name={"education.level"} text={"Escolaridade"} options={['Fundamental I', 'Fundamental II', 'Ensino Médio', 'Ensino Técnico', 'Graduação', 'Pós-Graduação']} disabled={edit} />,
+      },
+      {
+        field: <Select name={"education.shift"} text={"Turno"}  options={[ 'Fundamental I', 'Fundamental II', 'Ensino Médio', 'Ensino Técnico', 'Graduação', 'Pós-Graduação']} disabled={edit} />,
+        dep: {
+          name: 'education.level',
+          value: ['Pós Graduação', 'Graduação']
+        }
+      },
+      {
+        field: <Input name={"education.course"} text={"Curso"} type={"text"} disabled={edit} />,
+        dep: {
+          name: 'education.level',
+          value: ['Pós Graduação', 'Graduação']
+        }
+      },
+      {
+        field: <Input name={"education.period"} text={"Ano/Período"} type={"text"} disabled={edit} />,
+        dep: {
+          name: 'education.level',
+          value: ['Pós Graduação', 'Graduação']
+        }
+      },
+    ];
 
     function editToggle() {
         setEdit(!edit)
     }
 
-    function editHandle(){
-      if(level !== 'Graduação' && level !== 'Pós Graduação') {
-        const education = ({
-          level,
-        })
-        console.log(education)
-        editToggle()
-        return
-      }
-      if(imcomplete_info()) return alert('Informações incompletas!')
-      
-      const education = {
-        level,
-        curso,
-        periodo,
-        turno
-      }
-      console.log(education)
+    function editHandle(){    
       editToggle()
       return
     }
@@ -50,80 +52,26 @@ const Education = ({ education='' }) => {
           <h3>Escolaridade</h3>
         </div>
         <div style={{paddingBottom: '0em'}} className={styles.infos}>
-          <div className={styles.item}>
-            <div className={styles.input}>
-              <label htmlFor="level">Escolaridade</label>
-              <select
-                onChange={(e) => setLevel(e.target.value)}
-                value={level}
-                disabled={edit}
-                name="level"
-                id="level"
-              >
-                <option value="default" disabled hidden>Selecione</option>
-                <option value="Fundamental I">Fundamental I</option>
-                <option value="fundamental II">Fundamental II</option>
-                <option value="Ensino Médio">Ensino Médio</option>
-                <option value="Ensino Técnico">Ensino Técnico</option>
-                <option value="Graduação">Graduação</option>
-                <option value="Pós Graduação">Pós Graduação</option>
-              </select>
-            </div>
-            {(level === "Graduação" || level === "Pós Graduação") && (
-              <>
-                <div className={styles.input}>
-                  <label htmlFor="curso">Curso</label>
-                  <input
-                    type="text"
-                    name="curso"
-                    id="curso"
-                    disabled={edit}
-                    value={curso}
-                    onChange={(e) => setCurso(e.target.value)}
-                  />
+        {fields.map((field, index) => {
+          if(field.dep) {
+            const value = watch(field.dep.name)
+            if(field.dep.value.some(dep => dep === value)) {
+              return (
+                <div className={styles.item} key={index}>
+                  {field.field}
                 </div>
-              </>
-            )}
-          </div>
-          <div className={styles.item}>
-            {(level === "Graduação" || level === "Pós Graduação") && (
-              <>
-                <div className={styles.input}>
-                  <label htmlFor="turno">Ano/Periodo</label>
-                  <select
-                    onChange={(e) => setTurno(e.target.turno)}
-                    value={turno}
-                    disabled={edit}
-                    name="turno"
-                    id="turno"
-                  >
-                    <option value="default">Selecione</option>
-                    <option value="Manhã">Manhã</option>
-                    <option value="Tarde">Tarde</option>
-                    <option value="Noite">Noite</option>
-                  </select>
-                </div>
-                <div className={styles.input}>
-                  <label htmlFor="periodo">Ano/Periodo</label>
-                  <input
-                    type="text"
-                    name="periodo"
-                    id="periodo"
-                    disabled={edit}
-                    value={periodo}
-                    onChange={(e) => setPeriodo(e.target.periodo)}
-                  />
-                </div>
-              </>
-            )}
-          </div>
-          <div className={styles.item}>
-            <div className={styles.submitEdit}>
-              <button onClick={editToggle}>Editar dados</button>
-              {!edit && <button onClick={editHandle}>Confirmar</button>}
-            </div>
-          </div>
+              )
+            }
+          } else {
+            return (
+              <div className={styles.item} key={index}>
+                {field.field}
+              </div>
+            )
+          }
+        })}
         </div>
+        <ProfileSubmit txtEdit="Editar Dados" txtSubmit="Confirmar" handleSubmit={editHandle} handleToggle={editToggle} editState={edit} />
       </div>
     );
 }

@@ -13,6 +13,7 @@ const withLoading = (Component) => {
         try {
           const response = await api.get(url, { headers: { auth: id || '' } });
           setData(response.data);
+          console.log(response.data)
         } catch (error) {
           console.error("Erro ao buscar dados:", error);
         } finally {
