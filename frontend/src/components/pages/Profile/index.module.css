@@ -1,3 +1,9 @@
+@media(max-width: 754px) {
+    .profile {
+        padding: 0em;
+    }
+}
+
 .profile {
     height: auto;
     margin: auto;

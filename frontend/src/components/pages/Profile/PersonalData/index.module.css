@@ -14,11 +14,6 @@
     .containers .divImg button {
         font-size: .9em;
     }
-
-    .containers .divImg img {
-        width: 90px;
-        height: 90px;
-    }
     
     .containers .input input,
     .containers .input select {
@@ -33,7 +28,7 @@
     }
 }
 
-@media(max-width: 771px) {
+@media(max-width: 754px) {
     .containers .header h3 {
         font-size: .9em;
     }
@@ -41,14 +36,14 @@
     .containers .input label {
         font-size: .6em;
     }
+    
+    .containers .infos {
+        align-items: center;
+        flex-direction: column;
+    }
 
     .containers .divImg span {
         padding: .2em;
-    }
-
-    .containers .input img {
-        width: 70px;
-        height: 70px;
     }
     
     .containers .input input,
@@ -80,28 +75,14 @@
         font-size: .9em;
     }
 
-    .containers .infos {
-        align-items: center;
-        flex-direction: column;
-    }
+
 
     .containers .divImg {
         margin-bottom: 1em;
     }
 
-    .containers .infos .divImg {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
     .containers .input label {
         font-size: .7em;
-    }
-
-    .containers .divImg img {
-        width: 120px;
-        height: 150px;
     }
     
     .containers .input input,
