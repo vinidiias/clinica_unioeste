@@ -24,7 +24,7 @@ const Input = ({ type, name, text, handleOnChange, placeholder, autoComplete, cu
           disabled={disabled}
           placeholder={placeholder}
           {...register((name), {required: true})}
-          autoComplete={"" | autoComplete}
+          autoComplete={"off" | autoComplete}
         />
       </div>
     );

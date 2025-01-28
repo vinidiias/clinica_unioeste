@@ -5,14 +5,11 @@
 }
 
 .profile {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
     height: auto;
     margin: auto;
     width: 100%;
     padding: 1em;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    row-gap: 1em;
 }

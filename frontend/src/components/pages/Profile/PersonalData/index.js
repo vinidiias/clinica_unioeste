@@ -1,22 +1,24 @@
 import styles from "./index.module.css";
-import api from "../../../../services/Api";
 import Input from "../../../form/Input";
 import Select from "../../../form/Select";
 import { convertToBase64 } from "../../../util/ConvertToBase64";
-import { UserContext } from "../../../context/UserContext";
-import { useNavigate } from "react-router-dom";
 import React, { useContext, useState } from "react";
-import Button from "../../../form/Button";
 import ImageInput from "../../../form/ImageInput";
-import ProfileSubmit from '../ProfileSubmit'
+import ProfileSubmit from "../ProfileSubmit";
+import { FormProvider, useForm } from "react-hook-form";
+import { UserContext } from "../../../context/UserContext";
+import api from "../../../../services/Api";
 
-const PersonalData = ({
-  handleEdit,
-  imgProfile = "",
-}) => {
+const PersonalData = ({ initialData }) => {
   const [edit, setEdit] = useState(true);
-  const [img, setImg] = useState(imgProfile);
-  
+  const [img, setImg] = useState(initialData.img);
+  const [originalData, setOriginalData] = useState(initialData);
+  const { userData, setUserData } = useContext(UserContext);
+
+  const formMethods = useForm({
+    defaultValues: initialData || {},
+  });
+
   const fields = [
     {
       field: [
@@ -56,6 +58,7 @@ const PersonalData = ({
           text={"Alterar Senha"}
           type={"password"}
           disabled={edit}
+          autoComplete={"off"}
         />,
       ],
     },
@@ -70,80 +73,133 @@ const PersonalData = ({
     }
   }
 
-const editToggle = () => {
+  const editToggle = () => {
     setEdit(!edit);
-  }
+  };
 
-  async function editHandle() {
-    /*try {
-      const pessoaUpdated = await api.patch(
-        `/pessoa/${userData.user_id}`,
-        personal_data,
-        { headers: { auth: `${userData.user_id}` } }
-      );
-
-      if (!pessoaUpdated.data.pessoa) {
-        console.error("Dados da pessoa não foram retornados:", pessoaUpdated);
-        return;
+  const comparasionChange = (sourceData, originalData) => {
+    const updatedFields = Object.keys(sourceData).reduce((acc, key) => {
+      if (sourceData[key] !== originalData[key]) {
+        acc[key] = sourceData[key];
       }
+      return acc;
+    }, {});
 
-      try {
-        const userUpdated = await api.patch(
-          `/user/${userData.user_id}`,
-          user,
-          { headers: { auth: `${userData.user_id}` } }
-        );
+    return updatedFields;
+  };
 
-        if (userUpdated) {
-          let user = JSON.parse(sessionStorage.getItem("user"));
+  const separeDataPersonalandUser = (dataModified) => {
+    const dataUser = {};
+    const dataPerson = { ...dataModified };
 
-          if (user) {
-            user.name = userUpdated.data.user.name;
-            user.email = userUpdated.data.user.email;
-            sessionStorage.setItem("user", JSON.stringify(user));
-          } else {
-            console.error("Nenhum usuario encontrado");
-          }
+    if (dataModified.name) {
+      dataUser.name = dataModified.name;
+      delete dataPerson.name;
+    }
+
+    if (dataModified.email) {
+      dataUser.email = dataModified.email;
+      delete dataPerson.email;
+    }
+
+    if (dataModified.password) {
+      dataUser.password = dataModified.password;
+      delete dataPerson.password;
+    }
+
+    return { dataUser, dataPerson };
+  };
+
+  async function editHandle(data) {
+    const dataModified = comparasionChange(data, originalData);
+    if (Object.keys(dataModified).length === 0) {
+      alert('Sem alterações nos dados')
+      return;
+    } else {
+      const dataSeparated = separeDataPersonalandUser(dataModified);
+      const dataUser = dataSeparated.dataUser;
+      const personData = dataSeparated.dataPerson;
+
+      if (Object.keys(personData).length > 0 && personData !== null) {
+        try {
+          await api
+            .patch(`/pessoa/${userData.user_id}`, personData, {
+              headers: { auth: `${userData.user_id}` },
+            })
+            .then((resp) => console.log(resp))
+            .catch((error) => console.error(error));
+        } catch (err) {
+          console.log(err);
+        } finally {
+          editToggle();
         }
-      } catch (err) {
-        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
-    } finally {
-      editToggle();
-    }*/
+      if(Object.keys(dataUser).length > 0 && dataUser !== null) {
+          try {
+            await api
+              .patch(`/user/${userData.user_id}`, dataUser, {
+                headers: { auth: `${userData.user_id}` },
+              })
+              .then(() => {
+                setUserData((prevStat) => ({
+                  ...prevStat,
+                  name: dataUser?.name ?? prevStat.name,
+                  email: dataUser?.email ?? prevStat.email,
+                }));
+              })
+              .catch((error) => console.error(error));
+          } catch (err) {
+            console.log(err);
+          }
+      } else {
+        alert('Dados do usuário inválidos')
+      }
+    }
   }
 
   return (
-    <div className={`${styles.containers}`}>
-      <div className={styles.header}>
-        <h3>Dados pessoais</h3>
-      </div>
-      <div className={styles.infos}>
-        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'auto'}}>
-          <PersonalData.Imagem
-            img={img}
-            handleFileChange={handleFileChange}
-            edit={edit}
-          />
-        </div>
-      {fields.map((field, index) => {
-        return (
-          <div className={styles.item} key={index}>
-            {field.field.map((subField, subIndex) => {
+    <FormProvider {...formMethods}>
+      <form onSubmit={formMethods.handleSubmit(editHandle)}>
+        <div className={`${styles.containers}`}>
+          <div className={styles.header}>
+            <h3>Dados pessoais</h3>
+          </div>
+          <div className={styles.infos}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "auto",
+              }}
+            >
+              <PersonalData.Imagem
+                img={img}
+                handleFileChange={handleFileChange}
+                edit={edit}
+              />
+            </div>
+            {fields.map((field, index) => {
               return (
-              <React.Fragment key={subIndex}>
-              {subField}
-              </React.Fragment>
-              )
+                <div className={styles.item} key={index}>
+                  {field.field.map((subField, subIndex) => {
+                    return (
+                      <React.Fragment key={subIndex}>{subField}</React.Fragment>
+                    );
+                  })}
+                </div>
+              );
             })}
           </div>
-        )
-      })}
-      </div>
-      <ProfileSubmit txtEdit="Editar Dados" txtSubmit="Confirmar" handleToggle={editToggle} editState={edit} />
-    </div>
+          <ProfileSubmit
+            txtEdit="Editar Dados"
+            txtSubmit="Confirmar"
+            handleToggle={editToggle}
+            editState={edit}
+          />
+        </div>
+      </form>
+    </FormProvider>
   );
 };
 
@@ -152,9 +208,9 @@ PersonalData.Imagem = function ({ img, handleFileChange, edit }) {
     <div className={styles.divImg}>
       <label htmlFor="file-img">Foto *</label>
       {!img ? (
-        <ImageInput 
-          text='Selecionar'
-          name='file-img'
+        <ImageInput
+          text="Selecionar"
+          name="file-img"
           handleFileChange={handleFileChange}
         />
       ) : !edit ? (
@@ -165,18 +221,13 @@ PersonalData.Imagem = function ({ img, handleFileChange, edit }) {
             justifyContent: "center",
           }}
         >
-          <ImageInput 
-            text='Editar'
+          <ImageInput
+            text="Editar"
             customClass="edit"
             name="file-img"
             handleFileChange={handleFileChange}
           />
-          <img
-            id="mg"
-            className={styles.img}
-            src={img}
-            alt="foto perfil"
-          />
+          <img id="mg" className={styles.img} src={img} alt="foto perfil" />
         </div>
       ) : (
         <img className={styles.imgEdit} src={img} alt="foto perfil" />
