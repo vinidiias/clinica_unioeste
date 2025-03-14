@@ -28,33 +28,37 @@ function PessoaEmpty(sexo, birth, cpf, ra, phone, adressComplet){
     return false
 }
 
-function FicharioEmpty(profession, education, vinculo, work, psicologa, psiquiatra){
-    if (!profession || profession.trim() === '') {
-        console.log('profession: ', profession)
+function FicharioEmpty(profission, education, vinculo_unioeste, work, psychologist, psychiatric){
+    console.log(vinculo_unioeste)
+    if (!profission || profission.trim() === '') {
+        console.log('profission: ', profission)
         return true
     }
 
     // Verifica os campos obrigatórios de education
-    if (!education || !education.curso || education.curso.trim() === '') {
-        console.log('profissao curso:',education.curso)
-        return true
-    }
-    if (!education.periodo || education.periodo.trim() === '') {
-        console.log('education periodo:', education.periodo)
-        return true
-    }
-    if (!education.turno || education.turno.trim() === '') {
-        console.log('education turno: ', education.turno)
-        return true
-    }
-    if (!education.type || education.type.trim() === '') {
-        console.log('education level: ', education.level)
+    if (!education.level || education.level.trim() === '') {
+        console.log('education type: ', education.type)
         return true
     }
 
-    // Verifica o campo obrigatório vinculo
-    if (!vinculo || vinculo.trim() === '') {
-        console.log('vinculo: ', vinculo)
+    if(education.level === 'Graduação' || education.level === 'Pós Graduação') {
+        if (!education || !education.course || education.course.trim() === '') {
+            console.log('profissao course:',education.course)
+            return true
+        }
+        if (!education.period || education.period.trim() === '') {
+            console.log('education period:', education.period)
+            return true
+        }
+        if (!education.shift || education.shift.trim() === '') {
+            console.log('education shift: ', education.shift)
+            return true
+        }
+    }
+
+    // Verifica o campo obrigatório vinculo_unioeste
+    if (!vinculo_unioeste || vinculo_unioeste.type.trim() === '') {
+        console.log('vinculo_unioeste: ', vinculo_unioeste)
         return true
     }
 
@@ -64,15 +68,15 @@ function FicharioEmpty(profession, education, vinculo, work, psicologa, psiquiat
         return true
     }
 
-    // Verifica os campos obrigatórios de psicologa
-    if (!psicologa || !psicologa.type || psicologa.type.trim() === '') {
-        console.log('psicologa: ', psicologa)
+    // Verifica os campos obrigatórios de psychologist
+    if (!psychologist || !psychologist.type || psychologist.type.trim() === '') {
+        console.log('psychologist: ', psychologist)
         return true
     }
 
     // Verifica os campos obrigatórios de psiquiatria
-    if (!psiquiatra || !psiquiatra.type || psiquiatra.type.trim() === '') {
-        console.log('psiquiatra: ', psiquiatria)
+    if (!psychiatric || !psychiatric.type || psychiatric.type.trim() === '') {
+        console.log('psychiatric: ', psiquiatria)
         return true
     }
 
