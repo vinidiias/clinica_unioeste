@@ -45,48 +45,64 @@ const fichaSchema = new mongoose.Schema({
         },
         
     },
-    vinculo: {
+    vinculo_unioeste: {
+        type : {
+            type: String,
+            enum: ['Docente', 'Agente', 'Acadêmico', 'Estagiário', 'Sem Vínculo'],
+            required: true,
+            default: 'Sem Vínculo'
+        },
+        setor : {
+            type: String,
+            required: false,
+        }
+    },
+
+    community: {
         type: String,
-        enum: ['Docente', 'Agente', 'Acadêmico', 'Estagiário', 'Sem Vinculo'],
+        enum: ['Sim', 'Não'],
         required: true,
-        default: 'Sem Vinculo'
     },
-    comunidade: {
-        type: Boolean,
-        default: false,
-    },
+
     work: {
         type: {
             type: String,
-            enum: ['Trabalha', 'Não Trabalha'],
+            enum: ['Sim', 'Não'],
             required: true,
         },
-        time: {
+        schedule: {
             type: String, // Exemplo: "08:00"
         },
     },
-    psicologa: {
+    psychologist: {
         type: {
             type: String,
-            enum: ['Acompanha', 'Não Acompanha'],
+            enum: ['Sim', 'Não'],
             required: true,
         },
-        time: {
+        schedule: {
             type: String, // Exemplo: "3 anos"
         },
-    },
-    psiquiatra: {
+    }, 
+
+    psychiatric: {
         type: {
             type: String,
-            enum: ['Acompanha', 'Não Acompanha'],
+            enum: ['Sim', 'Não'],
             required: true,
         },
-        time: {
+        schedule: {
             type: String, // Exemplo: "1 ano"
         },
     },
+    
     observation: {
         type: String,
+    },
+
+    triagem: {
+        type: Boolean,
+        default: null
     },
 
     triagem: {
@@ -104,6 +120,12 @@ const fichaSchema = new mongoose.Schema({
         type: String,
         enum: ['Em avaliação', 'Avaliada'],
         default: 'Em avaliação',
+    },
+
+    agenda: {
+        type: String,
+        required: false,
+
     },
 
     user: {
