@@ -31,9 +31,9 @@ module.exports = {
     
             const userEmail = process.env.USER_EMAIL;
             const pass = process.env.PASS;
-            const baseURL = process.env.TEXT;
+            const baseURL = role === 'admin' ? process.env.TEXT_ADMIN : process.env.TEXT_PSY;
     
-            const fullLink = `${baseURL}email=${email}&id=${uniqueId}`;
+            const fullLink = `${baseURL}?email=${email}&id=${uniqueId}`;
     
             const transporter = nodemailer.createTransport({
                 host: 'smtp.gmail.com',
@@ -129,39 +129,39 @@ module.exports = {
         }
     },
 
-    async registerAdmin (req, res) {
-        const { email, name, password, id } = req.body
+    // async registerAdmin (req, res) {
+    //     const { email, name, password, id } = req.body
 
-        const existingUser = await User.findOne({ email })
-        if(existingUser) return res.status(400).send({ message: 'Usuario ja existe'})
+    //     const existingUser = await User.findOne({ email })
+    //     if(existingUser) return res.status(400).send({ message: 'Usuario ja existe'})
 
-        const isEmpty = UserEmpty(email, name, password)
-        if(isEmpty) return res.status(400).send({ message: 'Campo vazio'})
+    //     const isEmpty = UserEmpty(email, name, password)
+    //     if(isEmpty) return res.status(400).send({ message: 'Campo vazio'})
 
-        try{
-            const isEmailValied = await emailUnioeste(email)
-            if(!isEmailValied) return res.status(400).send({ message: 'Email invalido'})
+    //     try{
+    //         const isEmailValied = await emailUnioeste(email)
+    //         if(!isEmailValied) return res.status(400).send({ message: 'Email invalido'})
 
-            const invite = await Convite.findOne({ email, uniqueId: id})
-            if(!invite) return res.status(400).send({ message: 'Convite invalido'})
+    //         const invite = await Convite.findOne({ email, uniqueId: id})
+    //         if(!invite) return res.status(400).send({ message: 'Convite invalido'})
 
-            const hashedPassword = await bcrypt.hash(password, 10)
+    //         const hashedPassword = await bcrypt.hash(password, 10)
 
-            const adminCreated = await User.create({ 
-                email, 
-                name, 
-                password: hashedPassword, 
-                role: 'admin'})
+    //         const adminCreated = await User.create({ 
+    //             email, 
+    //             name, 
+    //             password: hashedPassword, 
+    //             role: 'admin'})
 
-            await Convite.deleteOne({ email, uniqueId: id})
+    //         await Convite.deleteOne({ email, uniqueId: id})
 
-            return res.status(400).send({ 
-                message: 'Conta de administrador criada com sucesso',
-                administrador: adminCreated
-            })
-        }
-        catch(err){
-            return res.status(400).send(err)
-        }
-    }
+    //         return res.status(400).send({ 
+    //             message: 'Conta de administrador criada com sucesso',
+    //             administrador: adminCreated
+    //         })
+    //     }
+    //     catch(err){
+    //         return res.status(400).send(err)
+    //     }
+    // }
 }
