@@ -5,7 +5,7 @@ const SessionController = require('../Controller/SessionController')
 const PessoaController = require('../Controller/PessoaController')
 const FichaController = require('../Controller/FichaController')
 const InvaitedController = require('../Controller/InvaitedController')
-const PsicologoController = require('../Controller/PsicologoController')
+const PsicologoController = require('../Controller/ConsultaController')
 
 const routes = Router()
 
