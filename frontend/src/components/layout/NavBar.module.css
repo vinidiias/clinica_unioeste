@@ -8,12 +8,19 @@
     color: #fff;
 }
 
+.nav img {
+    width: 60px;
+}
 .nav a {
     font-weight: bold;
     display: flex;
     align-items: center;
     text-decoration: none;
     color: #fff;
+}
+
+.nav a > h1 {
+    margin: 0;
 }
 
 .list {

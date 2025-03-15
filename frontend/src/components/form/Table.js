@@ -1,27 +1,11 @@
 import styles from './Table.module.css'
-
 import CheckBox from './CheckBox'
 
-const Table = ({ setPreferredDay, preferredDay }) => {
-    
-  function CheckBoxChange(e) {
-      const {name, checked} = e.target
-
-      setPreferredDay(prevState =>{
-        if(checked){
-          return {...prevState, [name]: checked}
-        }
-        else {
-          const aux = {...prevState}
-          delete aux[name]
-          return aux
-        }
-      })
-    }
+const Table = ({ title, disabled }) => {
 
     return (
       <div className={styles.table_container}>
-        <p>Dia de preferência:</p>
+        <h3>{title} *</h3>
         <div className={styles.table}>
           <table>
             <thead>
@@ -39,46 +23,41 @@ const Table = ({ setPreferredDay, preferredDay }) => {
                 <td>Manhã</td>
                 <td>
                   <CheckBox
-                    selected={preferredDay.morning_day}
-                    handleOnChange={CheckBoxChange}
-                    customClass="justify"
-                    name="morning_monday"
+                    disabled={disabled}
+                    customClass="table"
+                    name="preferred_day.morning_monday"
                     text=""
                   />
                 </td>
                 <td>
                   <CheckBox
-                    selected={preferredDay.morning_tuesday}
-                    handleOnChange={CheckBoxChange}
-                    customClass="justify"
-                    name="morning_tuesday"
+                    disabled={disabled}
+                    customClass="table"
+                    name="preferred_day.morning_tuesday"
                     text=""
                   />
                 </td>
                 <td>
                   <CheckBox
-                    selected={preferredDay.mornin_wednesday}
-                    handleOnChange={CheckBoxChange}
-                    customClass="justify"
-                    name="mornin_wednesday"
+                    disabled={disabled}
+                    customClass="table"
+                    name="preferred_day.morning_wednesday"
                     text=""
                   />
                 </td>
                 <td>
                   <CheckBox
-                    selected={preferredDay.morning_thursday}
-                    handleOnChange={CheckBoxChange}
-                    customClass="justify"
-                    name="morning_thursday"
+                    disabled={disabled}
+                    customClass="table"
+                    name="preferred_day.morning_thursday"
                     text=""
                   />
                 </td>
                 <td>
                   <CheckBox
-                    selected={preferredDay.morning_friday}
-                    handleOnChange={CheckBoxChange}
-                    customClass="justify"
-                    name="morning_friday"
+                    disabled={disabled}
+                    customClass="table"
+                    name="preferred_day.morning_friday"
                     text=""
                   />
                 </td>
@@ -87,46 +66,41 @@ const Table = ({ setPreferredDay, preferredDay }) => {
                 <td>Tarde</td>
                 <td>
                   <CheckBox
-                    selected={preferredDay.afternoon_monday}
-                    handleOnChange={CheckBoxChange}
-                    customClass="justify"
-                    name="afternoon_monday"
+                    disabled={disabled}
+                    customClass="table"
+                    name="preferred_day.afternoon_monday"
                     text=""
                   />
                 </td>
                 <td>
                   <CheckBox
-                    selected={preferredDay.afternoon_tuesday}
-                    handleOnChange={CheckBoxChange}
-                    customClass="justify"
-                    name="afternoon_tuesday"
+                    disabled={disabled}
+                    customClass="table"
+                    name="preferred_day.afternoon_tuesday"
                     text=""
                   />
                 </td>
                 <td>
                   <CheckBox
-                    selected={preferredDay.afternoon_wednesday}
-                    handleOnChange={CheckBoxChange}
-                    customClass="justify"
-                    name="afternoon_wednesday"
+                    disabled={disabled}
+                    customClass="table"
+                    name="preferred_day.afternoon_wednesday"
                     text=""
                   />
                 </td>
                 <td>
                   <CheckBox
-                    selected={preferredDay.afternoon_thursday}
-                    handleOnChange={CheckBoxChange}
-                    customClass="justify"
-                    name="afternoon_thursday"
+                    disabled={disabled}
+                    customClass="table"
+                    name="preferred_day.afternoon_thursday"
                     text=""
                   />
                 </td>
                 <td>
                   <CheckBox
-                    selected={preferredDay.afternoon_friday}
-                    handleOnChange={CheckBoxChange}
-                    customClass="justify"
-                    name="afternoon_friday"
+                    disabled={disabled}
+                    customClass="table"
+                    name="preferred_day.afternoon_friday"
                     text=""
                   />
                 </td>
@@ -135,46 +109,41 @@ const Table = ({ setPreferredDay, preferredDay }) => {
                 <td>Noite</td>
                 <td>
                   <CheckBox
-                    selected={preferredDay.night_monday}
-                    handleOnChange={CheckBoxChange}
-                    customClass="justify"
-                    name="night_monday"
+                    disabled={disabled}
+                    customClass="table"
+                    name="preferred_day.night_monday"
                     text=""
                   />
                 </td>
                 <td>
                   <CheckBox
-                    selected={preferredDay.night_tuesday}
-                    handleOnChange={CheckBoxChange}
-                    customClass="justify"
-                    name="night_tuesday"
+                    disabled={disabled}
+                    customClass="table"
+                    name="preferred_day.night_tuesday"
                     text=""
                   />
                 </td>
                 <td>
                   <CheckBox
-                    selected={preferredDay.night_wednesday}
-                    handleOnChange={CheckBoxChange}
-                    customClass="justify"
-                    name="night_wednesday"
+                    disabled={disabled}
+                    customClass="table"
+                    name="preferred_day.night_wednesday"
                     text=""
                   />
                 </td>
                 <td>
                   <CheckBox
-                    selected={preferredDay.night_thursday}
-                    handleOnChange={CheckBoxChange}
-                    customClass="justify"
-                    name="night_thursday"
+                    disabled={disabled}
+                    customClass="table"
+                    name="preferred_day.night_thursday"
                     text=""
                   />
                 </td>
                 <td>
                   <CheckBox
-                    selected={preferredDay.night_friday}
-                    handleOnChange={CheckBoxChange}
-                    customClass="justify"
-                    name="night_friday"
+                    disabled={disabled}
+                    customClass="table"
+                    name="preferred_day.night_friday"
                     text=""
                   />
                 </td>

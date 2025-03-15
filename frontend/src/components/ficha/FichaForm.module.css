@@ -1,9 +1,6 @@
-
-.ficha_form {
-    border: 2px solid rgb(180, 180, 180);
-    width: 60%;
-    padding: 1em;
-    background-color: #dcdcdc;
+h1 {
+    font-weight: 300;
+    font-size: 1.6em;
 }
 
 @media(max-width: 908px) {
@@ -31,6 +28,7 @@
     display: flex;
     width: 100%;
     column-gap: 10px;
+    margin-bottom: 1em;
 }
 
 .sex {
@@ -55,6 +53,10 @@
     width: 100%;
 }
 
+.table {
+    justify-content: center;
+}
+
 .acompanhamento {
     display: flex;
     column-gap: 1em;
@@ -68,12 +70,26 @@
     flex-basis: auto;
     flex-grow: 0;
     flex-shrink: 0;
-    font-size: .8em;
-    font-weight: 500;
+    font-size: .9em;
+    font-weight: 400;
     margin-right: 5px;
-  }
+}
 
-.btnSubmit {
-    padding: .1em;
+.observation {
+    display: flex;
+    flex-direction: column;
+}
+
+.observation label {
+    margin-bottom: .5em;
+}
+
+.observation textarea:disabled {
+    background-color: white;
+}
+
+.btnSubmit  {
+    width: 100%;
     color: black;
+    margin: auto;
 }

@@ -6,6 +6,7 @@
     padding: .5em;
     width: 100%;
     color: #535353;
+    flex-shrink: 0;
 }
 
 .copy_right {
