@@ -9,12 +9,13 @@ module.exports = {
     async create(req, res) {
 
         const {  
-            profission, education, preferredDay, vinculo, comunidade, work, psicologa, psiquiatra, observation } = req.body;
+            profission, education, preferred_day, vinculo_unioeste, community, work, psychologist, psychiatric, observation } = req.body;
         
         const { user_id } = req.params
         const { auth } = req.headers
 
-        const flag = FicharioEmpty(profission, education, vinculo, work, psicologa, psiquiatra)
+        const flag = FicharioEmpty(profission, education, vinculo_unioeste, work, psychologist, psychiatric)
+
         if(flag) return res.status(400).send({ message: 'Campo vazio' })
 
         if( user_id !== auth) return res.status(400).send({ message: 'Não autorizado' })
@@ -28,12 +29,12 @@ module.exports = {
             const createFicha = await Ficha.create({
                 profission,
                 education,
-                preferredDay,
-                vinculo,
-                comunidade,
+                preferred_day,
+                vinculo_unioeste,
+                community,
                 work,
-                psicologa,
-                psiquiatra,
+                psychologist,
+                psychiatric,
                 observation,
                 user: user_id
             })

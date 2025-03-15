@@ -6,43 +6,28 @@ const fichaSchema = new mongoose.Schema({
         required: true,
     },
     education: {
-        curso: {
+        course: {
             type: String,
             required: false,
         },
-        periodo: {
+        period: {
             type: String,
             required: false,
         },
-        turno: {
+        shift: {
             type: String,
             enum: ['Manhã', 'Tarde', 'Noite'],
             required: false,
         },
-        type: {
+        level: {
             type: String,
             enum: ['Fundamental I', 'Fundamental II', 'Ensino Médio', 'Ensino Técnico', 'Graduação', 'Pós Graduação'],
             required: true,
         },
     },
-    preferredDay: {
-        morning_monday: { type: Boolean, default: false },
-        morning_tuesday: { type: Boolean, default: false },
-        morning_wednesday: { type: Boolean, default: false },
-        morning_thursday: { type: Boolean, default: false },
-        morning_friday: { type: Boolean, default: false },
-        afternoon_monday: { type: Boolean, default: false },
-        afternoon_tuesday: { type: Boolean, default: false },
-        afternoon_wednesday: { type: Boolean, default: false },
-        afternoon_thursday: { type: Boolean, default: false },
-        afternoon_friday: { type: Boolean, default: false }, 
-        night_monday: { type: Boolean, default: false },
-        night_tuesday: { type: Boolean, default: false },
-        night_wednesday: { type: Boolean, default: false },
-        night_thursday: { type: Boolean, default: false },
-        night_friday: { type: Boolean, default: false },      // Continue adicionando campos para cada dia/turno conforme necessário
+    preferredDay: {      
     },
-    vinculo: {
+    vinculo_unioeste: {
         type : {
             type: String,
             enum: ['Docente', 'Agente', 'Acadêmico', 'Estagiário', 'Sem Vínculo'],
@@ -54,40 +39,45 @@ const fichaSchema = new mongoose.Schema({
             required: false,
         }
     },
-    comunidade: {
-        type: Boolean,
-        default: false,
+
+    community: {
+        type: String,
+        enum: ['Sim', 'Não'],
+        required: true,
     },
+
     work: {
         type: {
             type: String,
-            enum: ['Trabalha', 'Não Trabalha'],
+            enum: ['Sim', 'Não'],
             required: true,
         },
-        time: {
+        schedule: {
             type: String, // Exemplo: "08:00"
         },
     },
-    psicologa: {
+    psychologist: {
         type: {
             type: String,
-            enum: ['Acompanha', 'Não Acompanha'],
+            enum: ['Sim', 'Não'],
             required: true,
         },
-        time: {
+        schedule: {
             type: String, // Exemplo: "3 anos"
         },
-    },
-    psiquiatra: {
+    }, 
+
+    psychiatric: {
         type: {
             type: String,
-            enum: ['Acompanha', 'Não Acompanha'],
+            enum: ['Sim', 'Não'],
             required: true,
         },
-        time: {
+        schedule: {
             type: String, // Exemplo: "1 ano"
         },
     },
+    
     observation: {
         type: String,
     },
@@ -99,8 +89,20 @@ const fichaSchema = new mongoose.Schema({
 
     prioridade: {
         type: String,
-        enum: ['baixa', 'media', 'alta', null],
+        enum: ['Baixa', 'Média', 'Alta', null],
         default: null
+    },
+
+    status: {
+        type: String,
+        enum: ['Em avaliação', 'Avaliada', null],
+        default: null,
+    },
+
+    agenda: {
+        type: String,
+        required: false,
+
     },
 
     user: {
