@@ -12,6 +12,7 @@ const WaitQueue = ({ data, isPriority }) => {
   const [isSelected, setIsSelected] = useState(null);
   const [over, setOver] = useState(false);
   const [fichas, setFichas] = useState(data || []);
+  console.log(fichas)
   const navigate = useNavigate();
 
   function handleClick(index) {
@@ -20,7 +21,6 @@ const WaitQueue = ({ data, isPriority }) => {
 
   const renderizarPaciente = ({ index }) => {
     const ficha = fichas[index];
-
     if(!isPriority) {
       if (!ficha.ficha.triagem) return null;
     } else {

@@ -4,10 +4,11 @@ import { motion } from 'framer-motion'
 import Input from '../form/Input'
 import Submit from '../form/Button'
 import api from '../../services/Api'
+import { FormProvider, useForm } from 'react-hook-form'
 
 const InvitePsychologist = ({ inviteAdmin }) => {
-    const [email, setEmail] = useState('')
     const role = inviteAdmin ? 'admin' : 'psicologo'
+    const formMethods = useForm()
 
     const cardVariants = {
         initial: { scale: 0.96, y: 30, opacity: 0 },
@@ -20,13 +21,9 @@ const InvitePsychologist = ({ inviteAdmin }) => {
         },
       }
 
-    const handleInvite = async (e) => {
-        e.preventDefault()
-
-        if(!email || email === '') return alert('Email inválido')
-
+    const submit = async (data) => {
         try{
-          const emailSent = await api.post(`/${role}/convite`, {email, role})
+          const emailSent = await api.post(`/${role}/convite`, {...data, role: 'psicologo'})
 
           if(emailSent) {
             console.log(emailSent.data)
@@ -51,17 +48,18 @@ const InvitePsychologist = ({ inviteAdmin }) => {
             className={styles.login}
           >
             <h1>Convidar {inviteAdmin ? 'Administrador' : 'Psicólogo'}</h1>
-            <form onSubmit={handleInvite}>
-              <Input
-                type="email"
-                text={`Email ${inviteAdmin ? "do Administrador" : "da Psicóloga"}`}
-                name="email_psicologa"
-                placeholder="Digite o email"
-                customClass="column align"
-                handleOnChange={(e) => setEmail(e.target.value)}
-              />
-              <Submit text="Enviar convite" />
-            </form>
+            <FormProvider {...formMethods}>
+              <form onSubmit={formMethods.handleSubmit(submit)}>
+                <Input
+                  type="email"
+                  text={`Email ${inviteAdmin ? "do Administrador" : "da Psicóloga"}`}
+                  name="email"
+                  placeholder="Digite o email"
+                  customClass="column align"
+                />
+                <Submit text="Enviar convite" />
+              </form>
+            </FormProvider>
           </motion.div>
         </div>
       </>

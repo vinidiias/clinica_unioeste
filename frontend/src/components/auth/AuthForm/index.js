@@ -89,6 +89,7 @@ const AuthForm = ({
             case "email":
               return (
                 <Input
+                  disabled={field?.disable}
                   key={index}
                   type={field.type}
                   name={field.name}
@@ -97,10 +98,10 @@ const AuthForm = ({
                   customClass="column padding_login"
                 />
               );
-              break;
             case "password":
               return (
                 <Input
+                  disabled={field?.disable}
                   key={index}
                   type={field.type}
                   name={field.name}
@@ -109,10 +110,10 @@ const AuthForm = ({
                   customClass="column padding_login"
                 />
               );
-              break;
             case "text":
               return (
                 <Input
+                  disabled={field?.disable}
                   key={index}
                   type={field.type}
                   name={field.name}
@@ -121,10 +122,10 @@ const AuthForm = ({
                   customClass="column padding_login"
                 />
               );
-              break;
             case "file":
               return (
                 <Input
+                  disabled={field?.disable}
                   key={index}
                   type={field.type}
                   name={field.name}
@@ -132,20 +133,20 @@ const AuthForm = ({
                   customClass="padding_login"
                 />
               );
-              break;
             case "select":
               return (
                 <Select
+                  disabled={field?.disable}
                   key={index}
                   name={field.name}
                   text={field.label}
                   options={field.options}
                 />
               );
-              break;
             case "date":
               return (
                 <Input
+                  disabled={field?.disable}
                   key={index}
                   type={field.type}
                   name={field.name}
@@ -153,7 +154,6 @@ const AuthForm = ({
                   customClass="column padding_login"
                 />
               );
-              break;
             default:
               return null;
           }
@@ -166,7 +166,7 @@ const AuthForm = ({
               text={btn.label}
               type={btn.type}
               customClass={btn.class}
-              handleClick={btn.handleClick}
+              handleClick={btn?.handleClick}
             />
           ))}
       </div>
