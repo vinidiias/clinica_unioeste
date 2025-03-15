@@ -31,9 +31,9 @@ module.exports = {
     
             const userEmail = process.env.USER_EMAIL;
             const pass = process.env.PASS;
-            const baseURL = process.env.TEXT;
+            const baseURL = role === 'admin' ? process.env.TEXT_ADMIN : process.env.TEXT_PSY;
     
-            const fullLink = `${baseURL}email=${email}&id=${uniqueId}`;
+            const fullLink = `${baseURL}?email=${email}&id=${uniqueId}`;
     
             const transporter = nodemailer.createTransport({
                 host: 'smtp.gmail.com',

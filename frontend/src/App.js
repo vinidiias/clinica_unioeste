@@ -5,14 +5,17 @@ import RoleBasedComponent from './components/util/RoleBasedComponent';
 import NavBar from './components/layout/NavBar';
 import Footer from './components/layout/Footer';
 import Container from './components/layout/Container';
-import Login from './components/pages/Login'
 import Home from './components/pages/Home';
 import About from './components/pages/About';
 import Contato from './components/pages/Contato';
-import Ficha from './components/pages/Ficha';
-import Profile from './components/pages/Profile'
-import ScreeningQueue from './components/pages/ScreeningQueue';
+import Profile from './components/pages/Profile';
 import InvitePsychologist from './components/pages/InvitePsychologist';
+import CreateFicha from './components/ficha/CreateFicha';
+import UserLogin from './components/pages/UserLogin';
+import UserRegister from './components/pages/UserRegister';
+import FirstAcessRegister from './components/pages/FirstAcessRegister';
+import WrappedViewFicha from './components/ficha/ViewFicha';
+import WrappedWaitQueue from './components/pages/WaitQueue';
 
 function App() {
   return (
@@ -22,10 +25,26 @@ function App() {
           <NavBar />
           <Routes>
             <Route
-              path="/"
+              path="/login"
               element={
                 <Container customClass="align">
-                  <Login />
+                  <UserLogin />
+                </Container>
+              }
+            />
+            <Route
+              path="/login/first-acess"
+              element={
+                <Container customClass="align">
+                  <FirstAcessRegister />
+                </Container>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <Container customClass="align">
+                  <UserRegister />
                 </Container>
               }
             />
@@ -62,19 +81,29 @@ function App() {
               }
             />
             <Route
-              path="/ficha"
+              path="/ficha/create-ficha"
               element={
                 <Container customClass="auto">
-                  <Ficha />
+                  <CreateFicha />
                 </Container>
               }
             />
             <Route
-              path="/screening"
+              path="/psychologist/screening"
               element={
-                <RoleBasedComponent allowedRoles={["admin"]}>
+                <RoleBasedComponent allowedRoles={["admin", "psicologo"]}>
                   <Container customClass="height">
-                    <ScreeningQueue />
+                    <WrappedWaitQueue />
+                  </Container>
+                </RoleBasedComponent>
+              }
+            />
+            <Route
+              path="/psychologist/screening/:id"
+              element={
+                <RoleBasedComponent allowedRoles={["admin", "psicologo"]}>
+                  <Container customClass="height">
+                    <WrappedViewFicha />
                   </Container>
                 </RoleBasedComponent>
               }
@@ -90,10 +119,28 @@ function App() {
               }
             />
             <Route
+              path="admin/invite/admin"
+              element={
+                <RoleBasedComponent allowedRoles={["admin"]}>
+                  <Container customClass="align">
+                    <InvitePsychologist inviteAdmin={true} />
+                  </Container>
+                </RoleBasedComponent>
+              }
+            />
+            <Route
               path="/register/psychologist"
               element={
                 <Container customClass="align">
-                  <Login registerPsychologist={true} />
+                  {/*<Auth registerPsychologist={true} />*/}
+                </Container>
+              }
+            />
+            <Route
+              path="/register/admin"
+              element={
+                <Container customClass="align">
+                  {/*<Auth registerAdmin={true} />*/}
                 </Container>
               }
             />

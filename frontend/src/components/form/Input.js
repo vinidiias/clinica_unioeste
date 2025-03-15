@@ -1,6 +1,10 @@
 import styles from './Input.module.css'
+import { useFormContext } from 'react-hook-form';
 
-const Input = ({ type, name, text, handleOnChange, placeholder, value, autoComplete, customClass, disable}) => {
+const Input = ({ type, name, text, handleOnChange, placeholder, autoComplete, customClass, disabled}) => {
+
+  const { register } = useFormContext()
+
   
     return (
       <div
@@ -12,17 +16,15 @@ const Input = ({ type, name, text, handleOnChange, placeholder, value, autoCompl
             .join(" ")
         }`}
       >
-        <label htmlFor={name}>{text}:</label>
+        <label htmlFor={name}>{text} *</label>
         <input
-          required={true}
           type={type}
           name={name}
           id={name}
-          disabled={disable}
+          disabled={disabled}
           placeholder={placeholder}
-          onChange={handleOnChange}
-          value={value}
-          autoComplete={"" | autoComplete}
+          {...register((name), {required: true})}
+          autoComplete={"off" | autoComplete}
         />
       </div>
     );

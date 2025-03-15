@@ -1,0 +1,25 @@
+
+
+.overlay {
+    border-radius: 5px;
+    width: 600px;
+    background-color: rgb(221, 221, 221);
+    border: 1px solid #483768;
+    padding: 2em;
+}
+
+.overlay h1 {
+    font-weight: 400;
+}
+
+@media(max-width: 900px) {
+    .overlay {
+        width: 500px;
+    }
+}
+
+@media(max-width: 680px) {
+    .overlay {
+        flex: 1 1;
+    }
+}

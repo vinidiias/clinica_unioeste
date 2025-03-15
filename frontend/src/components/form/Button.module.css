@@ -1,0 +1,21 @@
+.btn {
+    font-weight: 500;
+    border: none;
+    color: #fff;
+    background-color: #B64667;
+    font-size: .8em;
+    padding: .5em 1em;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: 0.5s;
+    margin: auto;
+}
+
+.btn:hover{
+    background-color: #8a364f;
+    color: #fff;
+}
+
+.align {
+    text-align: center;
+}

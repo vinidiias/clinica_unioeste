@@ -1,0 +1,15 @@
+@media(max-width: 754px) {
+    .profile {
+        padding: 0em;
+    }
+}
+
+.profile {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    height: auto;
+    margin: auto;
+    width: 100%;
+    padding: 1em;
+}
