@@ -1,0 +1,11 @@
+.header {
+    padding: .8em;
+    display: grid;
+    grid-template-columns: 1fr repeat(6, 3fr);
+    border-bottom: 1px solid rgb(189, 189, 189);
+}
+
+.header h3 {
+    font-weight: 400;
+    font-size: .9em;
+}

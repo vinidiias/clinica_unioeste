@@ -1,0 +1,24 @@
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: .5em;
+    margin-bottom: 1em;
+}
+
+.buttons button {
+    font-weight: 500;
+    border: none;
+    color: #fff;
+    background-color: #B64667;
+    font-size: .8em;
+    padding: .5em .7em;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.buttons button:hover{
+    background-color: #8a364f;
+    color: #fff;
+}

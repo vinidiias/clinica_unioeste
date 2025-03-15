@@ -8,16 +8,16 @@ const fichaSchema = new mongoose.Schema({
     education: {
         course: {
             type: String,
-            required: true,
+            required: false,
         },
         period: {
             type: String,
-            required: true,
+            required: false,
         },
         shift: {
             type: String,
             enum: ['Manhã', 'Tarde', 'Noite'],
-            required: true,
+            required: false,
         },
         level: {
             type: String,
@@ -26,24 +26,21 @@ const fichaSchema = new mongoose.Schema({
         },
     },
     preferredDay: {
-        preferredDay: {
-            morning_monday: { type: Boolean, default: false },
-            morning_tuesday: { type: Boolean, default: false },
-            morning_wednesday: { type: Boolean, default: false },
-            morning_thursday: { type: Boolean, default: false },
-            morning_friday: { type: Boolean, default: false },
-            afternoon_monday: { type: Boolean, default: false },
-            afternoon_tuesday: { type: Boolean, default: false },
-            afternoon_wednesday: { type: Boolean, default: false },
-            afternoon_thursday: { type: Boolean, default: false },
-            afternoon_friday: { type: Boolean, default: false },
-            night_monday: { type: Boolean, default: false },
-            night_tuesday: { type: Boolean, default: false },
-            night_wednesday: { type: Boolean, default: false },
-            night_thursday: { type: Boolean, default: false },
-            night_friday: { type: Boolean, default: false },
-        },
-        
+        morning_monday: { type: Boolean, default: false },
+        morning_tuesday: { type: Boolean, default: false },
+        morning_wednesday: { type: Boolean, default: false },
+        morning_thursday: { type: Boolean, default: false },
+        morning_friday: { type: Boolean, default: false },
+        afternoon_monday: { type: Boolean, default: false },
+        afternoon_tuesday: { type: Boolean, default: false },
+        afternoon_wednesday: { type: Boolean, default: false },
+        afternoon_thursday: { type: Boolean, default: false },
+        afternoon_friday: { type: Boolean, default: false },
+        night_monday: { type: Boolean, default: false },
+        night_tuesday: { type: Boolean, default: false },
+        night_wednesday: { type: Boolean, default: false },
+        night_thursday: { type: Boolean, default: false },
+        night_friday: { type: Boolean, default: false },        
     },
     vinculo_unioeste: {
         type : {

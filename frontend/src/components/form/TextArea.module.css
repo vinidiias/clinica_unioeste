@@ -1,0 +1,26 @@
+.observation {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.observation label {
+    font-size: 1em;
+    font-weight: 300;
+    margin-bottom: .5em;
+}
+
+.observation textarea {
+    border-radius: 3px;
+}
+
+.observation textarea::placeholder {
+    padding-left: .2em;
+    color: black;
+    font-size: 1em;
+
+}
+
+.observation textarea:disabled {
+    background-color: white;
+}
