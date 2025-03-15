@@ -2,7 +2,7 @@ const { mongoose } = require('mongoose')
 const Pessoa = require('../Models/PessoaModel')
 const User = require('../Models/UserModel')
 const { isValidCPF } = require('../Validations/cpfValidation')
-const { calcularIdade, verifyDate, isValidDate } = require('../Validations/dataValidation')
+const { verifyDate } = require('../Validations/dataValidation')
 const { PessoaEmpty } = require('../Validations/emptyValidation')
 const { isValidPhoneNumber } = require('../Validations/phoneValidation')
 
@@ -102,8 +102,6 @@ module.exports ={
             const allPessoaOfUser = await Pessoa.find({
                 user: user_id
             })
-
-           // allPessoaOfUser[0].age = calcularIdade(allPessoaOfUser[0].birth) // calcula a idade da pessoa pela dada de nascimento
 
             return res.status(200).send(allPessoaOfUser)
         } catch (err) {
