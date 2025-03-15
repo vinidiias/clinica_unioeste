@@ -105,11 +105,6 @@ const fichaSchema = new mongoose.Schema({
         default: null
     },
 
-    triagem: {
-        type: Boolean,
-        default: null
-    },
-
     prioridade: {
         type: String,
         enum: ['Baixa', 'Média', 'Alta', null],
