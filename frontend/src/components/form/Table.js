@@ -2,152 +2,58 @@ import styles from './Table.module.css'
 import CheckBox from './CheckBox'
 
 const Table = ({ title, disabled }) => {
+    const heads = ['Turno', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta']
+    const body = [
+      { turno: 'Manhã', type: 'label', cell: [
+        { name: "preferred_day.morning_monday", type: 'checkbox'},
+        { name: "preferred_day.morning_tuesday", type: 'checkbox'},
+        { name: "preferred_day.morning_wednesday", type: 'checkbox'},
+        { name: "preferred_day.morning_thursday", type: 'checkbox'},
+        { name: "preferred_day.morning_friday", type: 'checkbox'},
+      ]},
+      { turno: 'Tarde', type: 'label', cell: [
+        { name: "preferred_day.afternoon_monday", type: 'checkbox'},
+        { name: "preferred_day.afternoon_tuesday", type: 'checkbox'},
+        { name: "preferred_day.afternoon_wednesday", type: 'checkbox'},
+        { name: "preferred_day.afternoon_thursday", type: 'checkbox'},
+        { name: "preferred_day.afternoon_friday", type: 'checkbox'},
+      ]},
+      { turno: 'Noite', type: 'label', cell: [
+        { name: "preferred_day.night_monday", type: 'checkbox'},
+        { name: "preferred_day.night_tuesday", type: 'checkbox'},
+        { name: "preferred_day.night_wednesday", type: 'checkbox'},
+        { name: "preferred_day.night_thursday", type: 'checkbox'},
+        { name: "preferred_day.night_friday", type: 'checkbox'},
+      ]},
+    ]
 
     return (
       <div className={styles.table_container}>
-        <h3>{title} *</h3>
+        <h3>{title}</h3>
         <div className={styles.table}>
           <table>
             <thead>
               <tr>
-                <th>Turno</th>
-                <th>Segunda</th>
-                <th>Terça</th>
-                <th>Quarta</th>
-                <th>Quinta</th>
-                <th>Sexta</th>
+                {heads.map((head) => (
+                  <th>{head}</th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Manhã</td>
-                <td>
-                  <CheckBox
-                    disabled={disabled}
-                    customClass="table"
-                    name="preferred_day.morning_monday"
-                    text=""
-                  />
-                </td>
-                <td>
-                  <CheckBox
-                    disabled={disabled}
-                    customClass="table"
-                    name="preferred_day.morning_tuesday"
-                    text=""
-                  />
-                </td>
-                <td>
-                  <CheckBox
-                    disabled={disabled}
-                    customClass="table"
-                    name="preferred_day.morning_wednesday"
-                    text=""
-                  />
-                </td>
-                <td>
-                  <CheckBox
-                    disabled={disabled}
-                    customClass="table"
-                    name="preferred_day.morning_thursday"
-                    text=""
-                  />
-                </td>
-                <td>
-                  <CheckBox
-                    disabled={disabled}
-                    customClass="table"
-                    name="preferred_day.morning_friday"
-                    text=""
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>Tarde</td>
-                <td>
-                  <CheckBox
-                    disabled={disabled}
-                    customClass="table"
-                    name="preferred_day.afternoon_monday"
-                    text=""
-                  />
-                </td>
-                <td>
-                  <CheckBox
-                    disabled={disabled}
-                    customClass="table"
-                    name="preferred_day.afternoon_tuesday"
-                    text=""
-                  />
-                </td>
-                <td>
-                  <CheckBox
-                    disabled={disabled}
-                    customClass="table"
-                    name="preferred_day.afternoon_wednesday"
-                    text=""
-                  />
-                </td>
-                <td>
-                  <CheckBox
-                    disabled={disabled}
-                    customClass="table"
-                    name="preferred_day.afternoon_thursday"
-                    text=""
-                  />
-                </td>
-                <td>
-                  <CheckBox
-                    disabled={disabled}
-                    customClass="table"
-                    name="preferred_day.afternoon_friday"
-                    text=""
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>Noite</td>
-                <td>
-                  <CheckBox
-                    disabled={disabled}
-                    customClass="table"
-                    name="preferred_day.night_monday"
-                    text=""
-                  />
-                </td>
-                <td>
-                  <CheckBox
-                    disabled={disabled}
-                    customClass="table"
-                    name="preferred_day.night_tuesday"
-                    text=""
-                  />
-                </td>
-                <td>
-                  <CheckBox
-                    disabled={disabled}
-                    customClass="table"
-                    name="preferred_day.night_wednesday"
-                    text=""
-                  />
-                </td>
-                <td>
-                  <CheckBox
-                    disabled={disabled}
-                    customClass="table"
-                    name="preferred_day.night_thursday"
-                    text=""
-                  />
-                </td>
-                <td>
-                  <CheckBox
-                    disabled={disabled}
-                    customClass="table"
-                    name="preferred_day.night_friday"
-                    text=""
-                  />
-                </td>
-              </tr>
+              {body.map((row) => (
+                <tr>
+                  <td>{row.turno}</td>
+                  {row.cell.map((check) => (
+                    <td>
+                      <CheckBox
+                        name={check.name}
+                        customClass="table"
+                        disabled={disabled}
+                      />
+                    </td>
+                  ))}
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

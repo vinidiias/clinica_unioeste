@@ -26,6 +26,7 @@ const fichaSchema = new mongoose.Schema({
             required: true,
         },
     },
+    
     preferredDay: {
         morning_monday: { type: Boolean, default: false },
         morning_tuesday: { type: Boolean, default: false },
