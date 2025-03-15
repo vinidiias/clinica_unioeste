@@ -2,7 +2,6 @@ import styles from './Table.module.css'
 import CheckBox from './CheckBox'
 
 const Table = ({ title, disabled }) => {
-
     const heads = ['Turno', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta']
     const body = [
       { turno: 'Manhã', type: 'label', cell: [

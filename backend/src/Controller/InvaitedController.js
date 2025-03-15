@@ -119,7 +119,7 @@ module.exports = {
 
             await Convite.deleteOne({ email, uniqueId: id})
 
-            return res.status(400).send({ 
+            return res.status(200).send({ 
                 message: 'Conta de psicologo criada com sucesso',
                 psicologa: psyCreated
             })

@@ -15,7 +15,7 @@ const ViewFicha = ({ data, id }) => {
 
   const buttonsFicha = [
     { label: 'Agendar Triagem', type: 'button', customClass: 'align', handleClick: () => setOpenAgenda(true) },
-  ]
+   ]
 
   const fields = personal_data_fields.concat(fieldsFicha)
 

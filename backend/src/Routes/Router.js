@@ -5,7 +5,7 @@ const SessionController = require('../Controller/SessionController')
 const PessoaController = require('../Controller/PessoaController')
 const FichaController = require('../Controller/FichaController')
 const InvaitedController = require('../Controller/InvaitedController')
-const PsicologoController = require('../Controller/PsicologoController')
+const ConsultaController = require('../Controller/ConsultaController')
 
 const routes = Router()
 
@@ -32,6 +32,8 @@ routes.get('/ficharios', FichaController.indexAll)
 routes.get('/:user_id/fichario/', FichaController.indexByUser)
 routes.delete('/:user_id/:ficha/', FichaController.delete)
 routes.delete('/ficharios/delete', FichaController.deleteAll)
+routes.patch('/avaliarPrioridade/:ficha_id', FichaController.prioridadeFicha)
+
 
 //Sessao
 routes.post('/session', SessionController.create)
@@ -47,7 +49,8 @@ routes.post('/psicologo/register', InvaitedController.register)
 // routes.post('/admin/register', InvaitedController.registerAdmin)
 
 //Consultas
-routes.patch('/agendarConsulta/:ficha_id', PsicologoController.agendarTriagem)
-routes.patch('/avaliarPrioridade/:ficha_id', PsicologoController.prioridadeFicha)
+routes.post('/agendarConsulta/:ficha_id/:psico_id/:paci_id', ConsultaController.agendarTriagem)
+routes.get('/consultaPsicologo/:psico_id', ConsultaController.indexByPsicologo);
+routes.get('/todasConsulta', ConsultaController.indexAll);
 
 module.exports = routes
