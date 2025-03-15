@@ -1,0 +1,16 @@
+.login {
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5em;
+    background-color: #483768;
+    border-radius: 10px;
+    font-size: .9em;
+}
+
+.login h1 {
+    margin-bottom: .5em;
+}
+

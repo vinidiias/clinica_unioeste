@@ -1,0 +1,24 @@
+.screening {
+    padding: 1em;
+    width: 100%;
+    background-color: #dcdcdc;
+    height: 100%;
+}
+
+.queue_container {
+    border: 1px solid rgb(173, 173, 173);
+    border-bottom: none;
+    border-radius: 5px;
+    background-color: white;
+    height: auto;
+    overflow: hidden;
+
+}
+
+.btns {
+    margin-bottom: 1em;
+}
+
+.btns button {
+    padding: .2em;
+}
