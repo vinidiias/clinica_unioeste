@@ -5,6 +5,7 @@ const SessionController = require('../Controller/SessionController')
 const PessoaController = require('../Controller/PessoaController')
 const FichaController = require('../Controller/FichaController')
 const InvaitedController = require('../Controller/InvaitedController')
+const PsicologoController = require('../Controller/PsicologoController')
 
 const routes = Router()
 
@@ -29,7 +30,7 @@ routes.delete('/:user_id/pessoa/:pessoa_id', PessoaController.delete)
 routes.post('/:user_id/ficha', FichaController.create)
 routes.get('/ficharios', FichaController.indexAll)
 routes.get('/:user_id/fichario/', FichaController.indexByUser)
-routes.delete('/user_id/ficha/', FichaController.delete)
+routes.delete('/:user_id/:ficha/', FichaController.delete)
 routes.delete('/ficharios/delete', FichaController.deleteAll)
 
 //Sessao
@@ -41,8 +42,12 @@ routes.post('/psicologo/validate', InvaitedController.validated)
 routes.post('/psicologo/register', InvaitedController.register)
 
 //Administrador
-routes.post('/admin/convite', InvaitedController.invited)
-routes.post('/admin/validate', InvaitedController.validated)
-routes.post('/admin/register', InvaitedController.registerAdmin)
+// routes.post('/admin/convite', InvaitedController.invited)
+// routes.post('/admin/validate', InvaitedController.validated)
+// routes.post('/admin/register', InvaitedController.registerAdmin)
+
+//Consultas
+routes.patch('/agendarConsulta/:ficha_id', PsicologoController.agendarTriagem)
+routes.patch('/avaliarPrioridade/:ficha_id', PsicologoController.prioridadeFicha)
 
 module.exports = routes

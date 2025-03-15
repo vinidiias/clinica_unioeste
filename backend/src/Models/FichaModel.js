@@ -6,20 +6,20 @@ const fichaSchema = new mongoose.Schema({
         required: true,
     },
     education: {
-        curso: {
+        course: {
             type: String,
             required: true,
         },
-        periodo: {
+        period: {
             type: String,
             required: true,
         },
-        turno: {
+        shift: {
             type: String,
             enum: ['Manhã', 'Tarde', 'Noite'],
             required: true,
         },
-        type: {
+        level: {
             type: String,
             enum: ['Fundamental I', 'Fundamental II', 'Ensino Médio', 'Ensino Técnico', 'Graduação', 'Pós Graduação'],
             required: true,
@@ -112,14 +112,14 @@ const fichaSchema = new mongoose.Schema({
 
     prioridade: {
         type: String,
-        enum: ['baixa', 'media', 'alta', null],
+        enum: ['Baixa', 'Média', 'Alta', null],
         default: null
     },
 
     status: {
         type: String,
-        enum: ['Em avaliação', 'Avaliada'],
-        default: 'Em avaliação',
+        enum: ['Em avaliação', 'Avaliada', null],
+        default: null,
     },
 
     agenda: {
