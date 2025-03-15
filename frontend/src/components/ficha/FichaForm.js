@@ -148,12 +148,13 @@ const FichaForm = ({ disabled, fieldsContainers, buttons, title }) => {
       })}
 
       <div className={styles.btnSubmit}>
-        {buttons.map((btn, index) => (
+        {buttons && buttons.map((btn, index) => (
           <Button
             key={`button-${index}`}
             text={btn.label}
             type={btn.type}
             customClass={btn.customClass}
+            handleClick={btn?.handleClick}
           />
         ))}
       </div>
