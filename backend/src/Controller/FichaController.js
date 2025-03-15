@@ -10,7 +10,6 @@ module.exports = {
 
         const {  
             profission, education, preferred_day, vinculo_unioeste, community, work, psychologist, psychiatric, observation } = req.body;
-
         
         const { user_id } = req.params
         const { auth } = req.headers
