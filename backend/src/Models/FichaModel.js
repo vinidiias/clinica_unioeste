@@ -9,16 +9,16 @@ const fichaSchema = new mongoose.Schema({
     education: {
         course: {
             type: String,
-            required: true,
+            required: false,
         },
         period: {
             type: String,
-            required: true,
+            required: false,
         },
         shift: {
             type: String,
             enum: ['Manhã', 'Tarde', 'Noite'],
-            required: true,
+            required: false,
         },
         level: {
             type: String,

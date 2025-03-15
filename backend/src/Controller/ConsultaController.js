@@ -61,7 +61,7 @@ module.exports = {
         if(!paciente) return res.status(400).send({ message: 'Paciente nao encontrado'});
 
         const validRolePaciente = 'paciente';
-        if(paciente.role !== validRolePaciente) return res
+        if(paciente.role !== validRolePaciente) return 
 
         if(psico_id !== auth) return res.status(400).send({ message: 'Nao autorizado'});
 
