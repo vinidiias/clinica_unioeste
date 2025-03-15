@@ -3,8 +3,7 @@ import styles from './CheckBox.module.css'
 
 const CheckBox = ({ name, text, side, handleOnChange, value, isSelected, customClass, disabled }) => {
 
-  const { register } = useFormContext()
-
+  const { register, watch } = useFormContext()
   const inputId = `${name}-${value}`;
     return (
       <div className={`${styles.form_control} ${styles[customClass]}`}>
