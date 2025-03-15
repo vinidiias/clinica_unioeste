@@ -135,5 +135,51 @@ module.exports = {
         catch(err){
             return res.status(400).send(err)
         }
-    }
+    },
+
+    // Avaliar ficha e definir prioridade
+    async prioridadeFicha(req, res) {
+        const { ficha_id, psico_id, paci_id } = req.params;
+        const { prioridade } = req.body;
+        const { auth } = req.headers;
+
+        try {
+            const psico = await User.findById(psico_id);
+            if (!psico) return res.status(400).send({ message: 'Psicólogo não encontrado' });
+            if (psico.role !== 'psicologo') return res.status(400).send({ message: 'Somente psicólogos podem definir a prioridade' });
+
+            const paciente = await User.findById(paci_id);
+            if (!paciente) return res.status(400).send({ message: 'Paciente não encontrado' });
+            if (paciente.role !== 'paciente') return res.status(400).send({ message: 'O ID fornecido não pertence a um paciente' });
+
+            if (psico_id !== auth) return res.status(403).send({ message: 'Não autorizado' });
+
+            if (!['Baixa', 'Média', 'Alta'].includes(prioridade)) return res.status(400).send({ message: 'Prioridade inválida' });
+            
+            const ficha = await Ficha.findById(ficha_id);
+            if (!ficha) return res.status(400).send({ message: 'Ficha não encontrada' });
+
+            if (ficha.user !== paci_id) {
+                return res.status(400).send({ message: 'Ficha não pertence ao paciente informado' });
+            }
+
+            // Define a prioridade e altera o status para 'Avaliada'
+            ficha.prioridade = prioridade;
+            ficha.status = 'Avaliada';
+            ficha.triagem = false;
+
+            await ficha.save();
+
+            return res.status(200).send({ 
+                message: 'Prioridade definida com sucesso', 
+                ficha 
+            });
+
+        } catch (err) {
+            return res.status(400).send({ 
+                message: 'Erro ao avaliar ficha', 
+                error: err.message 
+            });
+        }
+    },
 }
