@@ -8,30 +8,30 @@ const { isValidPhoneNumber } = require('../Validations/phoneValidation')
 
 module.exports ={
     async create (req,res) {
-        const { img, sexo, birth, cpf, ra, phone, adressComplet} = req.body
-        const { user_id } = req.params 
-        const { auth } = req.headers
+        const { img, sexo, birth, cpf, ra, phone, addressComplet} = req.body;
+        const { user_id } = req.params;
+        const { auth } = req.headers;
 
-        const flag = PessoaEmpty(sexo, birth, cpf, ra, phone, adressComplet)
-        if(flag) return res.status(400).send({ message: 'Campo vazio'})
+        const flag = PessoaEmpty(sexo, birth, cpf, ra, phone, addressComplet);
+        if(flag) return res.status(400).send({ message: 'Campo vazio'});
 
         const userExists = await User.findById(user_id) 
-        if(!userExists) return res.status(400).send({ message: 'Usuário não encontrado'})
+        if(!userExists) return res.status(400).send({ message: 'Usuário não encontrado'});
 
-        if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'})
+        if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'});
 
-        const existPessoa = await Pessoa.findOne({ user: user_id }) 
-        if(existPessoa) return res.status(400).send({ message: 'Pessoa já está cadastrada'})
+        const existPessoa = await Pessoa.findOne({ user: user_id });
+        if(existPessoa) return res.status(400).send({ message: 'Pessoa já está cadastrada'});
     
         try{
-            const cpfIsValid = await isValidCPF(cpf)
-            if(!cpfIsValid) return res.status(400).send({ message: 'CPF inválid' })
+            const cpfIsValid = await isValidCPF(cpf);
+            if(!cpfIsValid) return res.status(400).send({ message: 'CPF inválid' });
 
-            const dataValida = await verifyDate(birth)
-            if(!dataValida) return res.status(400).send({ message: 'Data invalida'})
+            const dataValida = await verifyDate(birth);
+            if(!dataValida) return res.status(400).send({ message: 'Data invalida'});
 
-            const phoneValid = await isValidPhoneNumber(phone)
-            if(!phoneValid) return res.status(400).send({ message: 'Telefone invalido'})
+            const phoneValid = await isValidPhoneNumber(phone);
+            if(!phoneValid) return res.status(400).send({ message: 'Telefone invalido'});
 
 
             const createPessoa = await Pessoa.create({
@@ -41,81 +41,96 @@ module.exports ={
                 cpf,
                 ra,
                 phone,
-                adressComplet,
+                addressComplet,
                 user: user_id, 
-            })
+            });
             
-            userExists.isFirstLogin = false
-            await userExists.save()
+            userExists.isFirstLogin = false;
+            await userExists.save();
 
-            const pessoaComUser = await Pessoa.findById(createPessoa._id).populate('user')
+            const pessoaComUser = await Pessoa.findById(createPessoa._id).populate('user');
             return res.status(200).send({
                 pessoa: createPessoa,
                 message: 'Pessoa cadastrada com sucesso'
-            })
+            });
         }
         catch(err){
-            return res.status(400).send(err)
+            res.status(400).send({
+                message: "Erro ao criar pessoa",
+                error: err.message 
+            })
         }
     },
     
     async delete (req, res) {
-        const { pessoa_id, user_id } = req.params
-        const { auth } = req.headers
+        const { pessoa_id, user_id } = req.params;
+        const { auth } = req.headers;
 
-        if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
+        if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado'});
         
         try{
-            const deletePesosa = await Pessoa.findByIdAndDelete(pessoa_id)
-            if(!deletePesosa) return res.status(400).send({ message: 'Pessoa não encontrada'})
+            const deletePesosa = await Pessoa.findByIdAndDelete(pessoa_id);
+            if(!deletePesosa) return res.status(400).send({ message: 'Pessoa não encontrada'});
                 
-            return res.status(200).send({ status: 'Deletado com sucesso', user: deletePesosa})
+            return res.status(200).send({ status: 'Deletado com sucesso', user: deletePesosa});
         }
         catch(err){
-            return res.status(400).send(err)
+            res.status(400).send({
+                message: "Erro ao deletar pessoa",
+                error: err.message 
+            });
         }
     },
     
     async deleteAll(req, res) {
         try {
             // Deleta todas as pessoas
-            const deletePessoas = await Pessoa.deleteMany({})
+            const deletePessoas = await Pessoa.deleteMany({});
     
             // Verifica se houve alguma exclusão
             if (deletePessoas.deletedCount > 0) {
-                return res.status(200).send({ status: 'deleted', count: deletePessoas.deletedCount })
+                return res.status(200).send({ status: 'deleted', count: deletePessoas.deletedCount });
             } else {
-                return res.status(404).send({ status: 'no records found to delete' })
+                return res.status(404).send({ status: 'no records found to delete' });
             }
         } catch (err) {
-            return res.status(400).send(err)
+            res.status(400).send({
+                message: "Erro ao deletar pessoas",
+                error: err.message 
+            });
         }
     }, 
 
     async indexByUser (req, res) {
-        const { user_id } = req.params
-        const { auth } = req.headers
+        const { user_id } = req.params;
+        const { auth } = req.headers;
 
-        if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
+        if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado'});
         
         try{
             const allPessoaOfUser = await Pessoa.find({
                 user: user_id
-            })
+            });
 
-            return res.status(200).send(allPessoaOfUser)
+            return res.status(200).send(allPessoaOfUser);
         } catch (err) {
-            return res.status(400).send(err);
+            res.status(400).send({
+                message: "Erro ao listar pessoa",
+                error: err.message 
+            });
         }
     },
 
     async indexAll (req, res) {
         try{
-            const allPessoa = await Pessoa.find().populate('user')
-            return res.status(200).send(allPessoa)
+            const allPessoa = await Pessoa.find().populate('user');
+            return res.status(200).send(allPessoa);
         }
         catch(err){
-            return res.status(400).send(err)
+            res.status(400).send({
+                message: "Erro ao listar as pessoas",
+                error: err.message 
+            });
         }
     }, 
 
@@ -124,29 +139,28 @@ module.exports ={
         const { user_id } = req.params 
         const { auth } = req.headers
 
-        if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado'})
+        if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado' });
 
         const PessoaAtual = await Pessoa.findById(user_id)
-        if(!PessoaAtual) return res.status(400).send({ message: 'Usuario nao encontrado' })
+        if(!PessoaAtual) return res.status(400).send({ message: 'Usuario nao encontrado' });
 
         try{
             if(cpf){
-                const cpfIsValid = await isValidCPF(cpf)
-                if(!cpfIsValid) return res.status(400).send({ message: 'CPF inválid' })
-                PessoaAtual.cpf = cpf
+                const cpfIsValid = await isValidCPF(cpf);
+                if(!cpfIsValid) return res.status(400).send({ message: 'CPF inválid' });
+                PessoaAtual.cpf = cpf;
             }
             
             if(birth){
-                const dataValida = await verifyDate(birth)
-                if(!dataValida) return res.status(400).send({ message: 'Data invalida'})
-                PessoaAtual.birth = birth
+                const dataValida = await verifyDate(birth);
+                if(!dataValida) return res.status(400).send({ message: 'Data invalida' });
+                PessoaAtual.birth = birth;
             }
 
             if(phone){
-                const phoneValid = await isValidPhoneNumber(phone)
-                if(!phoneValid) return res.status(400).send({ message: 'Telefone invalido'})
-                PessoaAtual.phone = phone
-
+                const phoneValid = await isValidPhoneNumber(phone);
+                if(!phoneValid) return res.status(400).send({ message: 'Telefone invalido' });
+                PessoaAtual.phone = phone;
             }
 
             // Atualiza apenas os campos enviados no body
@@ -156,15 +170,18 @@ module.exports ={
                 }
             })
 
-            const PessoaAtualizado = await PessoaAtual.save()
+            const PessoaAtualizado = await PessoaAtual.save();
 
             return res.status(200).send({ 
                 message: 'Dados da pesosa atualizado com sucesso',
                 pessoa: PessoaAtualizado
-            })
+            });
         } 
         catch(err){
-            return res.status(400).send(err)
+            res.status(400).send({
+                message: "Erro ao atualizar pessoas",
+                error: err.message 
+            });
         }
     }
 }

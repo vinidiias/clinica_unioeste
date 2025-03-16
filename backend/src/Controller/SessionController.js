@@ -30,7 +30,9 @@ module.exports = {
 
         return res.status(200).json(response);
     } catch (err) {
-        return res.status(500).json({ message: 'Internal server error', error: err. Message });
+        return res.status(500).json({ 
+            message: 'Internal server error',
+            error: err.message });
     }
 }
 }
