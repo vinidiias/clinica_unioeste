@@ -42,7 +42,9 @@ const fichaSchema = new mongoose.Schema({
         night_tuesday: { type: Boolean, default: false },
         night_wednesday: { type: Boolean, default: false },
         night_thursday: { type: Boolean, default: false },
-        night_friday: { type: Boolean, default: false },        
+        night_friday: { type: Boolean, default: false },    
+        
+        required: false
     },
 
     vinculo_unioeste: {
@@ -124,7 +126,12 @@ const fichaSchema = new mongoose.Schema({
         ref: 'User',
         required: true,
         unique: true,
-    }
+    },
+    pessoa: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Pessoa',
+        required: true,
+    },
 })
 
 const ficha = mongoose.model('Ficha', fichaSchema)
