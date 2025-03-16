@@ -9,7 +9,7 @@ const Consulta = require('../Models/ConsultaModel')
 module.exports = {
     async create(req, res) {
 
-        const {  profission, education, preferred_day, vinculo_unioeste, community, work, psychologist, psychiatric, observation } = req.body;
+        const {  profission, education, preferredDay, vinculo_unioeste, community, work, psychologist, psychiatric, observation } = req.body;
 
         
         const { user_id } = req.params;
@@ -30,7 +30,7 @@ module.exports = {
             const createFicha = await Ficha.create({
                 profission,
                 education,
-                preferred_day,
+                preferredDay,
                 vinculo_unioeste,
                 community,
                 work,
@@ -61,29 +61,35 @@ module.exports = {
     }, 
 
     async indexAll (req, res) {
-        try{
-            const allFichario = await Ficha.find().populate('user');
-
-            const result = await Promise.all(
-                allFichario.map(async (ficha) => {
-                    const pessoa = await Pessoa.findOne({ user: ficha.user._id});
-
-                    return {
-                        ficha,
-                        pessoa
-                    }
-                })
-            )
-            return res.status(200).send(result);
-
-        }
-        catch(err){
-            res.status(400).send({
-                message: "Erro ao lsitar todos os ficharios",
-                error: err.message 
-            });
-        }
-    }, 
+            try {
+                // Busca todas as fichas no banco de dados
+                const fichas = await Ficha.find();
+        
+                if (!fichas || fichas.length === 0) {
+                    return res.status(404).send({ message: 'Nenhuma ficha encontrada' });
+                }
+        
+                const resultados = await Promise.all(
+                    fichas.map(async (ficha) => {
+                        const user = await User.findById(ficha.user);
+                        const pessoa = await Pessoa.findOne({ user: ficha.user });
+        
+                        return {
+                            ficha: ficha,
+                            pessoa: pessoa,
+                            user: user
+                        };
+                    })
+                );
+        
+                return res.status(200).send(resultados);
+            } catch (err) {
+                res.status(500).send({
+                    message: "Erro ao listar todas as fichas",
+                    error: err.message 
+                });
+            }
+        }, 
     
     async indexByUser (req, res) {
         const { user_id } = req.params;
@@ -99,8 +105,8 @@ module.exports = {
 
             return res.status(200).send({
                 ficha: allFicharioUser,
-                user: user,
-                pessoa: pessoa
+                pessoa: pessoa,
+                user: user
             });    
         }
         catch (err){
