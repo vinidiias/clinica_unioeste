@@ -115,8 +115,8 @@ const fichaSchema = new mongoose.Schema({
 
     status: {
         type: String,
-        enum: ['Em avaliação', 'Avaliada', null],
-        default: null,
+        enum: ['Em avaliação', 'Avaliada'],
+        default: 'Em avaliação',
     },
 
     user: {
