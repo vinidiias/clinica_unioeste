@@ -43,6 +43,8 @@ const fichaSchema = new mongoose.Schema({
         night_wednesday: { type: Boolean, required: false },
         night_thursday: { type: Boolean, required: false },
         night_friday: { type: Boolean, required: false },    
+
+        required: true
         
     },
 
@@ -126,10 +128,12 @@ const fichaSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+
     pessoa: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Pessoa',
         required: true,
+        unique: true,
     },
 })
 
