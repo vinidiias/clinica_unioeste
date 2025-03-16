@@ -28,23 +28,22 @@ const fichaSchema = new mongoose.Schema({
     },
     
     preferredDay: {
-        morning_monday: { type: Boolean, default: false },
-        morning_tuesday: { type: Boolean, default: false },
-        morning_wednesday: { type: Boolean, default: false },
-        morning_thursday: { type: Boolean, default: false },
-        morning_friday: { type: Boolean, default: false },
-        afternoon_monday: { type: Boolean, default: false },
-        afternoon_tuesday: { type: Boolean, default: false },
-        afternoon_wednesday: { type: Boolean, default: false },
-        afternoon_thursday: { type: Boolean, default: false },
-        afternoon_friday: { type: Boolean, default: false },
-        night_monday: { type: Boolean, default: false },
-        night_tuesday: { type: Boolean, default: false },
-        night_wednesday: { type: Boolean, default: false },
-        night_thursday: { type: Boolean, default: false },
-        night_friday: { type: Boolean, default: false },    
+        morning_monday: { type: Boolean, required: false },
+        morning_tuesday: { type: Boolean, required: false },
+        morning_wednesday: { type: Boolean, required: false },
+        morning_thursday: { type: Boolean, required: false },
+        morning_friday: { type: Boolean, required: false },
+        afternoon_monday: { type: Boolean, required: false },
+        afternoon_tuesday: { type: Boolean, required: false },
+        afternoon_wednesday: { type: Boolean, required: false },
+        afternoon_thursday: { type: Boolean, required: false },
+        afternoon_friday: { type: Boolean, required: false },
+        night_monday: { type: Boolean, required: false },
+        night_tuesday: { type: Boolean, required: false },
+        night_wednesday: { type: Boolean, required: false },
+        night_thursday: { type: Boolean, required: false },
+        night_friday: { type: Boolean, required: false },    
         
-        required: false
     },
 
     vinculo_unioeste: {
