@@ -17,6 +17,11 @@ const ConsultaSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
+
+    horario: {
+        type: String,
+        required: false,
+    }
 });
 
 module.exports = mongoose.model('Consulta', ConsultaSchema);

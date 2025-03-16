@@ -12,7 +12,7 @@ function UserEmpty(email, name, password){
     return false
 }
 
-function PessoaEmpty(sexo, birth, cpf, ra, phone, adressComplet){
+function PessoaEmpty(sexo, birth, cpf, ra, phone, addressComplet){
     if(isEmpty(sexo)) return true
 
     if(isEmpty(birth)) return true
@@ -23,7 +23,7 @@ function PessoaEmpty(sexo, birth, cpf, ra, phone, adressComplet){
 
     if(isEmpty(phone)) return true
 
-    if(isEmpty(adressComplet)) return true
+    if(isEmpty(addressComplet)) return true
 
     return false
 }

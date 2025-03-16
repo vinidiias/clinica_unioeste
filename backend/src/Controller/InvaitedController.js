@@ -68,8 +68,10 @@ module.exports = {
     
             return res.status(200).send({message: 'Convite enviado com sucesso' });
         } catch (err) {
-            console.log(err);
-            return res.status(400).send(err);
+            res.status(400).send({
+                message: "Erro ao enviar convite",
+                error: err.message 
+            })
         }
     },
 
@@ -87,65 +89,70 @@ module.exports = {
             return res.status(200).send({ message: 'Convite valido'})
         }
         catch(err){
-            console.log(err)
-            return res.status(400).send(err)
+            res.status(400).send({
+                message: "Erro ao validar convite",
+                error: err.message 
+            })
         }
     },
 
     async register (req, res)  {
-        const { email, name, password, id } = req.body
+        const { email, name, password, id } = req.body;
 
-        const existingUser = await User.findOne({ email })
-        if(existingUser) return res.status(400).send({ message: 'Usuario ja existe'})
+        const existingUser = await User.findOne({ email });
+        if(existingUser) return res.status(400).send({ message: 'Usuario ja existe'});
 
-        const isEmpty = UserEmpty(email, name, password)
-        if(isEmpty) return res.status(400).send({ message: 'Campo vazio'})
+        const isEmpty = UserEmpty(email, name, password);
+        if(isEmpty) return res.status(400).send({ message: 'Campo vazio'});
 
         try{
-            const isEmailValied = await emailUnioeste(email)
-            if(!isEmailValied) return res.status(400).send({ message: 'Email invalido'})
+            const isEmailValied = await emailUnioeste(email);
+            if(!isEmailValied) return res.status(400).send({ message: 'Email invalido'});
 
-            const invite = await Convite.findOne({ email, uniqueId: id})
-            if(!invite) return res.status(400).send({ message: 'Convite invalido'})
+            const invite = await Convite.findOne({ email, uniqueId: id});
+            if(!invite) return res.status(400).send({ message: 'Convite invalido'});
 
-            const hashedPassword = await bcrypt.hash(password, 10)
+            const hashedPassword = await bcrypt.hash(password, 10);
 
             const psyCreated = await User.create({ 
                 email, 
                 name,
                 password: hashedPassword, 
                 role: 'psicologo'
-            })
+            });
 
-            await Convite.deleteOne({ email, uniqueId: id})
+            await Convite.deleteOne({ email, uniqueId: id});
 
             return res.status(200).send({ 
                 message: 'Conta de psicologo criada com sucesso',
                 psicologa: psyCreated
-            })
+            });
         }
         catch(err){
-            return res.status(400).send(err)
+            res.status(400).send({
+                message: "Erro ao criar conta de Psicologo",
+                error: err.message 
+            });
         }
     },
 
     async registerAdmin (req, res) {
-        const { email, name, password, id } = req.body
+        const { email, name, password, id } = req.body;
 
-        const existingUser = await User.findOne({ email })
-        if(existingUser) return res.status(400).send({ message: 'Usuario ja existe'})
+        const existingUser = await User.findOne({ email });
+        if(existingUser) return res.status(400).send({ message: 'Usuario ja existe'});
 
-        const isEmpty = UserEmpty(email, name, password)
-        if(isEmpty) return res.status(400).send({ message: 'Campo vazio'})
+        const isEmpty = UserEmpty(email, name, password);
+        if(isEmpty) return res.status(400).send({ message: 'Campo vazio'});
 
         try{
-            const isEmailValied = await emailUnioeste(email)
-            if(!isEmailValied) return res.status(400).send({ message: 'Email invalido'})
+            const isEmailValied = await emailUnioeste(email);
+            if(!isEmailValied) return res.status(400).send({ message: 'Email invalido'});
 
-            const invite = await Convite.findOne({ email, uniqueId: id})
-            if(!invite) return res.status(400).send({ message: 'Convite invalido'})
+            const invite = await Convite.findOne({ email, uniqueId: id});
+            if(!invite) return res.status(400).send({ message: 'Convite invalido'});
 
-            const hashedPassword = await bcrypt.hash(password, 10)
+            const hashedPassword = await bcrypt.hash(password, 10);
 
             const adminCreated = await User.create({ 
                 email, 
@@ -153,15 +160,18 @@ module.exports = {
                 password: hashedPassword, 
                 role: 'admin'})
 
-            await Convite.deleteOne({ email, uniqueId: id})
+            await Convite.deleteOne({ email, uniqueId: id});
 
             return res.status(400).send({ 
                 message: 'Conta de administrador criada com sucesso',
                 administrador: adminCreated
-            })
+            });
         }
         catch(err){
-            return res.status(400).send(err)
+            res.status(400).send({
+                message: "Erro ao criar conta do Administrador",
+                error: err.message 
+            });
         }
     }
 }
