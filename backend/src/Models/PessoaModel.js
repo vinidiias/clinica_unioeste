@@ -26,8 +26,8 @@ const pessoaSchema = new mongoose.Schema({
         require: true,
     },
 
-    adressComplet: {
-        adress: {
+    addressComplet: {
+        address: {
             type: String, 
             require: true,
         },  

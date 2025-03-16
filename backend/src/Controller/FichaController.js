@@ -3,34 +3,34 @@ const Ficha = require('../Models/FichaModel')
 const { FicharioEmpty } = require('../Validations/emptyValidation')
 const User = require('../Models/UserModel')
 const Pessoa = require('../Models/PessoaModel')
+const Consulta = require('../Models/ConsultaModel')
 
 
 module.exports = {
     async create(req, res) {
 
-        const {  
-            profission, education, preferred_day, vinculo_unioeste, community, work, psychologist, psychiatric, observation } = req.body;
+        const {  profission, education, preferredDay, vinculo_unioeste, community, work, psychologist, psychiatric, observation } = req.body;
 
         
-        const { user_id } = req.params
-        const { auth } = req.headers
+        const { user_id } = req.params;
+        const { auth } = req.headers;
 
-        const flag = FicharioEmpty(profission, education, vinculo_unioeste, work, psychologist, psychiatric)
+        const flag = FicharioEmpty(profission, education, vinculo_unioeste, work, psychologist, psychiatric);
 
-        if(flag) return res.status(400).send({ message: 'Campo vazio' })
+        if(flag) return res.status(400).send({ message: 'Campo vazio' });
 
-        if( user_id !== auth) return res.status(400).send({ message: 'Não autorizado' })
+        if( user_id !== auth) return res.status(400).send({ message: 'Não autorizado' });
     
         try {
             //Verificar se ja existe uma ficha assosciada ao usuario
-            const existFicha = await Ficha.findOne({ user: user_id })
-            if(existFicha) return res.status(400).send({ message: 'Ficha ja existe' })
+            const existFicha = await Ficha.findOne({ user: user_id });
+            if(existFicha) return res.status(400).send({ message: 'Ficha ja existe' });
 
             // Cria o documento usando o modelo Ficha
             const createFicha = await Ficha.create({
                 profission,
                 education,
-                preferred_day,
+                preferredDay,
                 vinculo_unioeste,
                 community,
                 work,
@@ -38,91 +38,108 @@ module.exports = {
                 psychiatric,
                 observation,
                 user: user_id
-            })
+            });
             //console.log(createFicha)
             
             // Popula o campo 'user' com as informações do usuário associado (se houver relação no schema)
-            const fichaComUser = await Ficha.findById(createFicha._id).populate('user') //tenta adicionar pessoas tmb sem ser o populate
+            const fichaComUser = await Ficha.findById(createFicha._id).populate('user'); //tenta adicionar pessoas tmb sem ser o populate
 
-            fichaComUser.triagem = true
-            fichaComUser.status = 'Em avaliação'
+            fichaComUser.triagem = true;
+            fichaComUser.status = 'Em avaliação';
 
-            await fichaComUser.save()
+            await fichaComUser.save();
 
-            return res.status(200).send(fichaComUser)//tras outras informacoes sobre o usurario
+            return res.status(200).send(fichaComUser);//tras outras informacoes sobre o usurario
             
         }
         catch (err) {
-            return res.status(400).send(err)
+            res.status(400).send({
+                message: "Erro ao criar a ficha",
+                error: err.message 
+            });
         }
     }, 
 
     async indexAll (req, res) {
-        try{
-            const allFichario = await Ficha.find().populate('user')
-
-            const result = await Promise.all(
-                allFichario.map(async (ficha) => {
-                    const pessoa = await Pessoa.findOne({ user: ficha.user._id})
-
-                    return {
-                        ficha,
-                        pessoa
-                    }
-                })
-            )
-            return res.status(200).send(result)
-
-        }
-        catch(err){
-            console.log(err)
-            return res.status(400).send(err)
-        }
-    }, 
+            try {
+                // Busca todas as fichas no banco de dados
+                const fichas = await Ficha.find();
+        
+                if (!fichas || fichas.length === 0) {
+                    return res.status(404).send({ message: 'Nenhuma ficha encontrada' });
+                }
+        
+                const resultados = await Promise.all(
+                    fichas.map(async (ficha) => {
+                        const user = await User.findById(ficha.user);
+                        const pessoa = await Pessoa.findOne({ user: ficha.user });
+        
+                        return {
+                            ficha: ficha,
+                            pessoa: pessoa,
+                            user: user
+                        };
+                    })
+                );
+        
+                return res.status(200).send(resultados);
+            } catch (err) {
+                res.status(500).send({
+                    message: "Erro ao listar todas as fichas",
+                    error: err.message 
+                });
+            }
+        }, 
     
     async indexByUser (req, res) {
-        const { user_id } = req.params
-        const { auth } = req.headers
+        const { user_id } = req.params;
+        const { auth } = req.headers;
 
-        if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'})
+        if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'});
 
         try {
-            const allFicharioUser = await Ficha.findOne({ user: user_id })
+            const allFicharioUser = await Ficha.findOne({ user: user_id });
             
-            const user = await User.findById(user_id)
-            const pessoa = await Pessoa.findOne({ user: user_id})
+            const user = await User.findById(user_id);
+            const pessoa = await Pessoa.findOne({ user: user_id});
 
             return res.status(200).send({
                 ficha: allFicharioUser,
-                user: user,
-                pessoa: pessoa
-            })    
+                pessoa: pessoa,
+                user: user
+            });    
         }
         catch (err){
-            return res.status(400).send(err)
+            res.status(400).send({
+                message: "Erro ao listar seu fichario",
+                error: err.message 
+            });
         }
     },
 
     async delete (req, res) {
-        const { ficha_id, user_id } = req.params
-        const { auth } = req.headers
+        const { ficha_id, user_id } = req.params;
+        const { auth } = req.headers;
 
-        if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado' })
+        if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado' });
 
         try {
-            const deleteFichario = await Ficha.findByIdAndDelete(ficha_id)
-            if(!deleteFichario) return res.status(400).send({ message: 'Fichario não encontrado' })
+            const deleteFichario = await Ficha.findByIdAndDelete(ficha_id);
+            if(!deleteFichario) return res.status(400).send({ message: 'Fichario não encontrado' });
             
-            return res.status(200).send({ message: 'Fichario deletado com sucesso' })
+            return res.status(200).send({ message: 'Fichario deletado com sucesso' });
         }
         catch(err){
-            return res.status(400).send({status: 'Ficha deletada com sucesso' })
+            res.status(400).send({
+                message: "Erro ao delatar o fichario",
+                error: err.message 
+            });
         }
     },
 
     async deleteAll (req, res) {
         try{
-            const deleteFicharios = await Ficha.deleteMany({})
+            const deleteFicharios = await Ficha.deleteMany({});
 
             if(deleteFicharios.deletedCount > 0) {
                 return res.status(200).send({ 
@@ -130,18 +147,21 @@ module.exports = {
                     count: deleteFicharios.deletedCount })
             }
             else {
-                return res.status(400).send({ message: 'Não há nehnuma ficha para deletar' })
+                return res.status(400).send({ message: 'Não há nehnuma ficha para deletar' });
             }
         }
         catch(err){
-            return res.status(400).send(err)
+            res.status(400).send({
+                message: "Erro ao deletar todas as fichas",
+                error: err.message 
+            });
         }
     },
 
     // Avaliar ficha e definir prioridade
     async prioridadeFicha(req, res) {
         const { ficha_id, psico_id, paci_id } = req.params;
-        const { prioridade } = req.body;
+        const { prioridade, agenda } = req.body;
         const { auth } = req.headers;
 
         try {
@@ -160,16 +180,22 @@ module.exports = {
             const ficha = await Ficha.findById(ficha_id);
             if (!ficha) return res.status(400).send({ message: 'Ficha não encontrada' });
 
-            if (ficha.user !== paci_id) {
-                return res.status(400).send({ message: 'Ficha não pertence ao paciente informado' });
-            }
+            if (ficha.user !== paci_id) return res.status(400).send({ message: 'Ficha não pertence ao paciente informado' });
+
+            const consulta = await Consulta.findById(paci_id);
+            if(!consulta) return res.status(400).send({ message: 'Paciente nao tem consulta' })
+            
 
             // Define a prioridade e altera o status para 'Avaliada'
             ficha.prioridade = prioridade;
             ficha.status = 'Avaliada';
             ficha.triagem = false;
 
+            consulta.agenda = agenda;
+
             await ficha.save();
+            await consulta.save();
+
 
             return res.status(200).send({ 
                 message: 'Prioridade definida com sucesso', 

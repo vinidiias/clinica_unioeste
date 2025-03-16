@@ -16,22 +16,22 @@ async function hashPassword(password) {
 module.exports = {
     async create(req, res) {
         
-        const { email, name, password, role } = req.body
+        const { email, name, password, role } = req.body;
 
-        const flag = UserEmpty(email, name, password)
-        if(flag) return res.status(400).send({ message: 'Campo vazio'})
+        const flag = UserEmpty(email, name, password);
+        if(flag) return res.status(400).send({ message: 'Campo vazio'});
 
-        const validRole = ['paciente', 'psicologo']
-        if(!validRole.includes(role)) return res.status(400).send({ message: 'Papel invalido'})
+        const validRole = ['paciente', 'psicologo'];
+        if(!validRole.includes(role)) return res.status(400).send({ message: 'Papel invalido' });
 
         try{
-            const emailIsValid = await verifyEmail(email)
-            if(!emailIsValid) return res.status(400).send({ message: 'Email inválido' })
+            const emailIsValid = await verifyEmail(email);
+            if(!emailIsValid) return res.status(400).send({ message: 'Email inválido' });
 
-            const userAlreadyExists = await User.findOne({ email })
-            if(userAlreadyExists) return res.status(400).send({ message: 'Usuário já existe' })
+            const userAlreadyExists = await User.findOne({ email });
+            if(userAlreadyExists) return res.status(400).send({ message: 'Usuário já existe' });
         
-            const hashedPassword = await hashPassword(password)
+            const hashedPassword = await hashPassword(password);
         
             const createdUser = await User.create({
                 email,
@@ -39,68 +39,77 @@ module.exports = {
                 password: hashedPassword,
                 role,
                 isFirstLogin: true // Define automaticamente como true na criação
-            })
+            });
 
-            return res.status(200).send(createdUser)
+            return res.status(200).send(createdUser);
 
         } catch (err) {
-            res.status(400).send(err)
+            res.status(400).send({
+                message: "Erro ao criar o usuario",
+                error: err.message 
+            });
         }
     },
 
     async delete(req, res){
-        const { user_id } = req.params
-        const { auth } = req.headers
+        const { user_id } = req.params;
+        const { auth } = req.headers;
 
-        if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'})
+        if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'});
             
         try{
-            const deletedUser = await User.findByIdAndDelete(user_id)
-            if(!deletedUser) return res.status(400).send({ message: 'Usuário não encontrado'})
+            const deletedUser = await User.findByIdAndDelete(user_id);
+            if(!deletedUser) return res.status(400).send({ message: 'Usuário não encontrado'});
 
-            return res.status(200).send({ status: 'Deletado com sucesso', user: deletedUser})
+            return res.status(200).send({ status: 'Deletado com sucesso', user: deletedUser});
         }
         catch(err){
-            return res.status(400).send(err)
+            res.status(400).send({
+                message: "Erro ao deletar o usuario",
+                error: err.message 
+            });
         }
     },
 
     async index(req, res){
         try {
-            const allUsers = await User.find()
-            return res.status(200).send(allUsers)
+            const allUsers = await User.find();
+            return res.status(200).send(allUsers);
         }
         catch(err){
-            return res.status(400).send(err)
+            res.status(400).send({
+                message: "Erro ao listar usuarios",
+                error: err.message 
+            });
         }
     },
 
     async updateUser(req, res) {
-        const { email, password, ...dadosAtualizado } = req.body
-        const { user_id } = req.params
-        const { auth } = req.headers
-    
-        if (user_id !== auth) return res.status(400).send({ message: 'Não autorizado' })
+        const { email, password, ...dadosAtualizado } = req.body;
+        const { user_id } = req.params;
+        const { auth } = req.headers;
 
-        const userAtual = await User.findById(user_id)
-        if(!userAtual) return res.status(400).send({ message: 'Usuario nao encontrado' })
+        if (user_id !== auth) return res.status(400).send({ message: 'Não autorizado' });
+
+        const userAtual = await User.findById(user_id);
+        if(!userAtual) return res.status(400).send({ message: 'Usuario nao encontrado' });
     
         try {
             // Verifica e valida email
             if (email) {
-                const emailValido = await verifyEmail(email)
-                if (!emailValido) return res.status(400).send({ message: 'Email inválido' })
+                const emailValido = await verifyEmail(email);
+                if (!emailValido) return res.status(400).send({ message: 'Email inválido' });
     
                 const emailExists = await User.findOne({ email, _id: { $ne: user_id } })
-                if (emailExists) return res.status(400).send({ message: 'E-mail já está em uso' })
+                if (emailExists) return res.status(400).send({ message: 'E-mail já está em uso' });
     
-                dadosAtualizado.email = email
+                dadosAtualizado.email = email;
             }
     
             // Verifica e encripta a senha, se for alterada
             if (password) {
-                const hashedPassword = await hashPassword(password)
-                dadosAtualizado.password = hashedPassword
+                const hashedPassword = await hashPassword(password);
+                dadosAtualizado.password = hashedPassword;
             }
     
             // Atualiza apenas os campos enviados no body
@@ -110,16 +119,18 @@ module.exports = {
                 }
             })
 
-            const userAtualizado = await userAtual.save()
+            const userAtualizado = await userAtual.save();
 
             return res.status(200).send({ 
                 message: 'Dados do usuario atualizado com sucesso',
                 user: userAtualizado
-            })
+            });
         }
         catch (err) {
-            return res.status(400).send(err) // Certifique-se de que só envia uma resposta em caso de erro
+            res.status(400).send({
+                message: "Erro ao atualziar o usuario",
+                error: err.message 
+            });
         }
-    }
-    
+    }  
 }

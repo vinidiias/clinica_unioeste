@@ -7,7 +7,7 @@ module.exports = {
 
     async agendarTriagem(req, res) {
         const { ficha_id, psico_id, paci_id } = req.params;
-        const { agenda } = req.body;
+        const { agenda, horario } = req.body;
         const { auth } = req.headers;
     
         try {
@@ -41,6 +41,7 @@ module.exports = {
             // Cria a consulta
             const createConsulta = await Consulta.create({
                 agenda,
+                horario,
                 psicologo_id: psico_id,
                 paciente_id: paci_id
             });
