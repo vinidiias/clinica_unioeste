@@ -109,7 +109,7 @@ module.exports = {
         }
     },
 
-    async  listarPacientesEmTriagem(req, res) {
+    async  indexPacientesEmTriagem(req, res) {
         const { psico_id } = req.params;
         const { auth } = req.headers;
     
@@ -155,7 +155,7 @@ module.exports = {
         }
     },
     
-    async listarPacientesAvaliados(req, res) {
+    async indexPacientesAvaliados(req, res) {
         const { psico_id } = req.params;
         const { auth } = req.headers;
     
