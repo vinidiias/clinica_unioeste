@@ -194,9 +194,9 @@ module.exports = {
             const ficha = await Ficha.findById(ficha_id);
             if (!ficha) return res.status(400).send({ message: 'Ficha não encontrada' });
 
-            if (ficha.user !== paci_id) return res.status(400).send({ message: 'Ficha não pertence ao paciente informado' });
+            if (ficha.user.toString() !== paci_id) return res.status(400).send({ message: 'Ficha não pertence ao paciente informado' });
 
-            const consulta = await Consulta.findById(paci_id);
+            const consulta = await Consulta.findOne({paciente_id: paci_id});
             if(!consulta) return res.status(400).send({ message: 'Paciente nao tem consulta' })
             
 
