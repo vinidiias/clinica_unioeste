@@ -153,24 +153,15 @@ module.exports ={
 
     async updatePessoa (req, res){
         const {cpf, birth, phone, ...dadosAtualizado} = req.body
-        const { user_id, pessoa_id } = req.params 
+        const { user_id} = req.params 
         const { auth } = req.headers
 
         if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado' });
 
-        const PessoaAtual = await Pessoa.findById(user_id)
+        const PessoaAtual = await Pessoa.findOne({ user: user_id})
         if(!PessoaAtual) return res.status(400).send({ message: 'Usuario nao encontrado' });
 
-        try{
-            let pessoa;
-
-            if (pessoa_id) pessoa = await Pessoa.findById(new mongoose.Types.ObjectId(pessoa_id));
-            
-            else if (user_id) pessoa = await Pessoa.findOne({ user: user_id });
-    
-            if (!pessoa) return res.status(404).send({ message: 'Nenhuma informação encontrada para este usuário ou pessoa' });
-            
-    
+        try{              
             if(cpf){
                 const cpfIsValid = await isValidCPF(cpf);
                 if(!cpfIsValid) return res.status(400).send({ message: 'CPF inválid' });
