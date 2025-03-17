@@ -53,7 +53,7 @@ routes.post('/agendarConsulta/:ficha_id/:psico_id/:paci_id', ConsultaController.
 routes.get('/consultaPsicologo/:psico_id', ConsultaController.indexByPsicologo);
 routes.get('/consultasTraiagem/:psico_id', ConsultaController.indexPacientesEmTriagem);
 routes.get('/consultaAvaliados/:psico_id', ConsultaController.indexPacientesAvaliados);
-routes.patch('/atualizarConsulta/:ficha_id/:psico_id/:paci_id', ConsultaController.update);
-routes.delete('/deletarConsulta/:consulta_id', ConsultaController.deleteByConsulta)
+routes.patch('/atualizarConsulta/:ficha_id/:psico_id/:paci_id', ConsultaController.createSemana);
+routes.patch('/atualizaPrioridade/:ficha_id/:pscio_id/', ConsultaController.updatePrioridade);
 
 module.exports = routes
