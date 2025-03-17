@@ -21,8 +21,8 @@ routes.delete('/:user_id/user', userController.delete)
 //Pessoas
 routes.post('/:user_id/pessoa', PessoaController.create)
 routes.get('/pessoas', PessoaController.indexAll)
-routes.get('/:user_id/pessoa', PessoaController.indexByUser)
-routes.patch('/pessoa/:user_id', PessoaController.updatePessoa)
+routes.get('/:user_id/:pessoa_id/pessoa', PessoaController.indexByUser)
+routes.patch('/pessoa/:user_id/:pessoa_id', PessoaController.updatePessoa)
 routes.delete('/pessoas/delete', PessoaController.deleteAll)
 routes.delete('/:user_id/pessoa/:pessoa_id', PessoaController.delete)
 
@@ -44,13 +44,16 @@ routes.post('/psicologo/validate', InvaitedController.validated)
 routes.post('/psicologo/register', InvaitedController.register)
 
 //Administrador
-// routes.post('/admin/convite', InvaitedController.invited)
-// routes.post('/admin/validate', InvaitedController.validated)
-// routes.post('/admin/register', InvaitedController.registerAdmin)
+routes.post('/admin/convite', InvaitedController.invited)
+routes.post('/admin/validate', InvaitedController.validated)
+routes.post('/admin/register', InvaitedController.registerAdmin)
 
 //Consultas
 routes.post('/agendarConsulta/:ficha_id/:psico_id/:paci_id', ConsultaController.agendarTriagem)
 routes.get('/consultaPsicologo/:psico_id', ConsultaController.indexByPsicologo);
-routes.get('/todasConsulta', ConsultaController.indexAll);
+routes.get('/consultasTraiagem/:psico_id', ConsultaController.indexPacientesEmTriagem);
+routes.get('/consultaAvaliados/:psico_id', ConsultaController.indexPacientesAvaliados);
+routes.patch('/atualizarConsulta/:ficha_id/:psico_id/:paci_id', ConsultaController.update);
+routes.delete('/deletarConsulta/:consulta_id', ConsultaController.deleteByConsulta)
 
 module.exports = routes
