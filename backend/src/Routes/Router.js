@@ -32,7 +32,7 @@ routes.get('/ficharios', FichaController.indexAll)
 routes.get('/:user_id/fichario/', FichaController.indexByUser)
 routes.delete('/:user_id/:ficha/', FichaController.delete)
 routes.delete('/ficharios/delete', FichaController.deleteAll)
-routes.patch('/avaliarPrioridade/:ficha_id', FichaController.prioridadeFicha)
+routes.patch('/avaliarPrioridade/:ficha_id/:psico_id/:paci_id', FichaController.prioridadeFicha)
 
 
 //Sessao
