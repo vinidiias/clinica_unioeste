@@ -10,9 +10,16 @@ import Button from "../form/Button";
 
 const ViewFicha = ({ data, id }) => {
   console.log(data)
-  const formMethods = useForm({defaultValues: data ? Object.assign(data.ficha, data.pessoa, data.user) : {}});
+  const formMethods = useForm({
+    defaultValues: data 
+      ? { 
+          ...data.ficha,
+          ...data.user,
+          ...data.pessoa
+        }
+      : {}
+  });
   const [openAgenda, setOpenAgenda] = useState(false)
-
   const buttonsFicha = [
     { label: 'Agendar Triagem', type: 'button', customClass: 'align', handleClick: () => setOpenAgenda(true) },
    ]
@@ -26,7 +33,7 @@ const ViewFicha = ({ data, id }) => {
           <FichaForm fieldsContainers={fields} buttons={buttonsFicha} disabled={true}
           />
         </div>
-        <AgendaFormModal defaultValues={data ? Object.assign(data.ficha, data.user) : {}} open={openAgenda} handleClose={() => setOpenAgenda(false)} />
+        <AgendaFormModal data={data ? data : {}} open={openAgenda} handleClose={() => setOpenAgenda(false)} />
       </FormProvider>
     </>
   );

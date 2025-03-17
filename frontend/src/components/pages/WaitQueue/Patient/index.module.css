@@ -3,7 +3,7 @@
     padding: .8em;
     display: grid;
     align-items: center;
-    grid-template-columns: 1fr repeat(6, 3fr);
+    grid-template-columns: 1fr repeat(7, 3fr);
     transition: .5s;
     border-bottom: 1px solid rgb(189, 189, 189);
 }

@@ -1,7 +1,7 @@
 .header {
     padding: .8em;
     display: grid;
-    grid-template-columns: 1fr repeat(6, 3fr);
+    grid-template-columns: 1fr repeat(7, 3fr);
     border-bottom: 1px solid rgb(189, 189, 189);
 }
 

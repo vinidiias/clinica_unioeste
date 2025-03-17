@@ -3,7 +3,9 @@ import { FaRegSquare } from 'react-icons/fa6';
 
 import styles from './index.module.css'
 
-const Patient = ({ img, name, vinculo, indicated='Não', date, priority, isSelected, index, setOver, over, handleClick }) => {
+const Patient = ({ img, name, vinculo, prioridade='Não', date, priority, isSelected, index, setOver, over, handleClick, consultated }) => {
+  const data = new Date(date)
+  
     return (
       <div
         className={`${styles.patients} ${
@@ -24,8 +26,9 @@ const Patient = ({ img, name, vinculo, indicated='Não', date, priority, isSelec
         )}
         <h3>{name}</h3>
         <h3>{vinculo}</h3>
-        <h3>{indicated}</h3>
-        <h3>23/11/2024</h3>
+        <h3>{prioridade}</h3>
+        <h3>{`${data.getDate()}/${data.getMonth()}/${data.getFullYear()}`}</h3>
+        <h3>{consultated}</h3>
       </div>
     )
 }

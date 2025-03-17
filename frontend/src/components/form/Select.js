@@ -7,7 +7,9 @@ const Select = ({ name, text, options, disabled }) => {
 
     return (
       <div className={styles.select}>
-        <label htmlFor={name}>{text} *</label>
+        {text && (
+          <label htmlFor={name}>{text} *</label>
+        )}
         <select disabled={disabled} defaultValue='' required {...register(name)} name={name} id={name}>
           <option value="" hidden>Selecione uma opção</option>
           {options.map((option, index) => (

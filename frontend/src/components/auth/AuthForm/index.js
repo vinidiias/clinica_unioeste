@@ -82,7 +82,7 @@ const AuthForm = ({
 
   return (
     <>
-      <h1>{title}</h1>
+      {title && <h1>{title}</h1>}
       {fields.length > 0 &&
         fields.map((field, index) => {
           switch (field.type) {

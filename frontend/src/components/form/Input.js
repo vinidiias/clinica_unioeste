@@ -16,7 +16,9 @@ const Input = ({ type, name, text, handleOnChange, placeholder, autoComplete, cu
             .join(" ")
         }`}
       >
-        <label htmlFor={name}>{text} *</label>
+        {text && (
+          <label htmlFor={name}>{text} *</label>
+        )}
         <input
           type={type}
           name={name}

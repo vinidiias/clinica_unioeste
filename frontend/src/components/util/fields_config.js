@@ -110,6 +110,43 @@ export const personal_data_fields = [
    },
 ]
 
+export const table_ficha_fields = [
+  { turno: 'Manhã', type: 'label', cell: [
+    { name: "preferredDay.morning_monday", type: 'checkbox'},
+    { name: "preferredDay.morning_tuesday", type: 'checkbox'},
+    { name: "preferredDay.morning_wednesday", type: 'checkbox'},
+    { name: "preferredDay.morning_thursday", type: 'checkbox'},
+    { name: "preferredDay.morning_friday", type: 'checkbox'},
+  ]},
+  { turno: 'Tarde', type: 'label', cell: [
+    { name: "preferredDay.afternoon_monday", type: 'checkbox'},
+    { name: "preferredDay.afternoon_tuesday", type: 'checkbox'},
+    { name: "preferredDay.afternoon_wednesday", type: 'checkbox'},
+    { name: "preferredDay.afternoon_thursday", type: 'checkbox'},
+    { name: "preferredDay.afternoon_friday", type: 'checkbox'},
+  ]},
+  { turno: 'Noite', type: 'label', cell: [
+    { name: "preferredDay.night_monday", type: 'checkbox'},
+    { name: "preferredDay.night_tuesday", type: 'checkbox'},
+    { name: "preferredDay.night_wednesday", type: 'checkbox'},
+    { name: "preferredDay.night_thursday", type: 'checkbox'},
+    { name: "preferredDay.night_friday", type: 'checkbox'},
+  ]},
+]
+
+export const table_consultation_fields = [
+  { turno: 'Manhã', type: 'label', cell: [
+    { name: "semana.Segunda-feira", type: 'checkbox'},
+    { name: "semana.Terça-feira", type: 'checkbox'},
+    { name: "semana.Quarta-feira", type: 'checkbox'},
+    { name: "semana.Quinta-feira", type: 'checkbox'},
+    { name: "semana.Sexta-feira", type: 'checkbox'},
+  ]},
+]
+
+export const headsConsultation_table = [ 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta']
+
+
 export const first_acess_fields = [
   {
     name: "img",

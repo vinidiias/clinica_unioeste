@@ -8,15 +8,17 @@ import Button from "../../../form/Button";
 import ProfileSubmit from "../ProfileSubmit";
 import { FormProvider, useForm } from "react-hook-form";
 
-const Adress = () => {
+const Adress = ({ data }) => {
+  console.log(data)
   const [edit, setEdit] = useState(true);
-  const formMethods = useForm()
+  const formMethods = useForm({ defaultValues: {addressComplet: data} })
+  const { userData } = useContext(UserContext)
 
   const fields = [
     {
       field: (
         <Input
-          name={"addressComplete.address"}
+          name={"addressComplet.address"}
           text={"Endereço"}
           type={"text"}
           disabled={edit}
@@ -39,39 +41,21 @@ const Adress = () => {
     setEdit(!edit);
   }
 
-  async function handleEdit(data) {
+  async function handleEdit(dataAddress) {
     console.log(data)
-      /*const adressComplet = {
-        adress,
-        number
-    }
-      console.log(adressComplet)
-       if(!validation(adressComplet)) {
-            console.log('Dados de endereço incompleto(s)! Preencha todos os campos.')
-            return
-       }
        try{
-          const adressUpdated = await api.patch(`/pessoa/${userData.user_id}`, {adressComplet}, {
-            headers: {'auth': `${userData.user_id}`}
+          await api.patch(`/pessoa/${userData.user_id}`, dataAddress, {
+            headers: {auth: `${userData.user_id}`}
           })
+          .then(resp => {
+            console.log(resp)
+            editToggle()
+          })
+          .catch(err => console.error(err))
 
-          if (!adressUpdated.data.pessoa) {
-            console.error('Dados da pessoa não foram retornados:', adressUpdated);
-            return;
-          }
-          
-          const data = adressUpdated.data.pessoa
-
-           setPessoa(prevStat => ({
-            ...prevStat,
-            adressComplet: data.adressComplet
-           }))
-
-           console.log(pessoa)
-           editToggle()
        } catch(err){
         console.log(err)
-       }*/
+       }
     }
 
   return (

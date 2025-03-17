@@ -26,9 +26,9 @@ const withLoading = (Component) => {
     return (
       <>
         {loading ? (
-          <Loading />
+          <></>
         ) : (
-          <Component data={data} id={id} {...props} />
+          <Component data={data} id={id} loading={loading} {...props} />
         )}
       </>
     );

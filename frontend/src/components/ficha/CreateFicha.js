@@ -23,10 +23,10 @@ const CreateFicha = () => {
 
   const handleCreateFicha = async (data) => {
     const filteredData = Object.fromEntries(
-      Object.entries(data.preferred_day).filter(([_, value]) => value)
+      Object.entries(data.preferredDay).filter(([_, value]) => value)
     );
 
-    data.preferred_day = filteredData;
+    data.preferredDay = filteredData;
 
     console.log(data);
     try {
