@@ -17,21 +17,13 @@ const UserRegister = ({ onAction }) => {
     
     const handleNavigate = () => navigate("/login");
 
-    const handleRegisterUser = async (d) => {
-
-      const email = d.email
-      const name = d.name
-      const password = d.password
-
-      console.log(d)
-
+    const handleRegisterUser = async (data) => {
+      if(data.password !== data.confirmPassword) {
+        alert("Senhas não correspondem!")
+      }
+      delete data.confirmPassword
       try{
-        const userCreated = await api.post('/user', {
-          email,
-          name,
-          password,
-          role: 'paciente'
-        })
+        const userCreated = await api.post('/user', {...data, role: 'paciente'})
   
         if(!userCreated) return alert('Erro ao criar conta. Tente novamente...')
   
@@ -52,11 +44,31 @@ const UserRegister = ({ onAction }) => {
     }
 
     const fields = [
-        { name: 'email', label: 'Email', type: 'email', placeholder: 'Digite seu email' },
-        { name: 'name', label: 'Nome', type: 'name', placeholder: 'Digite seu nome' },
-        { name: 'password', label: 'Senha', type: 'password', placeholder: 'Digite sua senha' },
-        { name: 'confirm-password', label: 'Confirmar Senha', type: 'password', placeholder: 'Digite sua senha' },
-    ]
+      {
+        name: "name",
+        label: "Nome",
+        type: "text",
+        placeholder: "Digite seu nome",
+      },
+      {
+        name: "email",
+        label: "Email",
+        type: "email",
+        placeholder: "Digite seu email",
+      },
+      {
+        name: "password",
+        label: "Senha",
+        type: "password",
+        placeholder: "Digite sua senha",
+      },
+      {
+        name: "confirmPassword",
+        label: "Confirmar Senha",
+        type: "password",
+        placeholder: "Digite sua senha",
+      },
+    ];
   
     const btns = [
         { label: 'Criar conta', type: 'submit' },
@@ -67,9 +79,7 @@ const UserRegister = ({ onAction }) => {
       <>
         <FormProvider {...formMethods}>
           <form
-            onSubmit={formMethods.handleSubmit((data) =>
-              onAction(() => handleRegisterUser(data))
-            )}
+            onSubmit={formMethods.handleSubmit(handleRegisterUser)}
           >
             <AuthForm title="Criar" fields={fields} btns={btns} />
           </form>
@@ -78,4 +88,4 @@ const UserRegister = ({ onAction }) => {
     );
 }
 
-export default withAuth(withStyleAuth(UserRegister))
+export default withStyleAuth(UserRegister)

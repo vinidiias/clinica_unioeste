@@ -10,7 +10,7 @@ import withLoading from "../../../hocs/withLoading";
 
 const Profile = ({ data }) => {
   const { userData } = useContext(UserContext);
-
+console.log(data)
   return (
     <div className={styles.profile}>
       <PersonalData
@@ -23,7 +23,7 @@ const Profile = ({ data }) => {
           } || {}
         }
       />
-      <Adress />
+      <Adress data={data?.addressComplet} />
       <Escolaridade />
     </div>
   );

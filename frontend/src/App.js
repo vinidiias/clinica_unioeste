@@ -18,6 +18,7 @@ import WrappedViewFicha from './components/ficha/ViewFicha';
 import WrappedWaitQueue from './components/pages/WaitQueue';
 import AuthForm from './components/auth/AuthForm';
 import PsyRegister from './components/pages/PsyRegister';
+import HistoryConsultation from './components/pages/HistoryConsultation';
 
 function App() {
   return (
@@ -59,6 +60,14 @@ function App() {
               }
             />
             <Route
+              path="/history"
+              element={
+                <Container customClass="start">
+                  <HistoryConsultation />
+                </Container>
+              }
+            />
+            <Route
               path="/profile"
               element={
                 <Container customClass="height">
@@ -91,11 +100,31 @@ function App() {
               }
             />
             <Route
-              path="/psychologist/screening"
+              path="/psychologist/queue/screening"
               element={
                 <RoleBasedComponent allowedRoles={["admin", "psicologo"]}>
                   <Container customClass="height">
-                    <WrappedWaitQueue />
+                    <WrappedWaitQueue status="Em Triagem" />
+                  </Container>
+                </RoleBasedComponent>
+              }
+            />
+            <Route
+              path="/psychologist/queue/avaliation"
+              element={
+                <RoleBasedComponent allowedRoles={["admin", "psicologo"]}>
+                  <Container customClass="height">
+                    <WrappedWaitQueue status="Em avaliação" />
+                  </Container>
+                </RoleBasedComponent>
+              }
+            />
+            <Route
+              path="/psychologist/queue/avaliated"
+              element={
+                <RoleBasedComponent allowedRoles={["admin", "psicologo"]}>
+                  <Container customClass="height">
+                    <WrappedWaitQueue status="Avaliada" />
                   </Container>
                 </RoleBasedComponent>
               }

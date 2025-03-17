@@ -25,10 +25,13 @@ const Home = () => {
     navigate('/profile')
   }
   const navigateconsult = () => {
-    navigate('/psychologist/screening')
+    navigate('/psychologist/queue/screening')
   }
   const navigatehistory = () => {
     navigate('/history')
+  }
+  const navigateInvite = () => {
+    navigate('/admin/invite/psychologist')
   }
 
     return (
@@ -44,7 +47,7 @@ const Home = () => {
             icon={<FaPlusCircle style={{ color: "#fff" }} />}
             handleClick={navigateficha}
           />
-          <RoleBasedComponent allowedRoles={["admin", 'psicologo']}>
+          <RoleBasedComponent allowedRoles={["admin", "psicologo"]}>
             <System
               text="Atender pacientes"
               icon={<FcCustomerSupport />}
@@ -52,9 +55,14 @@ const Home = () => {
             />
           </RoleBasedComponent>
           <System
-            text="Histórico de Consultas"
+            text="Sua Consulta"
             icon={<FaHistory style={{ color: "#fff" }} />}
             handleClick={navigatehistory}
+          />
+          <System
+            text="Convidar Psicológo"
+            icon={<FaHistory style={{ color: "#fff" }} />}
+            handleClick={navigateInvite}
           />
         </div>
       </div>
