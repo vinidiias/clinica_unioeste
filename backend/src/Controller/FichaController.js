@@ -92,31 +92,44 @@ module.exports = {
             }
         }, 
     
-    async indexByUser (req, res) {
-        const { user_id } = req.params;
-        const { auth } = req.headers;
-
-        if(user_id !== auth) return res.status(400).send({ message: 'Nao autorizado'});
-
-        try {
-            const allFicharioUser = await Ficha.findOne({ user: user_id });
-            
-            const user = await User.findById(user_id);
-            const pessoa = await Pessoa.findOne({ user: user_id});
-
-            return res.status(200).send({
-                ficha: allFicharioUser,
-                pessoa: pessoa,
-                user: user
-            });    
-        }
-        catch (err){
-            res.status(400).send({
-                message: "Erro ao listar seu fichario",
-                error: err.message 
-            });
-        }
-    },
+        async indexByUser(req, res) {
+            const { user_id } = req.params;
+            const { auth } = req.headers;
+        
+            if (user_id !== auth) {
+                return res.status(403).send({ message: 'Não autorizado' });
+            }
+        
+            try {
+                // Busca a ficha do usuário
+                const ficha = await Ficha.findOne({ user: user_id });
+        
+                // Busca os dados do usuário
+                const user = await User.findById(user_id);
+        
+                // Busca os dados da pessoa associada ao usuário
+                const pessoa = await Pessoa.findOne({ user: user_id });
+        
+                //Busca todas as consultas onde o usuário é o paciente
+                const consultas = await Consulta.find({ paciente_id: user_id })
+                    .populate('psicologo_id', 'name') // Apenas o nome do psicólogo
+                    .select('agenda horario'); // Seleciona apenas esses campos
+        
+                return res.status(200).send({
+                    ficha: ficha,
+                    pessoa: pessoa,
+                    user: user,
+                    consultas: consultas
+                });
+        
+            } catch (err) {
+                console.error("Erro ao listar informações do usuário:", err);
+                res.status(500).send({
+                    message: "Erro ao listar seu fichário e consultas",
+                    error: err.message
+                });
+            }
+        },
 
     async delete (req, res) {
         const { ficha_id, user_id } = req.params;
