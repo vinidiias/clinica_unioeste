@@ -186,10 +186,12 @@ module.exports = {
                     const pessoa = await Pessoa.findOne({ user: ficha.user._id });
                     return {
                         paciente: {
+                            id: ficha.user._id,  
                             name: ficha.user.name, 
                             email: ficha.user.email
                         },
                         ficha: {
+                            id: ficha._id,  
                             status: ficha.status,
                             prioridade: ficha.prioridade
                         },
