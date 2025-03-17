@@ -102,21 +102,38 @@ module.exports ={
     }, 
 
     async indexByUser (req, res) {
-        const { user_id } = req.params;
+        const { user_id, pessoa_id } = req.params; // Pode vir um dos dois IDs
         const { auth } = req.headers;
-
-        if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado'});
-        
-        try{
-            const allPessoaOfUser = await Pessoa.find({
-                user: user_id
-            });
-
-            return res.status(200).send(allPessoaOfUser);
+    
+        if (user_id !== auth) {
+            return res.status(400).send({ message: 'Não autorizado' });
+        }
+    
+        try {
+            let pessoa;
+    
+            // Se o ID da Pessoa for informado, busca pelo _id
+            if (pessoa_id) {
+                console.log("Buscando pessoa pelo ID:", pessoa_id);
+                pessoa = await Pessoa.findById(new mongoose.Types.ObjectId(pessoa_id)).populate('user', 'name email role');
+            }
+            // Caso contrário, busca pelo user_id
+            else if (user_id) {
+                console.log("Buscando pessoa pelo user_id:", user_id);
+                pessoa = await Pessoa.findOne({ user: user_id }).populate('user', 'name email role');
+            }
+    
+            // Se nenhuma pessoa foi encontrada, retorna 404
+            if (!pessoa) {
+                return res.status(404).send({ message: 'Nenhuma informação encontrada para este usuário ou pessoa' });
+            }
+    
+            return res.status(200).send(pessoa);
         } catch (err) {
-            res.status(400).send({
-                message: "Erro ao listar pessoa",
-                error: err.message 
+            console.error("Erro ao buscar pessoa:", err);
+            return res.status(500).send({
+                message: "Erro ao listar informações da pessoa",
+                error: err.message
             });
         }
     },
@@ -136,7 +153,7 @@ module.exports ={
 
     async updatePessoa (req, res){
         const {cpf, birth, phone, ...dadosAtualizado} = req.body
-        const { user_id } = req.params 
+        const { user_id, pessoa_id } = req.params 
         const { auth } = req.headers
 
         if(user_id !== auth) return res.status(400).send({ message: 'Não autorizado' });
@@ -145,6 +162,15 @@ module.exports ={
         if(!PessoaAtual) return res.status(400).send({ message: 'Usuario nao encontrado' });
 
         try{
+            let pessoa;
+
+            if (pessoa_id) pessoa = await Pessoa.findById(new mongoose.Types.ObjectId(pessoa_id));
+            
+            else if (user_id) pessoa = await Pessoa.findOne({ user: user_id });
+    
+            if (!pessoa) return res.status(404).send({ message: 'Nenhuma informação encontrada para este usuário ou pessoa' });
+            
+    
             if(cpf){
                 const cpfIsValid = await isValidCPF(cpf);
                 if(!cpfIsValid) return res.status(400).send({ message: 'CPF inválid' });
