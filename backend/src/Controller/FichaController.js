@@ -26,8 +26,6 @@ module.exports = {
             const existFicha = await Ficha.findOne({ user: user_id });
             if(existFicha) return res.status(400).send({ message: 'Ficha ja existe' });
 
-            const pessoa = await Pessoa.findOne({ user: user_id});
-            if(pessoa) return res.status(400).send({ message: 'Pesosa nao encontrada'})
 
             // Cria o documento usando o modelo Ficha
             const createFicha = await Ficha.create({
@@ -41,7 +39,6 @@ module.exports = {
                 psychiatric,
                 observation,
                 user: user_id,
-                pessoa: pessoa._id
 
             });
             //console.log(createFicha)

@@ -43,8 +43,6 @@ const fichaSchema = new mongoose.Schema({
         night_wednesday: { type: Boolean, required: false },
         night_thursday: { type: Boolean, required: false },
         night_friday: { type: Boolean, required: false },    
-
-        required: true
         
     },
 
@@ -118,8 +116,8 @@ const fichaSchema = new mongoose.Schema({
 
     status: {
         type: String,
-        enum: ['Em avaliação', 'Avaliada'],
-        default: 'Em avaliação',
+        enum: ['Em avaliação', 'Avaliada', 'Em Triagem'],
+        default: 'Em Triagem',
     },
 
     user: {
@@ -129,12 +127,7 @@ const fichaSchema = new mongoose.Schema({
         unique: true,
     },
 
-    pessoa: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Pessoa',
-        required: true,
-        unique: true,
-    },
+
 })
 
 const ficha = mongoose.model('Ficha', fichaSchema)
