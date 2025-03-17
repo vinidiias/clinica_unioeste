@@ -304,13 +304,11 @@ module.exports = {
             if (horario) consulta.horario = horario;
     
             if (!consulta.semana) {
-                consulta.semana = {}; 
+                consulta.semana = [];
             }
     
-            if (semana) {
-                Object.keys(semana).forEach((dia) => {
-                    consulta.semana[dia] = semana[dia]; // Adiciona os valores recebidos
-                });
+            if (Array.isArray(semana) && semana.length > 0) {
+                consulta.semana = [...new Set([...consulta.semana, ...semana])]; // Remove duplicatas e adiciona os novos valores
             }
     
             await consulta.save();
