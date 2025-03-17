@@ -47,7 +47,6 @@ module.exports = {
             const fichaComUser = await Ficha.findById(createFicha._id).populate('user'); //tenta adicionar pessoas tmb sem ser o populate
 
             fichaComUser.triagem = true;
-            fichaComUser.status = 'Em avaliação';
 
             await fichaComUser.save();
 
