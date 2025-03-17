@@ -195,7 +195,7 @@ module.exports = {
             });
     
         } catch (err) {
-            return res.status(500).send({
+            return res.status(400).send({
                 message: 'Erro ao listar pacientes avaliados',
                 error: err.message
             });
