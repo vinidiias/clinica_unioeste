@@ -163,27 +163,34 @@ module.exports = {
         const { auth } = req.headers;
     
         try {
-            // Verifica se o usuário autenticado é o psicólogo correspondente
+   
             if (psico_id !== auth) {
                 return res.status(403).send({ message: 'Não autorizado' });
             }
     
-            // Verifica se o psicólogo existe
+
             const psicologo = await User.findById(psico_id);
             if (!psicologo) return res.status(404).send({ message: 'Psicólogo não encontrado' });
             if (psicologo.role !== 'psicologo') return res.status(400).send({ message: 'Apenas psicólogos podem acessar essa lista' });
     
-            // Busca todas as fichas de pacientes que já foram avaliados e popula o `user`
+     
             const fichasAvaliadas = await Ficha.find({ status: "Avaliada" }).populate('user', 'name email');
     
             if (!fichasAvaliadas || fichasAvaliadas.length === 0) {
                 return res.status(404).send({ message: 'Nenhum paciente avaliado encontrado' });
             }
     
-            // Enriquecendo com os dados pessoais do paciente (Pessoa)
+
             const pacientesComDados = await Promise.all(
                 fichasAvaliadas.map(async (ficha) => {
                     const pessoa = await Pessoa.findOne({ user: ficha.user._id });
+    
+  
+                    const consultas = await Consulta.find({ 
+                        paciente_id: ficha.user._id, 
+                        psicologo_id: psico_id 
+                    }).select('agenda semana horario');
+    
                     return {
                         paciente: {
                             id: ficha.user._id,  
@@ -195,13 +202,15 @@ module.exports = {
                             status: ficha.status,
                             prioridade: ficha.prioridade
                         },
-                        pessoa
+                        pessoa,
+                        consultas
                     };
                 })
             );
     
             return res.status(200).send({
                 psicologo: {
+                    id: psicologo._id,
                     name: psicologo.name,
                     email: psicologo.email
                 },
