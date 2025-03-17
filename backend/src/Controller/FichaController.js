@@ -175,7 +175,7 @@ module.exports = {
     // Avaliar ficha e definir prioridade
     async prioridadeFicha(req, res) {
         const { ficha_id, psico_id, paci_id } = req.params;
-        const { prioridade, agenda } = req.body;
+        const { prioridade, agenda, horario } = req.body;
         const { auth } = req.headers;
 
         try {
@@ -206,6 +206,7 @@ module.exports = {
             ficha.triagem = false;
 
             consulta.agenda = agenda;
+            consulta.horario = horario;
 
             await ficha.save();
             await consulta.save();
