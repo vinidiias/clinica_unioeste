@@ -232,39 +232,38 @@ module.exports = {
         const { auth } = req.headers;
     
         try {
-            // Verifica se o paciente autenticado está acessando suas próprias consultas
             if (paci_id !== auth) {
                 return res.status(403).send({ message: 'Não autorizado' });
             }
     
-            // Verifica se o paciente existe
             const paciente = await User.findById(paci_id);
             if (!paciente) return res.status(404).send({ message: 'Paciente não encontrado' });
             if (paciente.role !== 'paciente') return res.status(400).send({ message: 'Somente pacientes podem acessar essa consulta' });
     
-            // Busca todas as consultas onde `paciente_id` seja igual ao `paci_id`
-            const consultas = await Consulta.find({ paciente_id: paci_id });
+            const consultas = await Consulta.find({ paciente_id: paci_id }).populate('psicologo_id', 'name');
     
             if (!consultas || consultas.length === 0) {
                 return res.status(404).send({ message: 'Nenhuma consulta encontrada para este paciente' });
             }
     
-            // Enriquecendo cada consulta com apenas o nome do psicólogo responsável
-            const consultasComNomePsicologo = await Promise.all(
-                consultas.map(async (consulta) => {
-                    const psicologo = await User.findById(consulta.psicologo_id).select('name'); // Retorna apenas o nome
-                    return {
-                        consulta,
-                        psicologo: psicologo ? psicologo.name : 'Psicólogo não encontrado'
-                    };
-                })
-            );
+            const consultasFormatadas = consultas.map(consulta => ({
+                consulta_id: consulta._id,
+                agenda: consulta.agenda,
+                horario: consulta.horario,
+                semana: consulta.semana,
+                psicologo: consulta.psicologo_id ? consulta.psicologo_id.name : 'Psicólogo não encontrado'
+            }));
     
             return res.status(200).send({
-                paciente: paciente.name,
-                consultas: consultasComNomePsicologo
+                paciente: {
+                    id: paciente._id,
+                    name: paciente.name
+                },
+                consultas: consultasFormatadas
             });
+    
         } catch (err) {
+            console.error("Erro ao listar consultas do paciente:", err);
             return res.status(500).send({
                 message: 'Erro ao listar consultas do paciente',
                 error: err.message
@@ -347,32 +346,26 @@ module.exports = {
         const { auth } = req.headers;
     
         try {
-            // 🔹 Verifica se o psicólogo está autenticado e autorizado
             if (psico_id !== auth) {
                 return res.status(403).send({ message: 'Não autorizado' });
             }
     
-            // 🔹 Verifica se o psicólogo existe
             const psicologo = await User.findById(psico_id);
             if (!psicologo) return res.status(404).send({ message: 'Psicólogo não encontrado' });
             if (psicologo.role !== 'psicologo') return res.status(400).send({ message: 'Apenas psicólogos podem atualizar a prioridade' });
     
-            // 🔹 Verifica se a ficha existe
             const ficha = await Ficha.findById(ficha_id).populate('user', 'name email role');
             if (!ficha) return res.status(404).send({ message: 'Ficha não encontrada' });
     
-            // 🔹 Verifica se a ficha pertence a um paciente
             if (ficha.user.role !== 'paciente') {
                 return res.status(400).send({ message: 'A ficha informada não pertence a um paciente' });
             }
     
-            // 🔹 Valida a prioridade
             const prioridadesValidas = ['Baixa', 'Média', 'Alta'];
             if (!prioridadesValidas.includes(prioridade)) {
                 return res.status(400).send({ message: 'Prioridade inválida. As opções são: Baixa, Média ou Alta' });
             }
     
-            // 🔹 Atualiza a prioridade
             ficha.prioridade = prioridade;
             await ficha.save();
     
