@@ -172,9 +172,8 @@ module.exports = {
             const psicologo = await User.findById(psico_id);
             if (!psicologo) return res.status(404).send({ message: 'Psicólogo não encontrado' });
             if (psicologo.role !== 'psicologo') return res.status(400).send({ message: 'Apenas psicólogos podem acessar essa lista' });
-
     
-            // Busca todas as fichas de pacientes que já foram avaliados
+            // Busca todas as fichas de pacientes que já foram avaliados e popula o `user`
             const fichasAvaliadas = await Ficha.find({ status: "Avaliada" }).populate('user', 'name email');
     
             if (!fichasAvaliadas || fichasAvaliadas.length === 0) {
@@ -186,19 +185,30 @@ module.exports = {
                 fichasAvaliadas.map(async (ficha) => {
                     const pessoa = await Pessoa.findOne({ user: ficha.user._id });
                     return {
-                        ficha,
+                        paciente: {
+                            name: ficha.user.name, 
+                            email: ficha.user.email
+                        },
+                        ficha: {
+                            status: ficha.status,
+                            prioridade: ficha.prioridade
+                        },
                         pessoa
                     };
                 })
             );
     
             return res.status(200).send({
-                psicologo: psicologo.name,
+                psicologo: {
+                    name: psicologo.name,
+                    email: psicologo.email
+                },
                 pacientesAvaliados: pacientesComDados
             });
     
         } catch (err) {
-            return res.status(400).send({
+            console.error("Erro ao listar pacientes avaliados:", err);
+            return res.status(500).send({
                 message: 'Erro ao listar pacientes avaliados',
                 error: err.message
             });
