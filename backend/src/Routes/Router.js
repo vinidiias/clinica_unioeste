@@ -53,6 +53,7 @@ routes.post('/agendarConsulta/:ficha_id/:psico_id/:paci_id', ConsultaController.
 routes.get('/consultaPsicologo/:psico_id', ConsultaController.indexByPsicologo);
 routes.get('/consultasTraiagem/:psico_id', ConsultaController.indexPacientesEmTriagem);
 routes.get('/consultaAvaliados/:psico_id', ConsultaController.indexPacientesAvaliados);
+routes.get('/consultasPaciente/:paci_id', ConsultaController.indexByPaciente);
 routes.post('/atualizarConsulta/:consulta_id/:psico_id/:paci_id', ConsultaController.createSemana);
 routes.patch('/atualizaPrioridade/:ficha_id/:pscio_id/', ConsultaController.updatePrioridade);
 
