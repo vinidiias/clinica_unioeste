@@ -277,9 +277,9 @@ module.exports = {
         }
     },
 
-    async update(req, res) {
+    async createSemana(req, res) {
         const { consulta_id, psico_id, paci_id } = req.params;
-        const { agenda } = req.body; // Campo a ser atualizado
+        const { horario, semana } = req.body; // Campo a ser atualizado
         const { auth } = req.headers; // ID do usuário autenticado
     
         try {
@@ -300,12 +300,24 @@ module.exports = {
                 return res.status(403).send({ message: 'Somente o psicólogo responsável pode atualizar esta consulta' });
             }
     
-            // Atualiza a agenda, se fornecida
-            if (agenda) consulta.agenda = agenda;
+            // Atualiza a horario, se fornecida
+            if (horario) consulta.horario = horario;
+    
+            if (!consulta.semana) {
+                consulta.semana = [];
+            }
+    
+            if (Array.isArray(semana) && semana.length > 0) {
+                consulta.semana = [...new Set([...consulta.semana, ...semana])]; // Remove duplicatas e adiciona os novos valores
+            }
     
             await consulta.save();
     
-            return res.status(200).send({ message: 'Consulta atualizada com sucesso', consulta });
+            return res.status(200).send({
+                message: 'Consulta atualizada com sucesso',
+                consulta
+            });
+
         } catch (err) {
             return res.status(500).send({
                 message: 'Erro ao atualizar consulta',
@@ -314,49 +326,53 @@ module.exports = {
         }
     },
 
-    async deleteByConsulta(req, res) {
-        const { consulta_id } = req.params;
-        const { auth } = req.headers; // ID do usuário autenticado
+    async updatePrioridade(req, res) {
+        const { ficha_id, psico_id } = req.params;
+        const { prioridade } = req.body;
+        const { auth } = req.headers;
     
         try {
-            const consulta = await Consulta.findById(consulta_id);
-            if (!consulta) {
-                return res.status(404).send({ message: 'Consulta não encontrada' });
+            // 🔹 Verifica se o psicólogo está autenticado e autorizado
+            if (psico_id !== auth) {
+                return res.status(403).send({ message: 'Não autorizado' });
             }
     
-            // Verifica se o usuário autenticado é o psicólogo responsável
-            if (consulta.psicologo_id.toString() !== auth) {
-                return res.status(403).send({ message: 'Somente o psicólogo responsável pode excluir esta consulta' });
+            // 🔹 Verifica se o psicólogo existe
+            const psicologo = await User.findById(psico_id);
+            if (!psicologo) return res.status(404).send({ message: 'Psicólogo não encontrado' });
+            if (psicologo.role !== 'psicologo') return res.status(400).send({ message: 'Apenas psicólogos podem atualizar a prioridade' });
+    
+            // 🔹 Verifica se a ficha existe
+            const ficha = await Ficha.findById(ficha_id).populate('user', 'name email role');
+            if (!ficha) return res.status(404).send({ message: 'Ficha não encontrada' });
+    
+            // 🔹 Verifica se a ficha pertence a um paciente
+            if (ficha.user.role !== 'paciente') {
+                return res.status(400).send({ message: 'A ficha informada não pertence a um paciente' });
             }
     
-            await Consulta.findByIdAndDelete(consulta_id);
-            return res.status(200).send({ message: 'Consulta excluída com sucesso' });
-        } catch (err) {
-            return res.status(400).send({
-                message: 'Erro ao deletar consulta',
-                error: err.message
+            // 🔹 Valida a prioridade
+            const prioridadesValidas = ['Baixa', 'Média', 'Alta'];
+            if (!prioridadesValidas.includes(prioridade)) {
+                return res.status(400).send({ message: 'Prioridade inválida. As opções são: Baixa, Média ou Alta' });
+            }
+    
+            // 🔹 Atualiza a prioridade
+            ficha.prioridade = prioridade;
+            await ficha.save();
+    
+            return res.status(200).send({
+                message: 'Prioridade atualizada com sucesso',
+                ficha
             });
-        }
-    },
-
-    async deleteAll(req, res) {    
-        try {
-            const result = await Consulta.deleteMany({});
-
-            if(result.deletedCount > 0){
-                return res.status(200).send({ 
-                    message: 'Todas as consultas foram excluídas',
-                    count: result.deletedCount });
-            }
-            else{
-                return res.status(400).send({ message: 'Não há nehnuma consulta para deletar' })
-            }
-            
+    
         } catch (err) {
-            return res.status(400).send({
-                message: 'Erro ao deletar todas as consultas',
+            console.error("Erro ao atualizar prioridade:", err);
+            return res.status(500).send({
+                message: 'Erro ao atualizar prioridade',
                 error: err.message
             });
         }
     }
+    
 };

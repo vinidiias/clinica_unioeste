@@ -21,7 +21,14 @@ const ConsultaSchema = new mongoose.Schema({
     horario: {
         type: String,
         required: false,
+    }, 
+
+    semana: {
+        type: [String],  // 🔹 Agora `semana` será um array de strings
+        required: false,
+        default: []  // 🔹 Inicia como um array vazio
     }
+    
 });
 
 module.exports = mongoose.model('Consulta', ConsultaSchema);
