@@ -290,28 +290,26 @@ module.exports = {
 
     async createSemana(req, res) {
         const { consulta_id, psico_id, paci_id } = req.params;
-        const { horario, semana } = req.body; // Campo a ser atualizado
+        const { horario, semana } = req.body; // Agora recebe `semana` como array
         const { auth } = req.headers; // ID do usuário autenticado
     
         try {
             const psico = await User.findById(psico_id);
             if (!psico) return res.status(400).send({ message: 'Psicólogo não encontrado' });
-
+    
             const paciente = await User.findById(paci_id);
             if (!paciente) return res.status(400).send({ message: 'Paciente não encontrado' });
-
+    
             if (paciente.role !== 'paciente') return res.status(400).send({ message: 'O ID fornecido não pertence a um paciente' });
-            if (psico.role !== 'psicologo') return res.status(400).send({ message: 'Somente psicólogos podem acessar essa consulta' });
-
+            if (psico.role !== 'psicologo') return res.status(400).send({ message: 'Somente psicólogos podem acessar esta consulta' });
+    
             const consulta = await Consulta.findById(consulta_id);
             if (!consulta) return res.status(404).send({ message: 'Consulta não encontrada' });
-            
-            // Verifica se o usuário autenticado é o psicólogo responsável
-            if (consulta_id!== auth) {
+    
+            if (psico_id !== auth) {
                 return res.status(403).send({ message: 'Somente o psicólogo responsável pode atualizar esta consulta' });
             }
     
-            // Atualiza a horario, se fornecida
             if (horario) consulta.horario = horario;
     
             if (!consulta.semana) {
@@ -324,18 +322,24 @@ module.exports = {
     
             await consulta.save();
     
+            const consultaCompleta = await Consulta.findById(consulta._id)
+                .populate('psicologo_id', 'name email')
+                .populate('paciente_id', 'name email');
+    
             return res.status(200).send({
                 message: 'Consulta atualizada com sucesso',
-                consulta
+                consulta: consultaCompleta
             });
-
+    
         } catch (err) {
+            console.error("Erro ao atualizar consulta:", err);
             return res.status(500).send({
                 message: 'Erro ao atualizar consulta',
                 error: err.message
             });
         }
     },
+    
 
     async updatePrioridade(req, res) {
         const { ficha_id, psico_id } = req.params;
