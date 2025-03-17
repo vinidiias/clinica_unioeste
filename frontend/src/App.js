@@ -16,6 +16,8 @@ import UserRegister from './components/pages/UserRegister';
 import FirstAcessRegister from './components/pages/FirstAcessRegister';
 import WrappedViewFicha from './components/ficha/ViewFicha';
 import WrappedWaitQueue from './components/pages/WaitQueue';
+import AuthForm from './components/auth/AuthForm';
+import PsyRegister from './components/pages/PsyRegister';
 
 function App() {
   return (
@@ -132,7 +134,7 @@ function App() {
               path="/register/psychologist"
               element={
                 <Container customClass="align">
-                  {/*<Auth registerPsychologist={true} />*/}
+                  <PsyRegister />
                 </Container>
               }
             />
