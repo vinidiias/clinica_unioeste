@@ -66,43 +66,46 @@ module.exports = {
     async indexByPsicologo (req, res) {
         const { psico_id } = req.params;
         const { auth } = req.headers;
-
+    
         try {
+            // 🔹 Verifica se o psicólogo existe e tem permissão
             const psico = await User.findById(psico_id);
             if (!psico) return res.status(400).send({ message: 'Psicólogo não encontrado' });
-            if (psico.role !== 'psicologo') return res.status(400).send({ message: 'Somente psicólogos podem agendar a triagem' });
+            if (psico.role !== 'psicologo') return res.status(400).send({ message: 'Somente psicólogos podem acessar esta rota' });
             if (psico_id !== auth) return res.status(403).send({ message: 'Não autorizado' });
-
-            // Busca todas as consultas do psicólogo
+    
+            // 🔹 Busca todas as consultas do psicólogo
             const consultas = await Consulta.find({ psicologo_id: psico_id });
-
+    
             if (!consultas || consultas.length === 0) {
-                return res.status(400).send({ message: 'Nenhuma consulta encontrada para este psicólogo' });
+                return res.status(404).send({ message: 'Nenhuma consulta encontrada para este psicólogo' });
             }
-
-            // Busca os detalhes do psicólogo
-            const psicologo = await User.findById(psico_id);
-
-            // Enriquecendo cada consulta com os dados completos do paciente e da pessoa
+    
+            // 🔹 Enriquecendo cada consulta com os dados completos do paciente, pessoa e ficha
             const consultasComPacientes = await Promise.all(
                 consultas.map(async (consulta) => {
-                    const paciente = await User.findById(consulta.paciente_id);
+                    const paciente = await User.findById(consulta.paciente_id).select('name email role');
                     const pessoa = await Pessoa.findOne({ user: consulta.paciente_id });
-
+                    const ficha = await Ficha.findOne({ user: consulta.paciente_id });
+    
                     return {
-                        consulta,
+                        agenda: consulta.agenda,
+                        horario: consulta.horario,
                         paciente,
-                        pessoa
+                        pessoa,
+                        ficha
                     };
                 })
             );
-
+    
             return res.status(200).send({
-                psicologo,
+                psicologo: { name: psico.name, email: psico.email },
                 consultas: consultasComPacientes
             });
+    
         } catch (err) {
-            return res.status(400).send({
+            console.error("Erro ao listar consultas do psicólogo:", err);
+            return res.status(500).send({
                 message: 'Erro ao listar consultas do psicólogo',
                 error: err.message
             });
